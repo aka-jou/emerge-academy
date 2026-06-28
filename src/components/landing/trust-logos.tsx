@@ -2,7 +2,7 @@ const companies = ["Enel", "Vestas", "Acciona", "Iberdrola", "Siemens", "Nordex"
 
 export function TrustLogos() {
   return (
-    <section id="blog" className="border-y border-border bg-card py-12">
+    <section id="empresas" className="scroll-mt-16 border-y border-border bg-card py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted">
           Nuestros egresados trabajan en

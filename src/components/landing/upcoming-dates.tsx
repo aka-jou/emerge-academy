@@ -30,7 +30,7 @@ const courses = [
 
 export function UpcomingDates() {
   return (
-    <section id="fechas" className="bg-card py-16 lg:py-24">
+    <section id="fechas" className="scroll-mt-16 bg-card py-16 lg:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-balance text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">

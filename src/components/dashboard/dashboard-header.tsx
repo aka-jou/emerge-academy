@@ -3,7 +3,6 @@ import { GraduationCapIcon, CertificateIcon, CalendarIcon, LifeBuoyIcon } from "
 import { student } from "../../data/dashboard"
 
 const links = [
-  { label: "Calendario", href: "#calendario", Icon: CalendarIcon },
   { label: "Soporte", href: "#soporte", Icon: LifeBuoyIcon },
 ]
 
@@ -19,6 +18,14 @@ export function DashboardHeader() {
         </Link>
 
         <div className="flex items-center gap-1 sm:gap-2">
+          <Link
+            to="/dashboard/calendario"
+            className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-muted transition hover:bg-muted-surface hover:text-foreground"
+          >
+            <CalendarIcon className="h-4 w-4" />
+            <span className="hidden sm:inline">Calendario</span>
+          </Link>
+
           <Link
             to="/dashboard/logros"
             className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-muted transition hover:bg-muted-surface hover:text-foreground"

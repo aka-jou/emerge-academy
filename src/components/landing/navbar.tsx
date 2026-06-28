@@ -4,12 +4,12 @@ import { Logo } from "./logo"
 import { MenuIcon } from "../icons"
 
 const navLinks = [
-  { label: "Cursos GWO", href: "/cursos" },
-  { label: "Calendario", href: "#fechas" },
-  { label: "Sedes", href: "#sedes" },
-  { label: "Instructores", href: "#instructores" },
-  { label: "Empresas", href: "#empresas" },
-  { label: "Blog", href: "#blog" },
+  { label: "Cursos GWO", href: "/cursos", route: true },
+  { label: "Nuestro Enfoque", href: "#enfoque", route: false },
+  { label: "Beneficios", href: "#beneficios", route: false },
+  { label: "Calendario", href: "#fechas", route: false },
+  { label: "Empresas", href: "#empresas", route: false },
+  { label: "Blog", href: "#blog", route: false },
 ]
 
 export function Navbar() {
@@ -25,12 +25,21 @@ export function Navbar() {
         <ul className="hidden items-center gap-7 lg:flex">
           {navLinks.map((link) => (
             <li key={link.label}>
-              <a
-                href={link.href}
-                className="text-sm font-medium text-muted transition hover:text-foreground"
-              >
-                {link.label}
-              </a>
+              {link.route ? (
+                <Link
+                  to={link.href}
+                  className="text-sm font-medium text-muted transition hover:text-foreground"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  href={link.href}
+                  className="text-sm font-medium text-muted transition hover:text-foreground"
+                >
+                  {link.label}
+                </a>
+              )}
             </li>
           ))}
         </ul>
@@ -43,10 +52,10 @@ export function Navbar() {
             Mi inscripción
           </Link>
           <a
-            href="#cotizar"
+            href="#contacto"
             className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
           >
-            Cotizar
+            Contacto
           </a>
         </div>
 
@@ -66,13 +75,23 @@ export function Navbar() {
           <ul className="flex flex-col px-4 py-3">
             {navLinks.map((link) => (
               <li key={link.label}>
-                <a
-                  href={link.href}
-                  onClick={() => setOpen(false)}
-                  className="block py-2 text-sm font-medium text-muted transition hover:text-foreground"
-                >
-                  {link.label}
-                </a>
+                {link.route ? (
+                  <Link
+                    to={link.href}
+                    onClick={() => setOpen(false)}
+                    className="block py-2 text-sm font-medium text-muted transition hover:text-foreground"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="block py-2 text-sm font-medium text-muted transition hover:text-foreground"
+                  >
+                    {link.label}
+                  </a>
+                )}
               </li>
             ))}
           </ul>
@@ -84,10 +103,11 @@ export function Navbar() {
               Mi inscripción
             </Link>
             <a
-              href="#cotizar"
+              href="#contacto"
+              onClick={() => setOpen(false)}
               className="rounded-lg bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground"
             >
-              Cotizar
+              Contacto
             </a>
           </div>
         </div>

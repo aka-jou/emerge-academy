@@ -11,6 +11,7 @@ import { LiveSessionPage } from "./pages/live-session-page"
 import { AchievementsPage } from "./pages/achievements-page"
 import { AccountSettingsPage } from "./pages/account-settings-page"
 import { CoursePlayerPage } from "./pages/course-player-page"
+import { CalendarPage } from "./pages/calendar-page"
 import { ProtectedRoute } from "./components/protected-route"
 
 export default function App() {
@@ -60,6 +61,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <AchievementsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/calendario"
+          element={
+            <ProtectedRoute>
+              <CalendarPage />
             </ProtectedRoute>
           }
         />

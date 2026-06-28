@@ -6,7 +6,7 @@ const serviceLinks = ["Capacitación para empresas", "Bolsa de trabajo", "Renta 
 
 export function Footer() {
   return (
-    <footer id="cotizar" className="bg-zinc-950 text-zinc-400">
+    <footer id="contacto" className="scroll-mt-16 bg-zinc-950 text-zinc-400">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
