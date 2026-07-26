@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { MenuIcon } from "../icons"
-import {logo_university} from "./public/images/logo_university.png"
+
 
 const navLinks = [
   { label: "Cursos", href: "/cursos", route: true },
@@ -17,7 +17,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur">
-      <nav className="mx-auto flex py-4 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <nav className="mx-auto flex py-4 h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link to="/" aria-label="EMERGE UNIVERSIDAD inicio">
         <img 
         src="/images/logo_university.png" 
