@@ -16,8 +16,8 @@ export function Hero() {
           <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
             Respaldados por Grupo Emerge RM
           </span>
-          <h1 className="mt-5 text-balance text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl">
-            Universidad Emerge — Capacitación especializada en seguridad y emergencias
+          <h1 className="mt-5 text-balance text-4xl font-extrabold leading-tight tracking-tight text-[#0F3D2E] sm:text-5xl">
+            Universidad Emerge <br/> Capacitación especializada
           </h1>
           <p className="mt-5 max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg">
             Formamos profesionales, brigadistas y equipos de respuesta para empresas privadas,

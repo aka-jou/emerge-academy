@@ -13,9 +13,10 @@ type OrderSummaryProps = {
   subtotal: number
   discount: number
   taxRate: number
+  onApplyCoupon: (code: string) => void
 }
 
-export function OrderSummary({ subtotal, discount, taxRate }: OrderSummaryProps) {
+export function OrderSummary({ subtotal, discount, taxRate, onApplyCoupon }: OrderSummaryProps) {
   const [coupon, setCoupon] = useState("")
   const taxable = subtotal - discount
   const taxes = taxable * taxRate
@@ -30,10 +31,12 @@ export function OrderSummary({ subtotal, discount, taxRate }: OrderSummaryProps)
           <dt className="text-muted">Subtotal</dt>
           <dd className="font-medium text-foreground">{currency.format(subtotal)}</dd>
         </div>
-        <div className="flex items-center justify-between">
-          <dt className="text-muted">Descuento</dt>
-          <dd className="font-semibold text-primary">-{currency.format(discount)}</dd>
-        </div>
+        {discount > 0 && (
+          <div className="flex items-center justify-between">
+            <dt className="text-muted">Descuento</dt>
+            <dd className="font-semibold text-primary">-{currency.format(discount)}</dd>
+          </div>
+        )}
         <div className="flex items-center justify-between">
           <dt className="text-muted">Impuestos (IVA {Math.round(taxRate * 100)}%)</dt>
           <dd className="font-medium text-foreground">{currency.format(taxes)}</dd>
@@ -48,21 +51,25 @@ export function OrderSummary({ subtotal, discount, taxRate }: OrderSummaryProps)
       </div>
 
       {/* Cupón */}
-      <div className="mt-5 flex gap-2">
-        <input
-          type="text"
-          value={coupon}
-          onChange={(e) => setCoupon(e.target.value)}
-          placeholder="Código de cupón"
-          aria-label="Código de cupón"
-          className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
-        />
-        <button
-          type="button"
-          className="shrink-0 rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-semibold text-foreground transition hover:bg-background"
-        >
-          Aplicar
-        </button>
+      <div className="mt-5 flex flex-col gap-1.5">
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={coupon}
+            onChange={(e) => setCoupon(e.target.value)}
+            placeholder="Código de cupón"
+            aria-label="Código de cupón"
+            className="w-full rounded-lg border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
+          />
+          <button
+            type="button"
+            onClick={() => onApplyCoupon(coupon.trim().toUpperCase())}
+            className="shrink-0 rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-semibold text-foreground transition hover:bg-background"
+          >
+            Aplicar
+          </button>
+        </div>
+        <p className="text-xs text-muted">Prueba el código BIENVENIDA10 para 10% de descuento.</p>
       </div>
 
       {/* CTA */}

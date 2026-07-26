@@ -5,77 +5,43 @@ import { CartItem, type CartItemData } from "../components/cart/cart-item"
 import { OrderSummary } from "../components/cart/order-summary"
 import { RecommendedCourses } from "../components/cart/recommended-courses"
 import { ShoppingCartIcon, ArrowRightIcon } from "../components/icons"
+import { useCart, estimateCoursePrice } from "../lib/cart"
+import { courses } from "../data/courses"
 
-const initialItems: CartItemData[] = [
-  {
-    id: "alturas",
-    title: "Trabajo Seguro en Alturas",
-    module: "Módulo: Seguridad Industrial",
-    startDate: "A solicitud",
-    modality: "Capacitación en sitio",
-    unitPrice: 2450,
-    quantity: 1,
-  },
-]
-
-const recommendedCatalog: Record<string, Omit<CartItemData, "quantity">> = {
-  contraincendios: {
-    id: "contraincendios",
-    title: "Prevención y Combate Contra Incendios",
-    module: "Módulo: Protección Civil",
-    startDate: "A solicitud",
-    modality: "Capacitación en sitio",
-    unitPrice: 1200,
-  },
-  "primeros-auxilios": {
-    id: "primeros-auxilios",
-    title: "Primeros Auxilios",
-    module: "Módulo: Atención Prehospitalaria",
-    startDate: "A solicitud",
-    modality: "Capacitación en sitio",
-    unitPrice: 1800,
-  },
-  prl: {
-    id: "prl",
-    title: "PRL (Prevención de Riesgos Laborales)",
-    module: "Módulo: Seguridad Industrial",
-    startDate: "En línea",
-    modality: "En línea",
-    unitPrice: 1500,
-  },
-}
-
-const DISCOUNT = 250
-const TAX_RATE = 0.21
+const TAX_RATE = 0.16 // IVA México
 
 export function CartPage() {
-  const [items, setItems] = useState<CartItemData[]>(initialItems)
+  const { items, addItem, removeItem, setQuantity } = useCart()
+  const [couponCode, setCouponCode] = useState<string | null>(null)
 
-  const subtotal = useMemo(
-    () => items.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0),
+  const cartItems: CartItemData[] = useMemo(
+    () =>
+      items
+        .map((line): CartItemData | null => {
+          const course = courses.find((c) => c.id === line.courseId)
+          if (!course) return null
+          return {
+            id: course.id,
+            title: course.title,
+            module: `Módulo: ${course.type}`,
+            startDate: course.online ? "En línea" : "A solicitud",
+            modality: course.venue,
+            unitPrice: estimateCoursePrice(course.duration),
+            quantity: line.quantity,
+            image: course.image,
+          }
+        })
+        .filter((item): item is CartItemData => item !== null),
     [items],
   )
-  const discount = items.length > 0 ? DISCOUNT : 0
 
-  function handleQuantityChange(id: string, quantity: number) {
-    setItems((prev) => prev.map((item) => (item.id === id ? { ...item, quantity } : item)))
-  }
+  const recommendedCourses = useMemo(
+    () => courses.filter((c) => !items.some((line) => line.courseId === c.id)).slice(0, 3),
+    [items],
+  )
 
-  function handleRemove(id: string) {
-    setItems((prev) => prev.filter((item) => item.id !== id))
-  }
-
-  function handleAdd(id: string) {
-    setItems((prev) => {
-      const existing = prev.find((item) => item.id === id)
-      if (existing) {
-        return prev.map((item) => (item.id === id ? { ...item, quantity: item.quantity + 1 } : item))
-      }
-      const course = recommendedCatalog[id]
-      if (!course) return prev
-      return [...prev, { ...course, quantity: 1 }]
-    })
-  }
+  const subtotal = cartItems.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0)
+  const discount = couponCode === "BIENVENIDA10" ? Math.round(subtotal * 0.1) : 0
 
   return (
     <div className="flex min-h-full flex-col bg-background">
@@ -96,7 +62,7 @@ export function CartPage() {
             Carrito de compras
           </h1>
 
-          {items.length === 0 ? (
+          {cartItems.length === 0 ? (
             <div className="mt-8 rounded-2xl border border-border bg-card p-12 text-center shadow-sm">
               <p className="text-base font-medium text-foreground">Tu carrito está vacío</p>
               <p className="mt-1 text-sm text-muted">Explora nuestro catálogo de cursos.</p>
@@ -110,25 +76,30 @@ export function CartPage() {
             </div>
           ) : (
             <div className="mt-6 grid items-start gap-8 lg:grid-cols-[7fr_4fr]">
-              {/* Columna izquierda: productos */}
+              {/* Columna izquierda: cursos */}
               <div className="flex flex-col gap-4">
-                {items.map((item) => (
+                {cartItems.map((item) => (
                   <CartItem
                     key={item.id}
                     item={item}
-                    onQuantityChange={handleQuantityChange}
-                    onRemove={handleRemove}
+                    onQuantityChange={setQuantity}
+                    onRemove={removeItem}
                   />
                 ))}
               </div>
 
               {/* Columna derecha: pago */}
-              <OrderSummary subtotal={subtotal} discount={discount} taxRate={TAX_RATE} />
+              <OrderSummary
+                subtotal={subtotal}
+                discount={discount}
+                taxRate={TAX_RATE}
+                onApplyCoupon={(code) => setCouponCode(code)}
+              />
             </div>
           )}
 
-          {/* Sección inferior */}
-          <RecommendedCourses onAdd={handleAdd} />
+          {/* Recomendados */}
+          <RecommendedCourses courses={recommendedCourses} onAdd={(id) => addItem(id)} />
         </div>
       </main>
     </div>

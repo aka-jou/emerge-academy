@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom"
 import { Logo } from "../landing/logo"
 import { SearchIcon, ShoppingCartIcon } from "../icons"
+import { useCart } from "../../lib/cart"
 
 export function CoursesHeader() {
+  const { count } = useCart()
+
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-card">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
@@ -23,13 +26,15 @@ export function CoursesHeader() {
         <div className="ml-auto flex items-center gap-3 sm:ml-0">
           <Link
             to="/carrito"
-            aria-label="Carrito de inscripciones"
+            aria-label={`Carrito de inscripciones${count > 0 ? ` (${count})` : ""}`}
             className="relative flex h-10 w-10 items-center justify-center rounded-full text-foreground transition hover:bg-background"
           >
             <ShoppingCartIcon className="h-5 w-5" />
-            <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[11px] font-bold text-white">
-              1
-            </span>
+            {count > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[11px] font-bold text-white">
+                {count > 9 ? "9+" : count}
+              </span>
+            )}
           </Link>
           <Link
             to="/cursos"

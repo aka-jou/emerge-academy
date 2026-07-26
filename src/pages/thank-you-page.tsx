@@ -1,5 +1,8 @@
-import { Link } from "react-router-dom"
+import { useEffect, useRef, useState } from "react"
+import { Link, Navigate } from "react-router-dom"
 import { CheckIcon, MailIcon, UsersIcon, PlayIcon, ArrowRightIcon } from "../components/icons"
+import { useCart, estimateCoursePrice } from "../lib/cart"
+import { courses } from "../data/courses"
 
 const currency = new Intl.NumberFormat("es-MX", {
   style: "currency",
@@ -7,17 +10,12 @@ const currency = new Intl.NumberFormat("es-MX", {
   minimumFractionDigits: 2,
 })
 
-// Resumen de la transacción mostrado tras un pago exitoso con PayPal.
-const order = {
-  folio: "EMG-2026-09127",
-  method: "PayPal",
-  date: "28 de junio de 2026",
-  total: 2964.5,
-  course: {
-    title: "Trabajo Seguro en Alturas",
-    module: "Módulo: Seguridad Industrial · Certificación Universidad Emerge",
-    image: "/images/courses/alturas.jpg",
-  },
+const TAX_RATE = 0.16
+
+function buildFolio() {
+  const year = new Date().getFullYear()
+  const suffix = Math.floor(10000 + Math.random() * 89999)
+  return `EMG-${year}-${suffix}`
 }
 
 const nextSteps = [
@@ -39,6 +37,45 @@ const nextSteps = [
 ]
 
 export function ThankYouPage() {
+  const { items, clear } = useCart()
+
+  // Toma una foto del carrito al entrar (antes de vaciarlo), para no perder qué se compró.
+  const [snapshot] = useState(() => items)
+  const cleared = useRef(false)
+
+  useEffect(() => {
+    if (!cleared.current) {
+      cleared.current = true
+      clear()
+    }
+  }, [clear])
+
+  const purchasedCourses = snapshot
+    .map((line) => {
+      const course = courses.find((c) => c.id === line.courseId)
+      return course ? { course, quantity: line.quantity } : null
+    })
+    .filter((entry): entry is { course: (typeof courses)[number]; quantity: number } => entry !== null)
+
+  const [order] = useState(() => {
+    const subtotal = purchasedCourses.reduce(
+      (sum, { course, quantity }) => sum + estimateCoursePrice(course.duration) * quantity,
+      0,
+    )
+    return {
+      folio: buildFolio(),
+      date: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" }),
+      total: subtotal * (1 + TAX_RATE),
+    }
+  })
+
+  if (purchasedCourses.length === 0) {
+    return <Navigate to="/dashboard" replace />
+  }
+
+  const primaryCourse = purchasedCourses[0].course
+  const extraCount = purchasedCourses.length - 1
+
   return (
     <div className="flex min-h-full flex-col bg-background">
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center px-4 py-12 sm:px-6 sm:py-16">
@@ -56,7 +93,7 @@ export function ThankYouPage() {
           ¡Tu inscripción está confirmada!
         </h1>
         <p className="mt-2 text-center text-base font-medium text-muted text-pretty">
-          Bienvenido a EMERGE Academy
+          Bienvenido a Universidad Emerge
         </p>
 
         {/* Tarjeta de resumen de la transacción */}
@@ -75,11 +112,7 @@ export function ThankYouPage() {
             </span>
           </div>
 
-          <dl className="mt-6 grid grid-cols-1 gap-4 border-t border-border pt-6 sm:grid-cols-3">
-            <div>
-              <dt className="text-xs font-medium uppercase tracking-wide text-muted">Método de pago</dt>
-              <dd className="mt-1 text-sm font-semibold text-foreground">{order.method}</dd>
-            </div>
+          <dl className="mt-6 grid grid-cols-1 gap-4 border-t border-border pt-6 sm:grid-cols-2">
             <div>
               <dt className="text-xs font-medium uppercase tracking-wide text-muted">Fecha de compra</dt>
               <dd className="mt-1 text-sm font-semibold text-foreground">{order.date}</dd>
@@ -90,16 +123,23 @@ export function ThankYouPage() {
             </div>
           </dl>
 
-          {/* Miniatura del curso adquirido */}
+          {/* Curso(s) adquiridos */}
           <div className="mt-6 flex items-center gap-4 rounded-xl border border-border bg-muted-surface/50 p-4">
             <img
-              src={order.course.image || "/placeholder.svg"}
-              alt={order.course.title}
+              src={primaryCourse.image}
+              alt={primaryCourse.title}
               className="h-16 w-16 shrink-0 rounded-lg object-cover sm:h-20 sm:w-20"
             />
             <div className="min-w-0 flex-1">
-              <h2 className="truncate text-sm font-semibold text-foreground">{order.course.title}</h2>
-              <p className="mt-0.5 truncate text-xs text-muted">{order.course.module}</p>
+              <h2 className="truncate text-sm font-semibold text-foreground">
+                {primaryCourse.title}
+                {extraCount > 0 && (
+                  <span className="font-normal text-muted"> +{extraCount} curso{extraCount > 1 ? "s" : ""} más</span>
+                )}
+              </h2>
+              <p className="mt-0.5 truncate text-xs text-muted">
+                Módulo: {primaryCourse.type} · Certificación Universidad Emerge
+              </p>
               <div className="mt-3 flex items-center gap-3">
                 <div
                   className="h-2 flex-1 overflow-hidden rounded-full bg-border"

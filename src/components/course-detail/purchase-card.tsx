@@ -1,6 +1,7 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
-import { courseDetail } from "../../data/courses"
+import { useNavigate } from "react-router-dom"
+import type { CourseDetail } from "../../data/courses"
+import { useCart } from "../../lib/cart"
 import {
   ShoppingCartIcon,
   ChevronDownIcon,
@@ -28,8 +29,20 @@ function RequirementCard({ title, items }: { title: string; items: string[] }) {
   )
 }
 
-export function PurchaseCard() {
+export function PurchaseCard({ courseId, detail }: { courseId: string; detail: CourseDetail }) {
   const [quantity, setQuantity] = useState(1)
+  const { addItem } = useCart()
+  const navigate = useNavigate()
+
+  function handleAddToCart() {
+    addItem(courseId, quantity)
+    navigate("/carrito")
+  }
+
+  function handleBuyNow() {
+    addItem(courseId, quantity)
+    navigate("/carrito")
+  }
 
   return (
     <div className="flex flex-col gap-5 lg:sticky lg:top-24">
@@ -39,9 +52,9 @@ export function PurchaseCard() {
           <div className="relative">
             <select
               className="w-full appearance-none rounded-lg border border-border bg-card py-2.5 pl-3 pr-9 text-sm font-medium text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
-              defaultValue={courseDetail.venues[0]}
+              defaultValue={detail.venues[0]}
             >
-              {courseDetail.venues.map((venue) => (
+              {detail.venues.map((venue) => (
                 <option key={venue} value={venue}>
                   {venue}
                 </option>
@@ -77,19 +90,21 @@ export function PurchaseCard() {
           </div>
         </div>
 
-        <Link
-          to="/carrito"
+        <button
+          type="button"
+          onClick={handleAddToCart}
           className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
         >
           <ShoppingCartIcon className="h-5 w-5" />
           Agregar al carrito
-        </Link>
-        <Link
-          to="/carrito"
+        </button>
+        <button
+          type="button"
+          onClick={handleBuyNow}
           className="mt-2.5 block w-full rounded-lg border border-border bg-transparent px-5 py-3 text-center text-sm font-semibold text-foreground transition hover:bg-background"
         >
           Comprar ahora
-        </Link>
+        </button>
         <button
           type="button"
           className="mt-4 w-full text-center text-sm font-semibold text-primary underline-offset-4 transition hover:underline"
@@ -98,7 +113,7 @@ export function PurchaseCard() {
         </button>
       </div>
 
-      <RequirementCard title="Requisitos físicos" items={courseDetail.physicalRequirements} />
+      <RequirementCard title="Requisitos físicos" items={detail.physicalRequirements} />
 
       <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
         <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
@@ -106,7 +121,7 @@ export function PurchaseCard() {
           Equipo de protección personal (EPP)
         </h3>
         <ul className="mt-3 flex flex-col gap-2.5">
-          {courseDetail.ppeRequirements.map((item) => (
+          {detail.ppeRequirements.map((item) => (
             <li key={item} className="flex items-start gap-2.5 text-sm text-muted">
               <CheckIcon className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
               <span className="leading-snug">{item}</span>
@@ -121,7 +136,7 @@ export function PurchaseCard() {
           Normativas que cubre
         </h3>
         <ul className="mt-3 flex flex-col gap-3">
-          {courseDetail.standards.map((std) => (
+          {detail.standards.map((std) => (
             <li key={std.code} className="flex items-center gap-3">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border bg-card text-primary">
                 <CertificateIcon className="h-5 w-5" />

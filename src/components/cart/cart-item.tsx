@@ -8,6 +8,7 @@ export type CartItemData = {
   modality: string
   unitPrice: number
   quantity: number
+  image?: string
 }
 
 type CartItemProps = {
@@ -26,9 +27,15 @@ export function CartItem({ item, onQuantityChange, onRemove }: CartItemProps) {
   return (
     <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
       <div className="flex flex-col gap-5 sm:flex-row">
-        {/* Miniatura con degradado */}
-        <div className="flex h-28 w-full shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-sky-500 sm:w-40">
-          <FileTextIcon className="h-10 w-10 text-white/90" />
+        {/* Miniatura */}
+        <div className="h-28 w-full shrink-0 overflow-hidden rounded-xl bg-gradient-to-br from-indigo-500 to-sky-500 sm:w-40">
+          {item.image ? (
+            <img src={item.image} alt={item.title} className="h-full w-full object-cover" />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <FileTextIcon className="h-10 w-10 text-white/90" />
+            </div>
+          )}
         </div>
 
         {/* Detalles */}

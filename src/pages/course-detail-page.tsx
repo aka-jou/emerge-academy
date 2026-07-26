@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { CoursesHeader } from "../components/courses/courses-header"
 import { CourseTabs } from "../components/course-detail/course-tabs"
 import { PurchaseCard } from "../components/course-detail/purchase-card"
-import { courseDetail } from "../data/courses"
+import { courseDetails } from "../data/courses"
 import { ClockIcon, GraduationCapIcon, UsersIcon, CertificateIcon } from "../components/icons"
 
 const specIcons = {
@@ -13,6 +13,28 @@ const specIcons = {
 }
 
 export function CourseDetailPage() {
+  const { id } = useParams<{ id: string }>()
+  const courseDetail = id ? courseDetails[id] : undefined
+
+  if (!courseDetail) {
+    return (
+      <div className="flex min-h-full flex-col bg-background">
+        <CoursesHeader />
+        <main className="flex-1">
+          <div className="mx-auto max-w-6xl px-4 py-16 text-center sm:px-6">
+            <h1 className="text-2xl font-bold text-foreground">Curso no encontrado</h1>
+            <p className="mt-3 text-sm text-muted">El curso que buscas no existe o fue movido.</p>
+            <Link
+              to="/cursos"
+              className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
+            >
+              Ver todos los cursos
+            </Link>
+          </div>
+        </main>
+      </div>
+    )
+  }
   return (
     <div className="flex min-h-full flex-col bg-background">
       <CoursesHeader />
@@ -80,7 +102,7 @@ export function CourseDetailPage() {
 
             {/* Sidebar */}
             <aside>
-              <PurchaseCard />
+              <PurchaseCard courseId={id!} detail={courseDetail} />
             </aside>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+import { Logo } from "./landing/logo"
 import { useAuth } from "../lib/auth"
 
 export function RegisterCard() {
@@ -35,7 +36,7 @@ export function RegisterCard() {
   return (
     <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-[0_4px_24px_rgba(20,83,45,0.08)] sm:p-10">
       <div className="mb-8 flex flex-col items-center text-center">
-        <span className="text-2xl font-bold tracking-tight text-primary">EMERGE</span>
+        <Logo />
         <h1 className="mt-5 text-pretty text-xl font-semibold text-card-foreground">Crea tu cuenta</h1>
         <p className="mt-2 text-sm text-muted">Empieza tu formación en seguridad hoy mismo</p>
       </div>

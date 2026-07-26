@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { GoogleIcon } from "./google-icon"
+import { Logo } from "./landing/logo"
 import { useAuth, DEMO_CREDENTIALS } from "../lib/auth"
 
 export function LoginCard() {
@@ -25,7 +26,7 @@ export function LoginCard() {
     <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-[0_4px_24px_rgba(20,83,45,0.08)] sm:p-10">
       {/* Marca */}
       <div className="mb-8 flex flex-col items-center text-center">
-        <span className="text-2xl font-bold tracking-tight text-primary">EMERGE</span>
+        <Logo />
         <h1 className="mt-5 text-pretty text-xl font-semibold text-card-foreground">
           Inicia sesión en tu cuenta
         </h1>

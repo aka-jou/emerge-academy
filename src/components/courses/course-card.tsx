@@ -1,8 +1,16 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import type { Course } from "../../data/courses"
 import { ClockIcon, GraduationCapIcon, MonitorIcon, CalendarIcon } from "../icons"
+import { useCart } from "../../lib/cart"
 
 export function CourseCard({ course }: { course: Course }) {
+  const { addItem } = useCart()
+  const navigate = useNavigate()
+
+  function handleEnroll() {
+    addItem(course.id)
+    navigate("/carrito")
+  }
   return (
     <article className="flex flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm transition hover:shadow-md">
       <div className="aspect-[16/10] w-full overflow-hidden bg-muted-surface">
@@ -47,12 +55,13 @@ export function CourseCard({ course }: { course: Course }) {
         </ul>
 
         <div className="mt-5 flex items-center gap-2.5">
-          <Link
-            to="/login"
+          <button
+            type="button"
+            onClick={handleEnroll}
             className="rounded-lg bg-primary px-5 py-2.5 text-center text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
           >
             {course.action}
-          </Link>
+          </button>
           <Link
             to={`/cursos/${course.id}`}
             className="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-background"

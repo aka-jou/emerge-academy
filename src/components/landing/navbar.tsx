@@ -8,7 +8,7 @@ const navLinks = [
   { label: "Nuestro Enfoque", href: "#enfoque", route: false },
   { label: "Beneficios", href: "#beneficios", route: false },
   { label: "Calendario", href: "#fechas", route: false },
-  { label: "Empresas", href: "#empresas", route: false },
+  { label: "Sectores", href: "#sectores", route: false },
   { label: "Blog", href: "#blog", route: false },
 ]
 
@@ -45,18 +45,13 @@ export function Navbar() {
         </ul>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Link
+        <Link
             to="/login"
-            className="rounded-lg px-4 py-2 text-sm font-semibold text-foreground transition hover:text-primary"
+            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
           >
             Mi inscripción
           </Link>
-          <a
-            href="#contacto"
-            className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
-          >
-            Contacto
-          </a>
+         
         </div>
 
         <button
@@ -96,19 +91,14 @@ export function Navbar() {
             ))}
           </ul>
           <div className="flex flex-col gap-2 border-t border-border px-4 py-3">
-            <Link
+          <Link
               to="/login"
-              className="rounded-lg border border-border px-4 py-2 text-center text-sm font-semibold text-foreground"
-            >
-              Mi inscripción
-            </Link>
-            <a
-              href="#contacto"
               onClick={() => setOpen(false)}
               className="rounded-lg bg-primary px-4 py-2 text-center text-sm font-semibold text-primary-foreground"
             >
-              Contacto
-            </a>
+              Mi inscripción
+            </Link>
+           
           </div>
         </div>
       )}
