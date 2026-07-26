@@ -14,10 +14,10 @@ export function Hero() {
       <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:py-24 lg:px-8">
         <div>
           <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-            Centro de entrenamiento certificado GWO
+            Centro de entrenamiento certificado
           </span>
           <h1 className="mt-5 text-balance text-4xl font-extrabold leading-tight tracking-tight text-foreground sm:text-5xl">
-            EMERGE Academy — Formación GWO certificada
+            UNIVERSIDAD EMERGE <br/> Formación certificada
           </h1>
           <p className="mt-5 max-w-xl text-pretty text-base leading-relaxed text-muted sm:text-lg">
             Capacítate con estándares internacionales para trabajar en el sector eólico. Cursos
@@ -41,7 +41,7 @@ export function Hero() {
               to="/cursos"
               className="rounded-lg bg-primary px-6 py-3 text-center text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
             >
-              Ver cursos GWO
+              Ver cursos
             </Link>
             <a
               href="#fechas"

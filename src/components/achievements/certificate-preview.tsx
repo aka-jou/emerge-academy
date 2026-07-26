@@ -18,7 +18,7 @@ export function CertificatePreview() {
                 <GraduationCapIcon className="h-4 w-4" />
               </span>
               <span className="text-sm font-bold tracking-tight text-foreground sm:text-base">
-                EMERGE Academy
+                EMERGE UNIVERSITY
               </span>
             </div>
 
