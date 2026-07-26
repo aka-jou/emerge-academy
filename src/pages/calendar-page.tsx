@@ -90,7 +90,7 @@ export function CalendarPage() {
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground">Tu agenda de formación</h1>
           <p className="text-sm text-muted">
-            Sesiones en vivo, prácticas presenciales, evaluaciones y entregas de tus cursos GWO.
+            Sesiones en vivo, prácticas presenciales, evaluaciones y entregas de tus cursos.
           </p>
         </div>
 

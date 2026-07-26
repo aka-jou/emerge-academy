@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
-import { GraduationCapIcon, CertificateIcon, CalendarIcon, LifeBuoyIcon } from "../icons"
+import { Logo } from "../landing/logo"
+import { CertificateIcon, CalendarIcon, LifeBuoyIcon } from "../icons"
 import { student } from "../../data/dashboard"
 
 const links = [
@@ -10,11 +11,8 @@ export function DashboardHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-card">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link to="/dashboard" className="flex items-center gap-2" aria-label="Dashboard inicio">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <GraduationCapIcon className="h-5 w-5" />
-          </span>
-          <span className="text-lg font-bold tracking-tight text-foreground">Dashboard</span>
+        <Link to="/dashboard" aria-label="Universidad Emerge - Dashboard">
+          <Logo />
         </Link>
 
         <div className="flex items-center gap-1 sm:gap-2">

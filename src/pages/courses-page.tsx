@@ -12,12 +12,12 @@ export function CoursesPage() {
       <section className="border-b border-border bg-muted-surface">
         <div className="mx-auto max-w-6xl px-4 py-10 text-center sm:px-6">
           <h1 className="text-3xl font-bold tracking-tight text-foreground text-balance">
-            Cursos GWO
+            Cursos de capacitación
             <br />
             para iniciar o recertificar
           </h1>
           <p className="mt-3 text-sm text-muted">
-            Formación online con prácticas y certificación oficial
+            Formación práctica con instructores certificados y certificación oficial
           </p>
         </div>
       </section>

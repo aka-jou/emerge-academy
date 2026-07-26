@@ -1,30 +1,30 @@
 import { Link } from "react-router-dom"
-import { CalendarIcon, MapPinIcon, ClockIcon, UsersIcon } from "../icons"
+import { MapPinIcon, ClockIcon, UsersIcon } from "../icons"
 
 const courses = [
   {
-    code: "BST",
-    name: "Basic Safety Training",
-    date: "12 – 16 May 2026",
-    location: "Sede Oaxaca",
-    schedule: "08:00 – 17:00",
-    seats: "6 cupos disponibles",
+    code: "SI",
+    name: "Trabajo Seguro en Alturas",
+    duration: "8 horas",
+    location: "Capacitación en sitio",
+    schedule: "Programación a solicitud",
+    seats: "Sector Energías Renovables",
   },
   {
-    code: "BTT",
-    name: "Basic Technical Training",
-    date: "19 – 22 May 2026",
-    location: "Sede Tamaulipas",
-    schedule: "08:00 – 16:00",
-    seats: "4 cupos disponibles",
+    code: "PC",
+    name: "Líder de Brigada Contra Incendio Industrial",
+    duration: "32 horas",
+    location: "Capacitación en sitio",
+    schedule: "Programación a solicitud",
+    seats: "Sector Industrial y Gobierno",
   },
   {
-    code: "ART",
-    name: "Advanced Rescue Training",
-    date: "26 – 28 May 2026",
-    location: "Sede Oaxaca",
-    schedule: "08:00 – 17:00",
-    seats: "3 cupos disponibles",
+    code: "AP",
+    name: "Técnico Básico en Urgencias Médicas",
+    duration: "32 horas",
+    location: "Capacitación en sitio",
+    schedule: "Programación a solicitud",
+    seats: "Sector Gobierno Municipal",
   },
 ]
 
@@ -34,10 +34,10 @@ export function UpcomingDates() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-balance text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
-            Próximas fechas
+            Cursos destacados
           </h2>
           <p className="mt-4 text-pretty text-muted">
-            Reserva tu lugar en nuestros próximos cursos GWO. Cupos limitados por grupo.
+            Programas de capacitación en sitio, adaptados a las necesidades de tu empresa o dependencia.
           </p>
         </div>
 
@@ -57,20 +57,16 @@ export function UpcomingDates() {
 
               <dl className="mt-5 flex flex-col gap-3 text-sm text-muted">
                 <div className="flex items-center gap-2.5">
-                  <CalendarIcon className="h-4 w-4 text-primary" />
-                  <dd>{course.date}</dd>
+                  <ClockIcon className="h-4 w-4 text-primary" />
+                  <dd>{course.duration}</dd>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <MapPinIcon className="h-4 w-4 text-primary" />
                   <dd>{course.location}</dd>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <ClockIcon className="h-4 w-4 text-primary" />
-                  <dd>{course.schedule}</dd>
-                </div>
-                <div className="flex items-center gap-2.5">
                   <UsersIcon className="h-4 w-4 text-primary" />
-                  <dd>Grupos reducidos</dd>
+                  <dd>{course.schedule}</dd>
                 </div>
               </dl>
 
@@ -78,7 +74,7 @@ export function UpcomingDates() {
                 to="/login"
                 className="mt-6 rounded-lg bg-foreground px-4 py-2.5 text-center text-sm font-semibold text-background transition hover:opacity-90"
               >
-                Inscribirme
+                Solicitar información
               </Link>
             </div>
           ))}

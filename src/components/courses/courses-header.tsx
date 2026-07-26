@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom"
+import { Logo } from "../landing/logo"
 import { SearchIcon, ShoppingCartIcon } from "../icons"
 
 export function CoursesHeader() {
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-card">
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 sm:px-6">
-        <Link to="/" className="flex shrink-0 items-baseline gap-2">
-          <span className="text-xl font-extrabold tracking-tight text-primary">EMERGE</span>
-          <span className="text-sm font-semibold text-muted">Cursos GWO</span>
+        <Link to="/" className="flex shrink-0 items-center" aria-label="Universidad Emerge inicio">
+          <Logo />
         </Link>
 
         <div className="relative mx-auto hidden w-full max-w-xs sm:block">

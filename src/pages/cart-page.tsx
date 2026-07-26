@@ -8,37 +8,37 @@ import { ShoppingCartIcon, ArrowRightIcon } from "../components/icons"
 
 const initialItems: CartItemData[] = [
   {
-    id: "bst-altura",
-    title: "Curso de Seguridad en Alturas GWO",
-    module: "Módulo: Trabajos en Altura",
-    startDate: "25 Nov 2026",
-    modality: "Presencial – CDMX",
+    id: "alturas",
+    title: "Trabajo Seguro en Alturas",
+    module: "Módulo: Seguridad Industrial",
+    startDate: "A solicitud",
+    modality: "Capacitación en sitio",
     unitPrice: 2450,
     quantity: 1,
   },
 ]
 
 const recommendedCatalog: Record<string, Omit<CartItemData, "quantity">> = {
-  "bst-incendios": {
-    id: "bst-incendios",
-    title: "BST – Extinción de Incendios",
-    module: "Módulo: Extinción de Incendios",
-    startDate: "02 Dic 2026",
-    modality: "Presencial – Monterrey",
+  contraincendios: {
+    id: "contraincendios",
+    title: "Prevención y Combate Contra Incendios",
+    module: "Módulo: Protección Civil",
+    startDate: "A solicitud",
+    modality: "Capacitación en sitio",
     unitPrice: 1200,
   },
-  "bst-primeros-auxilios": {
-    id: "bst-primeros-auxilios",
-    title: "BST – Primeros Auxilios",
-    module: "Módulo: Primeros Auxilios",
-    startDate: "10 Dic 2026",
-    modality: "Presencial – Guadalajara",
+  "primeros-auxilios": {
+    id: "primeros-auxilios",
+    title: "Primeros Auxilios",
+    module: "Módulo: Atención Prehospitalaria",
+    startDate: "A solicitud",
+    modality: "Capacitación en sitio",
     unitPrice: 1800,
   },
-  "bst-cargas": {
-    id: "bst-cargas",
-    title: "BST – Manipulación de Cargas",
-    module: "Módulo: Manipulación de Cargas",
+  prl: {
+    id: "prl",
+    title: "PRL (Prevención de Riesgos Laborales)",
+    module: "Módulo: Seguridad Industrial",
     startDate: "En línea",
     modality: "En línea",
     unitPrice: 1500,
@@ -85,7 +85,7 @@ export function CartPage() {
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
           <nav className="mb-6 flex items-center gap-2 text-sm text-muted">
             <Link to="/cursos" className="transition hover:text-primary">
-              Cursos GWO
+              Cursos
             </Link>
             <span aria-hidden="true">/</span>
             <span className="text-foreground">Carrito de compras</span>
@@ -99,7 +99,7 @@ export function CartPage() {
           {items.length === 0 ? (
             <div className="mt-8 rounded-2xl border border-border bg-card p-12 text-center shadow-sm">
               <p className="text-base font-medium text-foreground">Tu carrito está vacío</p>
-              <p className="mt-1 text-sm text-muted">Explora nuestro catálogo de cursos GWO.</p>
+              <p className="mt-1 text-sm text-muted">Explora nuestro catálogo de cursos.</p>
               <Link
                 to="/cursos"
                 className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"

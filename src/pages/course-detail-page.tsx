@@ -21,7 +21,7 @@ export function CourseDetailPage() {
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
           <nav className="mb-6 flex items-center gap-2 text-sm text-muted">
             <Link to="/cursos" className="transition hover:text-primary">
-              Cursos GWO
+              Cursos
             </Link>
             <span aria-hidden="true">/</span>
             <span className="text-foreground">{courseDetail.title}</span>
@@ -31,12 +31,21 @@ export function CourseDetailPage() {
             {/* Columna izquierda */}
             <div>
               <span className="inline-block rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">
-                Certificación GWO
+                Certificación Universidad Emerge
               </span>
               <h1 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-foreground text-balance sm:text-4xl">
                 {courseDetail.title}
               </h1>
-              <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted">
+
+              <div className="mt-5 overflow-hidden rounded-2xl border border-border shadow-sm">
+                <img
+                  src={courseDetail.image}
+                  alt={courseDetail.title}
+                  className="h-64 w-full object-cover sm:h-80"
+                />
+              </div>
+
+              <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted">
                 {courseDetail.description}
               </p>
 

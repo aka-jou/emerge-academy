@@ -16,23 +16,23 @@ type Recommended = {
 
 const recommended: Recommended[] = [
   {
-    id: "bst-incendios",
-    title: "BST – Extinción de Incendios",
-    duration: "16 horas",
+    id: "contraincendios",
+    title: "Prevención y Combate Contra Incendios",
+    duration: "8 horas",
     price: 1200,
     gradient: "from-orange-500 to-red-500",
   },
   {
-    id: "bst-primeros-auxilios",
-    title: "BST – Primeros Auxilios",
-    duration: "40 horas",
+    id: "primeros-auxilios",
+    title: "Primeros Auxilios",
+    duration: "8 horas",
     price: 1800,
     gradient: "from-rose-500 to-pink-500",
   },
   {
-    id: "bst-cargas",
-    title: "BST – Manipulación de Cargas",
-    duration: "32 horas",
+    id: "prl",
+    title: "PRL (Prevención de Riesgos Laborales)",
+    duration: "8 horas",
     price: 1500,
     gradient: "from-teal-500 to-emerald-500",
   },

@@ -47,7 +47,7 @@ export function RecentDownloads() {
       <section className="rounded-2xl bg-primary p-6 text-primary-foreground shadow-sm">
         <h3 className="text-lg font-bold text-balance">Certificaciones disponibles</h3>
         <p className="mt-2 text-sm leading-relaxed text-primary-foreground/80">
-          Desbloquea nuevas certificaciones GWO y haz crecer tu perfil profesional.
+          Desbloquea nuevas certificaciones y haz crecer tu perfil profesional.
         </p>
         <button
           type="button"

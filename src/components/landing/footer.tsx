@@ -1,8 +1,8 @@
 import { Logo } from "./logo"
 import { MailIcon, WhatsAppIcon } from "../icons"
 
-const courseLinks = ["Basic Safety Training (BST)", "Basic Technical Training (BTT)", "Advanced Rescue (ART)", "Refresher GWO"]
-const serviceLinks = ["Capacitación para empresas", "Bolsa de trabajo", "Renta de instalaciones", "Consultoría en seguridad"]
+const courseLinks = ["Trabajo Seguro en Alturas", "Primeros Auxilios", "Espacios Confinados", "Riesgo Eléctrico"]
+const serviceLinks = ["Universidad Corporativa", "Capacitación en sitio", "Diagnóstico de necesidades", "Consultoría en seguridad"]
 
 export function Footer() {
   return (
@@ -12,8 +12,8 @@ export function Footer() {
           <div>
             <Logo dark />
             <p className="mt-4 max-w-xs text-sm leading-relaxed">
-              Centro de entrenamiento certificado GWO. Formamos a los técnicos que impulsan la energía
-              eólica del futuro.
+              Capacitación especializada en seguridad industrial, protección civil, atención
+              prehospitalaria y gestión de emergencias. Respaldados por Grupo Emerge RM.
             </p>
           </div>
 
@@ -63,7 +63,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-zinc-800 pt-7 sm:flex-row">
-          <p className="text-xs">© {new Date().getFullYear()} EMERGE Academy. Todos los derechos reservados.</p>
+          <p className="text-xs">© {new Date().getFullYear()} Universidad Emerge. Todos los derechos reservados.</p>
           <div className="flex gap-6">
             <a href="#" className="text-xs transition hover:text-white">Aviso de privacidad</a>
             <a href="#" className="text-xs transition hover:text-white">Términos y condiciones</a>

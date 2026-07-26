@@ -3,24 +3,24 @@ import { StarIcon } from "../icons"
 const testimonials = [
   {
     name: "Carlos Méndez",
-    role: "Técnico de mantenimiento · Vestas",
+    role: "Coordinador de seguridad · Empresa EPC, sector eólico",
     avatar: "/images/avatar-1.png",
     quote:
-      "La certificación GWO de EMERGE me abrió las puertas. A las dos semanas de terminar ya estaba trabajando en un parque eólico. La práctica en alturas fue de primer nivel.",
+      "La capacitación en Trabajo Seguro en Alturas y Espacios Confinados de Universidad Emerge elevó el nivel de nuestra cuadrilla. Los instructores conocen el campo y eso se nota en la práctica.",
   },
   {
     name: "Daniela Ruiz",
-    role: "Especialista en seguridad · Acciona",
+    role: "Jefa de Protección Civil · Gobierno municipal",
     avatar: "/images/avatar-2.png",
     quote:
-      "Los instructores realmente conocen el campo. Aprendí protocolos que aplico todos los días. Recomiendo EMERGE a cualquiera que quiera entrar al sector eólico.",
+      "Capacitaron a toda nuestra brigada contra incendio con escenarios reales. El programa de Comandante de Situaciones de Emergencia mejoró nuestra capacidad de respuesta como institución.",
   },
   {
     name: "Jorge Sandoval",
-    role: "Supervisor de cuadrilla · Enel Green Power",
+    role: "Gerente de planta · Industria manufacturera",
     avatar: "/images/avatar-3.png",
     quote:
-      "Excelente infraestructura y grupos reducidos. La formación es exigente y eso se nota cuando llegas a la torre. La bolsa de trabajo me consiguió mi primer contrato.",
+      "Llevamos varios cursos in-company con Universidad Emerge: LOTO, Riesgo Eléctrico y Sustancias Químicas. La formación práctica redujo notablemente nuestros incidentes.",
   },
 ]
 
@@ -33,7 +33,7 @@ export function Testimonials() {
             Lo que dicen nuestros egresados
           </h2>
           <p className="mt-4 text-pretty text-muted">
-            Profesionales que hoy trabajan en las principales empresas del sector eólico.
+            Empresas y gobiernos que ya fortalecieron su capacidad de respuesta con Universidad Emerge.
           </p>
         </div>
 

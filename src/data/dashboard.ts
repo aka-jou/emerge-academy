@@ -16,14 +16,14 @@ export const student = {
   globalProgress: 74,
   completedModules: 3,
   totalModules: 4,
-  currentCourseId: "bst",
+  currentCourseId: "alturas",
 }
 
 export const activeCourses: ActiveCourse[] = [
   {
-    id: "bst",
-    code: "BST",
-    title: "Basic Safety Training (BST)",
+    id: "alturas",
+    code: "SI",
+    title: "Trabajo Seguro en Alturas",
     content: ["Video", "PDF", "Meet"],
     progress: 82,
     milestoneType: "live",
@@ -31,9 +31,9 @@ export const activeCourses: ActiveCourse[] = [
     live: true,
   },
   {
-    id: "bstr",
-    code: "BSTR",
-    title: "Basic Safety Training Refresher",
+    id: "espacios-confinados",
+    code: "SI",
+    title: "Espacios Confinados",
     content: ["Video", "Quiz"],
     progress: 45,
     milestoneType: "next",
@@ -41,9 +41,9 @@ export const activeCourses: ActiveCourse[] = [
     live: false,
   },
   {
-    id: "art",
-    code: "ART",
-    title: "Advanced Rescue Training (ART)",
+    id: "brigadas-practico",
+    code: "PC",
+    title: "Comando en Tácticas y Estrategias de Brigadas Contra Incendios",
     content: ["Video", "PDF", "Quiz", "Meet"],
     progress: 18,
     milestoneType: "next",
@@ -99,7 +99,7 @@ export type DownloadFile = {
 }
 
 export const downloads: DownloadFile[] = [
-  { id: "d1", name: "Manual BST - Trabajos en altura", ext: "PDF", size: "4.2 MB" },
+  { id: "d1", name: "Manual - Trabajo Seguro en Alturas", ext: "PDF", size: "4.2 MB" },
   { id: "d2", name: "Checklist de inspección de equipo", ext: "DOC", size: "320 KB" },
   { id: "d3", name: "Registro de prácticas EPP", ext: "XLS", size: "78 KB" },
   { id: "d4", name: "Guía de primeros auxilios", ext: "PDF", size: "1.8 MB" },
@@ -128,7 +128,7 @@ export type LiveSession = {
 }
 
 export const liveSession: LiveSession = {
-  courseId: "bst",
+  courseId: "alturas",
   courseName: "Curso de Seguridad en Alturas",
   title: "Sesión en vivo — Curso de Seguridad en Alturas (Google Meet)",
   platform: "Google Meet",
@@ -143,22 +143,22 @@ export const liveSession: LiveSession = {
   participants: 24,
   language: "Español",
   about: [
-    "En esta sesión en vivo profundizaremos en las técnicas de trabajo seguro en altura aplicadas al sector eólico, con énfasis en los sistemas de detención de caídas y los procedimientos de rescate en aerogeneradores.",
+    "En esta sesión en vivo profundizaremos en las técnicas de trabajo seguro en altura para entornos industriales, con énfasis en los sistemas de detención de caídas y los procedimientos de rescate.",
     "El instructor resolverá dudas en tiempo real y realizará demostraciones prácticas del uso correcto del arnés y la línea de vida. Te recomendamos conectarte 5 minutos antes con tu cámara y micrófono listos.",
   ],
   agenda: [
     { time: "00:00", topic: "Bienvenida y objetivos de la sesión" },
     { time: "00:10", topic: "Repaso del marco normativo (NOM-009-STPS)" },
     { time: "00:30", topic: "Demostración: inspección y uso del arnés" },
-    { time: "01:00", topic: "Procedimientos de rescate en aerogeneradores" },
+    { time: "01:00", topic: "Procedimientos de rescate en trabajos de altura" },
     { time: "01:20", topic: "Preguntas y respuestas" },
   ],
   materials: [
-    { name: "Manual BST - Trabajos en altura", ext: "PDF", size: "4.2 MB" },
+    { name: "Manual - Trabajo Seguro en Alturas", ext: "PDF", size: "4.2 MB" },
     { name: "Checklist de inspección de equipo", ext: "DOC", size: "320 KB" },
     { name: "Presentación de la sesión", ext: "PDF", size: "2.1 MB" },
   ],
-  meetUrl: "https://meet.google.com/lookup/emerge-bst-altura",
+  meetUrl: "https://meet.google.com/lookup/emerge-alturas",
 }
 
 export type Certificate = {
@@ -178,18 +178,18 @@ export type Certificate = {
 
 export const certificate: Certificate = {
   recipient: "María Fernanda González Ríos",
-  standard: "Basic Safety Training GWO",
-  standardCode: "GWO-BST-2026",
+  standard: "Trabajo Seguro en Alturas",
+  standardCode: "UE-ALT-2026",
   courseTitle: "Curso de Seguridad en Alturas",
-  hours: "40 horas",
+  hours: "8 horas",
   grade: "Aprobado · 96/100",
   issueDate: "25 de noviembre de 2026",
   expiryDate: "25 de noviembre de 2028",
   folio: "EMG-2026-08842",
-  serialNumber: "MX-GWO-BST-7F3A9C2E-2026",
-  verifyUrl: "https://verifica.emergeacademy.mx/c/EMG-2026-08842",
+  serialNumber: "MX-UE-ALT-7F3A9C2E-2026",
+  verifyUrl: "https://verifica.universidademerge.mx/c/EMG-2026-08842",
   instructors: [
-    { name: "Ing. Carlos Mendoza", role: "Instructor líder certificado GWO" },
+    { name: "Ing. Carlos Mendoza", role: "Instructor líder certificado" },
     { name: "Lic. Ana Beltrán", role: "Coordinadora académica" },
   ],
 }

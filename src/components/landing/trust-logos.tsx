@@ -1,11 +1,18 @@
-const companies = ["Enel", "Vestas", "Acciona", "Iberdrola", "Siemens", "Nordex"]
+const companies = [
+  "Parques Eólicos y Solares",
+  "Constructoras",
+  "Industria Manufacturera",
+  "Logística y Transporte",
+  "Gobiernos Municipales",
+  "Protección Civil y Bomberos",
+]
 
 export function TrustLogos() {
   return (
     <section id="empresas" className="scroll-mt-16 border-y border-border bg-card py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted">
-          Nuestros egresados trabajan en
+          Sectores que atendemos
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-6 sm:gap-x-16">
           {companies.map((company) => (

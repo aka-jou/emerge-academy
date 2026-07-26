@@ -3,23 +3,23 @@ import type { JSX } from "react"
 
 const benefits: { title: string; desc: string; icon: (p: { className?: string }) => JSX.Element }[] = [
   {
-    title: "Empleabilidad Real",
-    desc: "Formación alineada a lo que exigen las empresas del sector eólico para contratar de inmediato.",
-    icon: BriefcaseIcon,
-  },
-  {
-    title: "Máxima Seguridad",
-    desc: "Protocolos y equipos que cumplen los estándares GWO para que trabajes con total confianza.",
+    title: "Formación Práctica",
+    desc: "Capacitación basada en escenarios reales que fortalece la capacidad de respuesta de tu equipo.",
     icon: ShieldIcon,
   },
   {
-    title: "Instructores Certificados",
-    desc: "Aprende con profesionales acreditados y amplia experiencia operativa en campo.",
+    title: "Instructores Especializados",
+    desc: "Aprende con profesionales certificados y con amplia experiencia operativa en campo.",
     icon: CertificateIcon,
   },
   {
-    title: "Bolsa de Trabajo",
-    desc: "Conectamos a nuestros egresados con vacantes reales en empresas aliadas del sector.",
+    title: "Experiencia Industrial",
+    desc: "Respaldados por Grupo Emerge RM, con trayectoria en el sector energético e industrial.",
+    icon: BriefcaseIcon,
+  },
+  {
+    title: "Capacitación en Sitio",
+    desc: "Programas personalizados con cobertura regional para empresas y gobiernos municipales.",
     icon: UsersIcon,
   },
 ]
@@ -30,10 +30,11 @@ export function Benefits() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-balance text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
-            ¿Por qué elegir EMERGE Academy?
+            ¿Por qué elegir Universidad Emerge?
           </h2>
           <p className="mt-4 text-pretty text-muted">
-            Una formación pensada para impulsar tu carrera en la energía eólica.
+            Capacitación especializada basada en escenarios reales, instructores certificados y
+            metodologías prácticas.
           </p>
         </div>
 

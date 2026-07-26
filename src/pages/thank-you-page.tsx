@@ -14,9 +14,9 @@ const order = {
   date: "28 de junio de 2026",
   total: 2964.5,
   course: {
-    title: "Curso de Seguridad en Alturas GWO",
-    module: "Módulo: Trabajos en Altura · Certificación GWO",
-    image: "/images/training-center.png",
+    title: "Trabajo Seguro en Alturas",
+    module: "Módulo: Seguridad Industrial · Certificación Universidad Emerge",
+    image: "/images/courses/alturas.jpg",
   },
 }
 

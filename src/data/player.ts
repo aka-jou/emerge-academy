@@ -26,8 +26,8 @@ export type Module = {
 }
 
 export const playerCourse = {
-  id: "bst-altura",
-  title: "Curso de Seguridad en Alturas GWO",
+  id: "alturas",
+  title: "Curso de Seguridad en Alturas",
   progress: 45,
 }
 
@@ -42,7 +42,7 @@ export const playerModules: Module[] = [
         format: "video",
         duration: "6 min",
         status: "completed",
-        videoPoster: "/images/training-center.png",
+        videoPoster: "/images/courses/alturas.jpg",
       },
       {
         id: "l2",
@@ -58,7 +58,7 @@ export const playerModules: Module[] = [
         format: "video",
         duration: "14 min",
         status: "current",
-        videoPoster: "/images/wind-farm.png",
+        videoPoster: "/images/courses/espacios-confinados.jpg",
       },
     ],
   },
@@ -72,7 +72,7 @@ export const playerModules: Module[] = [
         format: "video",
         duration: "18 min",
         status: "available",
-        videoPoster: "/images/training-center.png",
+        videoPoster: "/images/courses/alturas.jpg",
       },
       {
         id: "l5",
@@ -110,7 +110,7 @@ export const playerModules: Module[] = [
   },
   {
     id: "m3",
-    title: "Módulo 3 · Rescate en aerogeneradores",
+    title: "Módulo 3 · Procedimientos de rescate en altura",
     lessons: [
       {
         id: "l7",
@@ -118,7 +118,7 @@ export const playerModules: Module[] = [
         format: "video",
         duration: "20 min",
         status: "locked",
-        videoPoster: "/images/wind-farm.png",
+        videoPoster: "/images/courses/espacios-confinados.jpg",
       },
       {
         id: "l8",
@@ -128,7 +128,7 @@ export const playerModules: Module[] = [
         status: "locked",
         quiz: [
           {
-            question: "¿Qué debe verificarse primero al iniciar un rescate en aerogenerador?",
+            question: "¿Qué debe verificarse primero al iniciar un rescate en altura?",
             options: [
               "La carga de la batería de la radio",
               "La seguridad de la zona y el estado del rescatista",
