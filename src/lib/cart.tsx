@@ -1,9 +1,32 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
+import { api, ApiError } from "./api"
 
 export type CartLine = {
   courseId: string
   quantity: number
 }
+
+export type OrderItem = {
+  courseId: string
+  quantity: number
+  unitPriceMxn: number
+  course?: { id: string; title: string; image: string }
+}
+
+export type Order = {
+  id: string
+  folio: string
+  subtotalMxn: number
+  discountMxn: number
+  taxRate: number
+  totalMxn: number
+  couponCode?: string
+  status: "paid" | "cancelled"
+  items: OrderItem[]
+  createdAt: string
+}
+
+type CheckoutResult = { ok: true; order: Order } | { ok: false; error: string }
 
 type CartContextValue = {
   items: CartLine[]
@@ -13,6 +36,7 @@ type CartContextValue = {
   setQuantity: (courseId: string, quantity: number) => void
   isInCart: (courseId: string) => boolean
   clear: () => void
+  checkout: (couponCode?: string) => Promise<CheckoutResult>
 }
 
 const CART_KEY = "emerge.cart"
@@ -68,10 +92,27 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems([])
   }
 
+  // Checkout real contra el backend: crea la orden (pago simulado, se confirma
+  // de inmediato) y deja al usuario inscrito en los cursos comprados.
+  async function checkout(couponCode?: string): Promise<CheckoutResult> {
+    try {
+      const order = await api.post<Order>("/orders", {
+        items: items.map((line) => ({ courseId: line.courseId, quantity: line.quantity })),
+        couponCode: couponCode || undefined,
+      })
+      return { ok: true, order }
+    } catch (err) {
+      const message = err instanceof ApiError ? err.message : "No se pudo procesar tu compra. Intenta de nuevo."
+      return { ok: false, error: message }
+    }
+  }
+
   const count = items.reduce((sum, line) => sum + line.quantity, 0)
 
   return (
-    <CartContext.Provider value={{ items, count, addItem, removeItem, setQuantity, isInCart, clear }}>
+    <CartContext.Provider
+      value={{ items, count, addItem, removeItem, setQuantity, isInCart, clear, checkout }}
+    >
       {children}
     </CartContext.Provider>
   )
@@ -84,8 +125,10 @@ export function useCart() {
 }
 
 /**
- * Precio de demostración calculado a partir de la duración del curso.
- * Reemplazar por precios reales del catálogo cuando exista backend/pricing.
+ * Precio estimado para mostrar en el carrito antes de pagar (misma tarifa usada
+ * para sembrar el catálogo real en el backend). El precio que realmente se cobra
+ * es el que calcula el servidor a partir de `Course.priceMxn` en la base de datos,
+ * no este valor del cliente.
  */
 const DEMO_RATE_MXN_PER_HOUR = 300
 

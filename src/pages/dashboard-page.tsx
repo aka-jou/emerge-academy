@@ -1,11 +1,14 @@
+import { Link } from "react-router-dom"
 import { DashboardHeader } from "../components/dashboard/dashboard-header"
 import { WelcomeBanner } from "../components/dashboard/welcome-banner"
-import { DashboardCourseCard } from "../components/dashboard/dashboard-course-card"
+import { EnrolledCourseCard } from "../components/dashboard/enrolled-course-card"
 import { UpcomingMilestones } from "../components/dashboard/upcoming-milestones"
 import { RecentDownloads } from "../components/dashboard/recent-downloads"
-import { activeCourses } from "../data/dashboard"
+import { useMyCourses } from "../lib/orders"
 
 export function DashboardPage() {
+  const { courses, loading, error } = useMyCourses()
+
   return (
     <div className="flex min-h-full flex-col bg-background">
       <DashboardHeader />
@@ -15,11 +18,29 @@ export function DashboardPage() {
 
         <section className="mt-8">
           <h2 className="text-xl font-bold tracking-tight text-foreground">Cursos activos</h2>
-          <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {activeCourses.map((course) => (
-              <DashboardCourseCard key={course.id} course={course} />
-            ))}
-          </div>
+
+          {loading && <p className="mt-4 text-sm text-muted">Cargando tus cursos…</p>}
+          {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
+
+          {!loading && !error && courses.length === 0 && (
+            <div className="mt-4 rounded-2xl border border-border bg-card p-8 text-center shadow-sm">
+              <p className="text-sm font-medium text-foreground">Aún no tienes cursos inscritos.</p>
+              <Link
+                to="/cursos"
+                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
+              >
+                Explorar catálogo
+              </Link>
+            </div>
+          )}
+
+          {!loading && courses.length > 0 && (
+            <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {courses.map((course) => (
+                <EnrolledCourseCard key={course.id} course={course} />
+              ))}
+            </div>
+          )}
         </section>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-5">

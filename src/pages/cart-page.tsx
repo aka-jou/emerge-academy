@@ -1,18 +1,23 @@
 import { useMemo, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { CoursesHeader } from "../components/courses/courses-header"
 import { CartItem, type CartItemData } from "../components/cart/cart-item"
 import { OrderSummary } from "../components/cart/order-summary"
 import { RecommendedCourses } from "../components/cart/recommended-courses"
 import { ShoppingCartIcon, ArrowRightIcon } from "../components/icons"
 import { useCart, estimateCoursePrice } from "../lib/cart"
+import { useAuth } from "../lib/auth"
 import { courses } from "../data/courses"
 
 const TAX_RATE = 0.16 // IVA México
 
 export function CartPage() {
-  const { items, addItem, removeItem, setQuantity } = useCart()
+  const { items, addItem, removeItem, setQuantity, checkout, clear } = useCart()
+  const { user } = useAuth()
+  const navigate = useNavigate()
   const [couponCode, setCouponCode] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
   const cartItems: CartItemData[] = useMemo(
     () =>
@@ -42,6 +47,27 @@ export function CartPage() {
 
   const subtotal = cartItems.reduce((sum, item) => sum + item.unitPrice * item.quantity, 0)
   const discount = couponCode === "BIENVENIDA10" ? Math.round(subtotal * 0.1) : 0
+
+  async function handleCheckout() {
+    setCheckoutError(null)
+
+    if (!user) {
+      navigate("/login", { state: { from: "/carrito" } })
+      return
+    }
+    if (items.length === 0) return
+
+    setSubmitting(true)
+    const result = await checkout(couponCode ?? undefined)
+    setSubmitting(false)
+
+    if (result.ok) {
+      clear()
+      navigate("/checkout/confirmacion", { state: { order: result.order } })
+    } else {
+      setCheckoutError(result.error)
+    }
+  }
 
   return (
     <div className="flex min-h-full flex-col bg-background">
@@ -94,6 +120,9 @@ export function CartPage() {
                 discount={discount}
                 taxRate={TAX_RATE}
                 onApplyCoupon={(code) => setCouponCode(code)}
+                onCheckout={handleCheckout}
+                submitting={submitting}
+                error={checkoutError}
               />
             </div>
           )}

@@ -11,8 +11,9 @@ export function RegisterCard() {
   const [password, setPassword] = useState("")
   const [confirm, setConfirm] = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError(null)
 
@@ -25,7 +26,10 @@ export function RegisterCard() {
       return
     }
 
-    const result = register(name, email, password)
+    setSubmitting(true)
+    const result = await register(name, email, password)
+    setSubmitting(false)
+
     if (result.ok) {
       navigate("/dashboard")
     } else {
@@ -117,9 +121,10 @@ export function RegisterCard() {
 
         <button
           type="submit"
-          className="mt-1 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-ring/40"
+          disabled={submitting}
+          className="mt-1 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-ring/40 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Crear cuenta
+          {submitting ? "Creando cuenta…" : "Crear cuenta"}
         </button>
       </form>
 

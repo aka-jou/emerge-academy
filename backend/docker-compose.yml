@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: emerge-academy-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: emerge
+      POSTGRES_PASSWORD: emerge
+      POSTGRES_DB: emerge_academy
+    ports:
+      - "5432:5432"
+    volumes:
+      - emerge_academy_pgdata:/var/lib/postgresql/data
+
+volumes:
+  emerge_academy_pgdata:

@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
 import { LockIcon, ShieldIcon, FileTextIcon, CheckIcon } from "../icons"
 import { PaymentMethods } from "./payment-methods"
 
@@ -14,9 +13,20 @@ type OrderSummaryProps = {
   discount: number
   taxRate: number
   onApplyCoupon: (code: string) => void
+  onCheckout: () => void
+  submitting: boolean
+  error: string | null
 }
 
-export function OrderSummary({ subtotal, discount, taxRate, onApplyCoupon }: OrderSummaryProps) {
+export function OrderSummary({
+  subtotal,
+  discount,
+  taxRate,
+  onApplyCoupon,
+  onCheckout,
+  submitting,
+  error,
+}: OrderSummaryProps) {
   const [coupon, setCoupon] = useState("")
   const taxable = subtotal - discount
   const taxes = taxable * taxRate
@@ -72,14 +82,25 @@ export function OrderSummary({ subtotal, discount, taxRate, onApplyCoupon }: Ord
         <p className="text-xs text-muted">Prueba el código BIENVENIDA10 para 10% de descuento.</p>
       </div>
 
+      {error && (
+        <p
+          role="alert"
+          className="mt-4 rounded-lg border border-destructive/30 bg-destructive/10 px-3.5 py-2.5 text-sm font-medium text-destructive"
+        >
+          {error}
+        </p>
+      )}
+
       {/* CTA */}
-      <Link
-        to="/checkout/confirmacion"
-        className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3.5 text-sm font-bold text-primary-foreground transition hover:bg-primary-hover"
+      <button
+        type="button"
+        onClick={onCheckout}
+        disabled={submitting}
+        className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3.5 text-sm font-bold text-primary-foreground transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
       >
         <LockIcon className="h-5 w-5" />
-        Proceder al pago - {currency.format(total)}
-      </Link>
+        {submitting ? "Procesando pago…" : `Proceder al pago - ${currency.format(total)}`}
+      </button>
 
       {/* Pie */}
       <div className="mt-5 flex flex-col gap-3 border-t border-border pt-5">

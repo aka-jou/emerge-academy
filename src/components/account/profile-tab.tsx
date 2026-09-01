@@ -1,31 +1,73 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { PencilIcon, CheckIcon } from "../icons"
-import { profileInfo } from "../../data/account"
+import { useAuth } from "../../lib/auth"
+
+type FormValues = {
+  name: string
+  email: string
+  phone: string
+  company: string
+  cityCountry: string
+}
 
 type Field = {
-  id: keyof typeof profileInfo
+  id: keyof FormValues
   label: string
   type: string
   optional?: boolean
+  readOnly?: boolean
   autoComplete?: string
 }
 
 const fields: Field[] = [
-  { id: "fullName", label: "Nombre completo", type: "text", autoComplete: "name" },
-  { id: "email", label: "Correo electrónico de contacto", type: "email", autoComplete: "email" },
-  { id: "phone", label: "Teléfono", type: "tel", autoComplete: "tel" },
+  { id: "name", label: "Nombre completo", type: "text", autoComplete: "name" },
+  { id: "email", label: "Correo electrónico de contacto", type: "email", autoComplete: "email", readOnly: true },
+  { id: "phone", label: "Teléfono", type: "tel", optional: true, autoComplete: "tel" },
   { id: "company", label: "Empresa actual", type: "text", optional: true, autoComplete: "organization" },
-  { id: "cityCountry", label: "Ciudad / País", type: "text", autoComplete: "address-level2" },
+  { id: "cityCountry", label: "Ciudad / País", type: "text", optional: true, autoComplete: "address-level2" },
 ]
 
 export function ProfileTab() {
-  const [values, setValues] = useState(profileInfo)
+  const { user, updateProfile } = useAuth()
+  const [values, setValues] = useState<FormValues>({
+    name: user?.name ?? "",
+    email: user?.email ?? "",
+    phone: user?.phone ?? "",
+    company: user?.company ?? "",
+    cityCountry: user?.cityCountry ?? "",
+  })
   const [saved, setSaved] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
 
-  function handleSubmit(e: React.FormEvent) {
+  useEffect(() => {
+    if (!user) return
+    setValues({
+      name: user.name,
+      email: user.email,
+      phone: user.phone ?? "",
+      company: user.company ?? "",
+      cityCountry: user.cityCountry ?? "",
+    })
+  }, [user])
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2500)
+    setError(null)
+    setSubmitting(true)
+    const result = await updateProfile({
+      name: values.name,
+      phone: values.phone,
+      company: values.company,
+      cityCountry: values.cityCountry,
+    })
+    setSubmitting(false)
+    if (result.ok) {
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2500)
+    } else {
+      setError(result.error ?? "No se pudo guardar el perfil.")
+    }
   }
 
   return (
@@ -40,11 +82,12 @@ export function ProfileTab() {
       {/* Avatar con botón de editar foto superpuesto */}
       <div className="flex items-center gap-5">
         <div className="relative">
-          <img
-            src="/images/maria-avatar.png"
-            alt={`Foto de perfil de ${values.fullName}`}
-            className="h-24 w-24 rounded-full border-2 border-border object-cover"
-          />
+          <div
+            aria-hidden="true"
+            className="flex h-24 w-24 items-center justify-center rounded-full border-2 border-border bg-muted-surface text-2xl font-bold text-muted"
+          >
+            {values.name.trim().charAt(0).toUpperCase() || "?"}
+          </div>
           <button
             type="button"
             className="absolute -bottom-1 -right-1 inline-flex h-9 w-9 items-center justify-center rounded-full border-2 border-card bg-primary text-primary-foreground shadow-sm transition hover:bg-primary-hover"
@@ -61,6 +104,15 @@ export function ProfileTab() {
         </div>
       </div>
 
+      {error && (
+        <p
+          role="alert"
+          className="rounded-lg border border-destructive/30 bg-destructive/10 px-3.5 py-2.5 text-sm font-medium text-destructive"
+        >
+          {error}
+        </p>
+      )}
+
       {/* Formulario en grid de dos columnas */}
       <div className="grid gap-5 sm:grid-cols-2">
         {fields.map((field) => (
@@ -74,9 +126,14 @@ export function ProfileTab() {
               name={field.id}
               type={field.type}
               autoComplete={field.autoComplete}
+              readOnly={field.readOnly}
               value={values[field.id]}
               onChange={(e) => setValues((prev) => ({ ...prev, [field.id]: e.target.value }))}
-              className="mt-2 w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
+              className={
+                field.readOnly
+                  ? "mt-2 w-full cursor-not-allowed rounded-lg border border-border bg-muted-surface px-3.5 py-2.5 text-sm text-muted outline-none"
+                  : "mt-2 w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
+              }
             />
           </div>
         ))}
@@ -85,10 +142,11 @@ export function ProfileTab() {
       <div className="flex items-center gap-4 border-t border-border pt-6">
         <button
           type="submit"
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary-hover"
+          disabled={submitting}
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
           <CheckIcon className="h-4 w-4" />
-          Guardar cambios del perfil
+          {submitting ? "Guardando…" : "Guardar cambios del perfil"}
         </button>
         {saved && <span className="text-sm font-medium text-primary">Cambios guardados correctamente.</span>}
       </div>

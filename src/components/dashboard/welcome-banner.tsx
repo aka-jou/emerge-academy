@@ -1,8 +1,11 @@
 import { ArrowRightIcon } from "../icons"
 import { student } from "../../data/dashboard"
+import { useAuth } from "../../lib/auth"
 
 export function WelcomeBanner() {
-  const { name, globalProgress, completedModules, totalModules } = student
+  const { user } = useAuth()
+  const { globalProgress, completedModules, totalModules } = student
+  const name = user?.name?.split(" ")[0] ?? student.name
 
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">

@@ -1,22 +1,13 @@
-import { useEffect, useRef, useState } from "react"
-import { Link, Navigate } from "react-router-dom"
+import { Link, Navigate, useLocation } from "react-router-dom"
 import { CheckIcon, MailIcon, UsersIcon, PlayIcon, ArrowRightIcon } from "../components/icons"
-import { useCart, estimateCoursePrice } from "../lib/cart"
 import { courses } from "../data/courses"
+import type { Order } from "../lib/cart"
 
 const currency = new Intl.NumberFormat("es-MX", {
   style: "currency",
   currency: "MXN",
   minimumFractionDigits: 2,
 })
-
-const TAX_RATE = 0.16
-
-function buildFolio() {
-  const year = new Date().getFullYear()
-  const suffix = Math.floor(10000 + Math.random() * 89999)
-  return `EMG-${year}-${suffix}`
-}
 
 const nextSteps = [
   {
@@ -37,43 +28,20 @@ const nextSteps = [
 ]
 
 export function ThankYouPage() {
-  const { items, clear } = useCart()
+  const location = useLocation()
+  // La orden real (ya pagada en el backend) llega por navigation state desde el checkout.
+  const order = (location.state as { order?: Order } | null)?.order
 
-  // Toma una foto del carrito al entrar (antes de vaciarlo), para no perder qué se compró.
-  const [snapshot] = useState(() => items)
-  const cleared = useRef(false)
-
-  useEffect(() => {
-    if (!cleared.current) {
-      cleared.current = true
-      clear()
-    }
-  }, [clear])
-
-  const purchasedCourses = snapshot
-    .map((line) => {
-      const course = courses.find((c) => c.id === line.courseId)
-      return course ? { course, quantity: line.quantity } : null
-    })
-    .filter((entry): entry is { course: (typeof courses)[number]; quantity: number } => entry !== null)
-
-  const [order] = useState(() => {
-    const subtotal = purchasedCourses.reduce(
-      (sum, { course, quantity }) => sum + estimateCoursePrice(course.duration) * quantity,
-      0,
-    )
-    return {
-      folio: buildFolio(),
-      date: new Date().toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" }),
-      total: subtotal * (1 + TAX_RATE),
-    }
-  })
-
-  if (purchasedCourses.length === 0) {
+  if (!order) {
     return <Navigate to="/dashboard" replace />
   }
 
-  const primaryCourse = purchasedCourses[0].course
+  const purchasedCourses = order.items.map((item) => {
+    const course = courses.find((c) => c.id === item.courseId)
+    return { course, quantity: item.quantity, item }
+  })
+
+  const primaryEntry = purchasedCourses[0]
   const extraCount = purchasedCourses.length - 1
 
   return (
@@ -115,46 +83,56 @@ export function ThankYouPage() {
           <dl className="mt-6 grid grid-cols-1 gap-4 border-t border-border pt-6 sm:grid-cols-2">
             <div>
               <dt className="text-xs font-medium uppercase tracking-wide text-muted">Fecha de compra</dt>
-              <dd className="mt-1 text-sm font-semibold text-foreground">{order.date}</dd>
+              <dd className="mt-1 text-sm font-semibold text-foreground">
+                {new Date(order.createdAt).toLocaleDateString("es-MX", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </dd>
             </div>
             <div className="sm:text-right">
               <dt className="text-xs font-medium uppercase tracking-wide text-muted">Monto total</dt>
-              <dd className="mt-1 text-sm font-extrabold text-primary">{currency.format(order.total)}</dd>
+              <dd className="mt-1 text-sm font-extrabold text-primary">{currency.format(order.totalMxn)}</dd>
             </div>
           </dl>
 
           {/* Curso(s) adquiridos */}
-          <div className="mt-6 flex items-center gap-4 rounded-xl border border-border bg-muted-surface/50 p-4">
-            <img
-              src={primaryCourse.image}
-              alt={primaryCourse.title}
-              className="h-16 w-16 shrink-0 rounded-lg object-cover sm:h-20 sm:w-20"
-            />
-            <div className="min-w-0 flex-1">
-              <h2 className="truncate text-sm font-semibold text-foreground">
-                {primaryCourse.title}
-                {extraCount > 0 && (
-                  <span className="font-normal text-muted"> +{extraCount} curso{extraCount > 1 ? "s" : ""} más</span>
-                )}
-              </h2>
-              <p className="mt-0.5 truncate text-xs text-muted">
-                Módulo: {primaryCourse.type} · Certificación Universidad Emerge
-              </p>
-              <div className="mt-3 flex items-center gap-3">
-                <div
-                  className="h-2 flex-1 overflow-hidden rounded-full bg-border"
-                  role="progressbar"
-                  aria-valuenow={0}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-label="Progreso del curso"
-                >
-                  <div className="h-full rounded-full bg-primary" style={{ width: "0%" }} />
+          {primaryEntry && (
+            <div className="mt-6 flex items-center gap-4 rounded-xl border border-border bg-muted-surface/50 p-4">
+              {primaryEntry.course && (
+                <img
+                  src={primaryEntry.course.image}
+                  alt={primaryEntry.course.title}
+                  className="h-16 w-16 shrink-0 rounded-lg object-cover sm:h-20 sm:w-20"
+                />
+              )}
+              <div className="min-w-0 flex-1">
+                <h2 className="truncate text-sm font-semibold text-foreground">
+                  {primaryEntry.course?.title ?? primaryEntry.item.courseId}
+                  {extraCount > 0 && (
+                    <span className="font-normal text-muted"> +{extraCount} curso{extraCount > 1 ? "s" : ""} más</span>
+                  )}
+                </h2>
+                <p className="mt-0.5 truncate text-xs text-muted">
+                  {primaryEntry.course ? `Módulo: ${primaryEntry.course.type} · ` : ""}Certificación Universidad Emerge
+                </p>
+                <div className="mt-3 flex items-center gap-3">
+                  <div
+                    className="h-2 flex-1 overflow-hidden rounded-full bg-border"
+                    role="progressbar"
+                    aria-valuenow={0}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label="Progreso del curso"
+                  >
+                    <div className="h-full rounded-full bg-primary" style={{ width: "0%" }} />
+                  </div>
+                  <span className="whitespace-nowrap text-xs font-semibold text-muted">0% · Listo para comenzar</span>
                 </div>
-                <span className="whitespace-nowrap text-xs font-semibold text-muted">0% · Listo para comenzar</span>
               </div>
             </div>
-          </div>
+          )}
         </section>
 
         {/* Pasos siguientes */}

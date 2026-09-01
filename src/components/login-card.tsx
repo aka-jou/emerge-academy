@@ -1,22 +1,27 @@
 import { type FormEvent, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { GoogleIcon } from "./google-icon"
 import { Logo } from "./landing/logo"
-import { useAuth, DEMO_CREDENTIALS } from "../lib/auth"
+import { useAuth } from "../lib/auth"
 
 export function LoginCard() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { login } = useAuth()
-  const [email, setEmail] = useState(DEMO_CREDENTIALS.email)
-  const [password, setPassword] = useState(DEMO_CREDENTIALS.password)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError(null)
-    const result = login(email, password)
+    setSubmitting(true)
+    const result = await login(email, password)
+    setSubmitting(false)
     if (result.ok) {
-      navigate("/dashboard")
+      const from = (location.state as { from?: string } | null)?.from
+      navigate(from ?? "/dashboard")
     } else {
       setError(result.error ?? "No se pudo iniciar sesión.")
     }
@@ -80,9 +85,10 @@ export function LoginCard() {
 
         <button
           type="submit"
-          className="mt-1 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-ring/40"
+          disabled={submitting}
+          className="mt-1 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-ring/40 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Iniciar sesión
+          {submitting ? "Iniciando sesión…" : "Iniciar sesión"}
         </button>
       </form>
 
@@ -108,12 +114,6 @@ export function LoginCard() {
           Regístrate aquí
         </Link>
       </p>
-
-      <div className="mt-6 rounded-lg border border-border bg-muted-surface px-3.5 py-3 text-center text-xs text-muted">
-        <span className="font-semibold text-card-foreground">Cuenta de prueba</span>
-        <br />
-        {DEMO_CREDENTIALS.email} · {DEMO_CREDENTIALS.password}
-      </div>
     </div>
   )
 }
