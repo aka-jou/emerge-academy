@@ -2,6 +2,8 @@ import { Link, useParams } from "react-router-dom"
 import { CoursesHeader } from "../components/courses/courses-header"
 import { CourseTabs } from "../components/course-detail/course-tabs"
 import { PurchaseCard } from "../components/course-detail/purchase-card"
+import { CourseObjective } from "../components/course-detail/course-objective"
+import { CourseReferences } from "../components/course-detail/course-references"
 import { courseDetails } from "../data/courses"
 import { ClockIcon, GraduationCapIcon, UsersIcon, CertificateIcon } from "../components/icons"
 
@@ -71,6 +73,8 @@ export function CourseDetailPage() {
                 {courseDetail.description}
               </p>
 
+              <CourseObjective objective={courseDetail.objective} instructor={courseDetail.instructor} />
+
               <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-3">
                 {courseDetail.specs.map((spec) => {
                   const Icon = specIcons[spec.icon]
@@ -98,6 +102,8 @@ export function CourseDetailPage() {
               </div>
 
               <CourseTabs modules={courseDetail.modules} />
+
+              <CourseReferences references={courseDetail.references} />
             </div>
 
             {/* Sidebar */}

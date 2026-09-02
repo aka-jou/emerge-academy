@@ -118,9 +118,9 @@ export const courses: Course[] = [
     type: "Seguridad Industrial",
     standard: "Certificación Universidad Emerge",
     title: "Bloqueo, Etiquetado y Candadeo (LOTO)",
-    description: "Procedimientos de bloqueo y etiquetado para el control de energías peligrosas durante mantenimiento.",
+    description: "Identificación de energías peligrosas y aplicación de los pasos de aislamiento, candadeo, tarjeteo y prueba de cero energía.",
     duration: "8 horas",
-    requirement: "Personal técnico/operativo",
+    requirement: "Escolaridad mínima secundaria, sin fobia a energías peligrosas",
     venue: "Capacitación en sitio",
     action: "Inscribirme",
   },
@@ -278,6 +278,11 @@ export type CourseModule = {
   hours: number
 }
 
+export type EvaluationCriterion = {
+  label: string
+  percentage: number
+}
+
 export type CourseDetail = {
   title: string
   image: string
@@ -291,6 +296,14 @@ export type CourseDetail = {
   physicalRequirements: string[]
   ppeRequirements: string[]
   standards: { code: string; name: string }[]
+  // Campos opcionales: sólo se muestran cuando el curso tiene un documento de
+  // planeación real que los respalda (ver componentes en course-detail).
+  instructor?: string
+  objective?: string
+  evaluationCriteria?: EvaluationCriterion[]
+  evaluationNote?: string
+  equipment?: string[]
+  references?: string[]
 }
 
 const cotizacion = { price: "Cotización", priceNote: "precio según número de participantes" }
@@ -573,27 +586,79 @@ export const courseDetails: Record<string, CourseDetail> = {
     title: "Bloqueo, Etiquetado y Candadeo (LOTO)",
     image: "/images/courses/loto.jpg",
     description:
-      "Procedimientos de bloqueo y etiquetado (LOTO) para el control de energías peligrosas durante labores de mantenimiento, evitando la liberación accidental de energía.",
+      "Curso teórico-práctico para identificar energías peligrosas (eléctrica, hidráulica, neumática, térmica) y aplicar de forma estricta los pasos de aislamiento, candadeo, tarjeteo y prueba de cero energía antes de intervenir maquinaria o equipo industrial y eólico.",
     specs: [
       { label: "8 horas", icon: "clock" },
       { label: "Intermedio", icon: "graduation" },
       { label: "Presencial", icon: "users" },
       { label: "Certificado", icon: "certificate" },
     ],
-    prerequisites: ["Personal técnico/operativo"],
+    prerequisites: [
+      "Escolaridad mínima: secundaria",
+      "Habilidad para el trabajo bajo presión y en equipo",
+      "Ausencia de fobia o negligencia ante la intervención de energías peligrosas acumuladas",
+    ],
     ...cotizacion,
     venues: sedeInSitu,
+    instructor: "Rafael Azaharez Cala",
+    objective:
+      "Al terminar el curso, el participante demostrará los conocimientos y habilidades necesarias para identificar, aislar y bloquear cualquier tipo de energía peligrosa en un entorno eólico e industrial, aplicando el procedimiento LOTO de forma teórico-práctica para realizar su trabajo de forma segura.",
     modules: [
-      { number: 1, title: "Fundamentos de energías peligrosas", lessons: 3, hours: 2 },
-      { number: 2, title: "Procedimientos de bloqueo y etiquetado", lessons: 4, hours: 2 },
-      { number: 3, title: "Verificación de energía cero", lessons: 3, hours: 2 },
-      { number: 4, title: "Práctica y evaluación final", lessons: 3, hours: 2 },
+      {
+        number: 1,
+        title: "Tipos de energías peligrosas y procedimiento estándar de control (pasos del LOTO)",
+        lessons: 3,
+        hours: 2,
+      },
+      {
+        number: 2,
+        title: "Dispositivos de aislamiento: candados, tarjetas y mordazas (personal autorizado y afectado)",
+        lessons: 3,
+        hours: 2,
+      },
+      {
+        number: 3,
+        title: "Tácticas de bloqueo: colocación de dispositivos, purga y verificación de energía cero",
+        lessons: 4,
+        hours: 2,
+      },
+      {
+        number: 4,
+        title: "Bloqueos grupales, coordinación con otras unidades y evaluación final",
+        lessons: 3,
+        hours: 2,
+      },
     ],
-    physicalRequirements: ["Sin requisitos físicos especiales"],
-    ppeRequirements: ["Candados y tarjetas de bloqueo personales", "Guantes de trabajo"],
+    physicalRequirements: [
+      "Complexión y resistencia física para manipular válvulas, interruptores y estaciones de bloqueo de hasta 15 kg",
+      "Capacidad físico-motora para aplicar maniobras de aislamiento mecánico y colocación de bloqueos físicos",
+      "Ausencia de fobia o negligencia ante la intervención de energías peligrosas acumuladas",
+    ],
+    ppeRequirements: ["Casco", "Lentes de seguridad", "Botas dieléctricas"],
     standards: [
-      { code: "LOTO", name: "Procedimientos de bloqueo y etiquetado (Lockout/Tagout)" },
-      { code: "NOM-004-STPS", name: "Sistemas de protección y dispositivos de seguridad en maquinaria" },
+      { code: "OSHA 29 CFR 1910.147", name: "Control de Energía Peligrosa (Lockout/Tagout)" },
+      { code: "NOM-004-STPS-1999", name: "Sistemas de protección y dispositivos de seguridad en la maquinaria" },
+    ],
+    evaluationCriteria: [
+      { label: "Evaluación diagnóstica (cuestionario, al inicio)", percentage: 0 },
+      { label: "Evaluación formativa — guía de observación", percentage: 50 },
+      { label: "Evaluación formativa — lista de cotejo", percentage: 40 },
+      { label: "Evaluación final (cuestionario)", percentage: 10 },
+    ],
+    evaluationNote: "Se requiere un mínimo de 70% acumulado para acreditar el curso.",
+    equipment: [
+      "Kit LOTO comercial (candados rojos dieléctricos, llaves únicas, mordazas de acero, tarjetas \"No operar\")",
+      "Bloqueadores mecánicos para disyuntores eléctricos (breakers)",
+      "Dispositivos de bloqueo para válvulas de compuerta y de bola",
+      "Cable ajustable de bloqueo para sistemas múltiples",
+      "Estación o caja de bloqueo grupal (Group Lock Box)",
+      "Multímetro / probador de ausencia de tensión",
+      "Panel o maqueta interactiva simuladora de fuentes de energía",
+    ],
+    references: [
+      "OSHA 29 CFR 1910.147 — Control de Energía Peligrosa (Lockout/Tagout), EE.UU.",
+      "NOM-004-STPS-1999 — Sistemas de protección y dispositivos de seguridad en la maquinaria y equipo, México",
+      "Manual de procedimientos LOTO para mantenimiento industrial y eólico — Grupo EMERGE RM",
     ],
   },
 

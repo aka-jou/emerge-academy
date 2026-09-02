@@ -2,6 +2,8 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import type { CourseDetail } from "../../data/courses"
 import { useCart } from "../../lib/cart"
+import { CourseEquipment } from "./course-equipment"
+import { EvaluationCriteria } from "./evaluation-criteria"
 import {
   ShoppingCartIcon,
   ChevronDownIcon,
@@ -115,6 +117,8 @@ export function PurchaseCard({ courseId, detail }: { courseId: string; detail: C
 
       <RequirementCard title="Requisitos físicos" items={detail.physicalRequirements} />
 
+      <CourseEquipment equipment={detail.equipment} />
+
       <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
         <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
           <HardHatIcon className="h-4 w-4 text-primary" />
@@ -129,6 +133,8 @@ export function PurchaseCard({ courseId, detail }: { courseId: string; detail: C
           ))}
         </ul>
       </div>
+
+      <EvaluationCriteria criteria={detail.evaluationCriteria} note={detail.evaluationNote} />
 
       <div className="rounded-xl border border-border bg-muted-surface p-5">
         <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
