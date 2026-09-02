@@ -57,7 +57,6 @@
     "duration": "16 horas",
     "requirement": "Escolaridad mínima secundaria, sin fobia a las alturas",
     "venue": "Capacitación en sitio",
-    "online": false,
     "action": "Inscribirme"
   },
   {
@@ -90,9 +89,9 @@
     "type": "Seguridad Industrial",
     "standard": "Certificación Universidad Emerge",
     "title": "Riesgo Eléctrico",
-    "description": "Prevención de accidentes eléctricos y procedimientos seguros de trabajo cerca de energía eléctrica.",
-    "duration": "8 horas",
-    "requirement": "Personal técnico/operativo",
+    "description": "Identificación de peligros eléctricos, aplicación de las 5 Reglas de Oro, bloqueo y etiquetado (LOTO) y uso de EPP dieléctrico en entornos industriales y eólicos.",
+    "duration": "16 horas",
+    "requirement": "Escolaridad mínima secundaria, de 20 a 50 años, sin fobia a trabajar cerca de energía eléctrica",
     "venue": "Capacitación en sitio",
     "action": "Inscribirme"
   },
