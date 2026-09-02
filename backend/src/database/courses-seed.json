@@ -53,12 +53,12 @@
     "type": "Seguridad Industrial",
     "standard": "Certificación Universidad Emerge",
     "title": "PRL (Prevención de Riesgos Laborales)",
-    "description": "Identificación y control de riesgos laborales para fortalecer la cultura de prevención en la empresa.",
-    "duration": "8 horas",
-    "requirement": "Sin experiencia previa",
-    "venue": "En línea",
-    "online": true,
-    "action": "Entrar"
+    "description": "Identificación de peligros, evaluación de riesgos (matriz IPER) y aplicación de medidas preventivas conforme a las NOM-STPS.",
+    "duration": "16 horas",
+    "requirement": "Escolaridad mínima secundaria, sin fobia a las alturas",
+    "venue": "Capacitación en sitio",
+    "online": false,
+    "action": "Inscribirme"
   },
   {
     "id": "torque-tension",
