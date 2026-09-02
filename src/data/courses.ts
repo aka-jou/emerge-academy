@@ -403,6 +403,35 @@ export const courseDetails: Record<string, CourseDetail> = {
       { code: "NFPA 10", name: "Standard for Portable Fire Extinguishers" },
       { code: "NFPA 101", name: "Life Safety Code" },
     ],
+    instructor: "Rafael Azaharez Cala",
+    objective:
+      "Al finalizar el curso, el participante será capaz de identificar los riesgos de incendio presentes en su entorno laboral, aplicar medidas preventivas, reconocer la clasificación de los incendios, seleccionar el agente extintor adecuado, utilizar correctamente un extintor portátil mediante la técnica PASS y participar de manera segura y coordinada en procedimientos de evacuación y respuesta inicial ante emergencias, conforme a la NOM-002-STPS-2010.",
+    evaluationCriteria: [
+      { label: "Guía de observación (participación, actitud preventiva)", percentage: 40 },
+      { label: "Lista de cotejo para la práctica con extintores", percentage: 30 },
+      { label: "Examen teórico (evaluación sumativa)", percentage: 30 },
+    ],
+    evaluationNote:
+      "Se acredita con 80/100 como mínimo, participación en todas las prácticas y desempeño satisfactorio en el simulacro.",
+    equipment: [
+      "Extintores portátiles de distintos tipos (agua, PQS, CO₂)",
+      "Tambor de prácticas para fuego controlado",
+      "Radio portátil para comunicación durante el simulacro",
+      "Botiquín de primeros auxilios",
+      "Cinta de delimitación y señalización",
+      "Cronómetro",
+    ],
+    references: [
+      "NOM-002-STPS-2010 — Prevención y protección contra incendios en los centros de trabajo, México",
+      "NOM-003-SEGOB-2011 — Señales y avisos para protección civil, México",
+      "Reglamento Federal de Seguridad y Salud en el Trabajo, México",
+      "NFPA 10 — Standard for Portable Fire Extinguishers",
+      "NFPA 101 — Life Safety Code",
+      "NFPA 600 — Standard on Facility Fire Brigades",
+      "NFPA 72 — National Fire Alarm and Signaling Code",
+      "Protección Civil México — Guías para la integración de brigadas y programas internos",
+      "Manual del Participante del Curso Básico de Protección contra Incendios — Universidad Emerge",
+    ],
   },
 
   "manejo-cargas": {
@@ -723,6 +752,30 @@ export const courseDetails: Record<string, CourseDetail> = {
     standards: [
       { code: "NOM-033-STPS-2015", name: "Condiciones de seguridad para realizar trabajos en espacios confinados" },
       { code: "OSHA 29 CFR 1910.146", name: "Permit-required confined spaces (referencia internacional)" },
+    ],
+    instructor: "Rafael Azaharez Cala",
+    objective:
+      "El participante, al terminar el curso taller, demostrará los conocimientos y habilidades necesarias de acuerdo con el módulo del Curso de Seguridad en Espacios Confinados, a través de la formación teórico-práctica, para identificar riesgos atmosféricos y físicos, y operar de forma segura en cualquier espacio restringido en un entorno eólico e industrial y así realizar su trabajo seguro.",
+    evaluationCriteria: [
+      { label: "Evaluación diagnóstica (cuestionario, al inicio)", percentage: 0 },
+      { label: "Evaluación formativa — guía de observación", percentage: 50 },
+      { label: "Evaluación formativa — lista de cotejo", percentage: 40 },
+      { label: "Evaluación final (cuestionario)", percentage: 10 },
+    ],
+    evaluationNote: "Se requiere un mínimo de 70% acumulado para acreditar el curso.",
+    equipment: [
+      "Detector multigas portátil calibrado (O₂, LEL, CO, H₂S) con bomba de muestreo",
+      "Trípode de seguridad industrial para rescate vertical con cabrestante",
+      "Extractor/ventilador de aire portátil con manguera flexible de ducto",
+      "Arnés de cuerpo completo con argolla dorsal y extensiones para hombros",
+      "Línea de vida autorretráctil o cuerda estática de seguridad",
+      "Equipo de respiración autónoma (ERA) o sistema de línea de aire cascada",
+      "Maqueta simuladora de entrada restringida (boca de visita / manhole)",
+    ],
+    references: [
+      "NOM-033-STPS-2015 — Condiciones de seguridad para realizar trabajos en espacios confinados, México",
+      "OSHA 29 CFR 1910.146 — Permit-required confined spaces, EE.UU.",
+      "Guía técnica de rescate y seguridad en espacios confinados — Grupo EMERGE RM",
     ],
   },
 
