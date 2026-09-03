@@ -3,8 +3,12 @@ import { CourseFilters } from "../components/courses/course-filters"
 import { CourseCard } from "../components/courses/course-card"
 import { EnterpriseBanner } from "../components/courses/enterprise-banner"
 import { courses } from "../data/courses"
+import { useMyCourses } from "../lib/orders"
 
 export function CoursesPage() {
+  const { courses: enrolledCourses } = useMyCourses()
+  const enrolledIds = new Set(enrolledCourses.map((c) => c.id))
+
   return (
     <div className="flex min-h-full flex-col bg-card">
       <CoursesHeader />
@@ -31,7 +35,7 @@ export function CoursesPage() {
           <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {courses.map((course) => (
-                <CourseCard key={course.id} course={course} />
+                <CourseCard key={course.id} course={course} isEnrolled={enrolledIds.has(course.id)} />
               ))}
             </div>
 

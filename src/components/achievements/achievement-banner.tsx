@@ -1,4 +1,6 @@
-import { certificate } from "../../data/dashboard"
+type AchievementBannerProps = {
+  courseTitle: string
+}
 
 // Confeti decorativo sutil: piezas pequeñas posicionadas de forma fija sobre el banner.
 const confetti = [
@@ -14,7 +16,7 @@ const confetti = [
   { left: "94%", top: "70%", color: "bg-amber-300", size: "h-1.5 w-3", rotate: "rotate-6" },
 ]
 
-export function AchievementBanner() {
+export function AchievementBanner({ courseTitle }: AchievementBannerProps) {
   return (
     <section
       aria-label="Felicitación por certificación completada"
@@ -45,8 +47,8 @@ export function AchievementBanner() {
             ¡Felicidades, has completado con éxito tu certificación!
           </h1>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-primary-foreground/85">
-            Has cumplido el 100% de los módulos y evaluaciones del {certificate.courseTitle}. Tu credencial{" "}
-            {certificate.standard} ya está disponible para descargar y compartir.
+            Has cumplido el 100% de los módulos y evaluaciones del curso {courseTitle}. Tu certificado ya está
+            disponible para descargar y compartir.
           </p>
         </div>
       </div>

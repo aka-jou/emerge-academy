@@ -5,10 +5,12 @@ import { User } from "./users/user.entity"
 import { Course } from "./courses/course.entity"
 import { Order } from "./orders/order.entity"
 import { OrderItem } from "./orders/order-item.entity"
+import { CourseProgress } from "./progress/course-progress.entity"
 import { AuthModule } from "./auth/auth.module"
 import { UsersModule } from "./users/users.module"
 import { CoursesModule } from "./courses/courses.module"
 import { OrdersModule } from "./orders/orders.module"
+import { ProgressModule } from "./progress/progress.module"
 
 @Module({
   imports: [
@@ -23,7 +25,7 @@ import { OrdersModule } from "./orders/orders.module"
         username: config.get<string>("DB_USERNAME", "emerge"),
         password: config.get<string>("DB_PASSWORD", "emerge"),
         database: config.get<string>("DB_DATABASE", "emerge_academy"),
-        entities: [User, Course, Order, OrderItem],
+        entities: [User, Course, Order, OrderItem, CourseProgress],
         // Sólo para desarrollo: crea/actualiza tablas automáticamente. En producción,
         // usar migraciones de TypeORM en vez de synchronize.
         synchronize: true,
@@ -33,6 +35,7 @@ import { OrdersModule } from "./orders/orders.module"
     UsersModule,
     CoursesModule,
     OrdersModule,
+    ProgressModule,
   ],
 })
 export class AppModule {}

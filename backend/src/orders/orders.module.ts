@@ -10,5 +10,6 @@ import { CoursesModule } from "../courses/courses.module"
   imports: [TypeOrmModule.forFeature([Order, OrderItem]), CoursesModule],
   providers: [OrdersService],
   controllers: [OrdersController],
+  exports: [OrdersService],
 })
 export class OrdersModule {}

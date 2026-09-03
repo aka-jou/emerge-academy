@@ -4,7 +4,7 @@ import { ClockIcon, GraduationCapIcon, MonitorIcon, CalendarIcon } from "../icon
 import { useCart } from "../../lib/cart"
 import { useAuth } from "../../lib/auth"
 
-export function CourseCard({ course }: { course: Course }) {
+export function CourseCard({ course, isEnrolled = false }: { course: Course; isEnrolled?: boolean }) {
   const { addItem } = useCart()
   const { user } = useAuth()
   const navigate = useNavigate()
@@ -13,6 +13,10 @@ export function CourseCard({ course }: { course: Course }) {
     if (!user) {
       // Sin cuenta no se puede comprar: mandamos a iniciar sesión y de ahí de regreso al curso.
       navigate("/login", { state: { from: `/cursos/${course.id}` } })
+      return
+    }
+    if (isEnrolled) {
+      navigate(`/dashboard/curso/${course.id}`)
       return
     }
     addItem(course.id)

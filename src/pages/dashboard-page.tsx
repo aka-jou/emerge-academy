@@ -5,16 +5,18 @@ import { EnrolledCourseCard } from "../components/dashboard/enrolled-course-card
 import { UpcomingMilestones } from "../components/dashboard/upcoming-milestones"
 import { RecentDownloads } from "../components/dashboard/recent-downloads"
 import { useMyCourses } from "../lib/orders"
+import { useAllProgress } from "../lib/progress"
 
 export function DashboardPage() {
   const { courses, loading, error } = useMyCourses()
+  const { progress, loading: loadingProgress } = useAllProgress()
 
   return (
     <div className="flex min-h-full flex-col bg-background">
       <DashboardHeader />
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
-        <WelcomeBanner />
+        <WelcomeBanner enrolledCourses={courses} progress={progress} loading={loading || loadingProgress} />
 
         <section className="mt-8">
           <h2 className="text-xl font-bold tracking-tight text-foreground">Cursos activos</h2>
@@ -37,7 +39,7 @@ export function DashboardPage() {
           {!loading && courses.length > 0 && (
             <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {courses.map((course) => (
-                <EnrolledCourseCard key={course.id} course={course} />
+                <EnrolledCourseCard key={course.id} course={course} progress={progress} />
               ))}
             </div>
           )}

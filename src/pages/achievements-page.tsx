@@ -5,13 +5,25 @@ import { CertificatePreview } from "../components/achievements/certificate-previ
 import { CertificateActions } from "../components/achievements/certificate-actions"
 import { ChevronRightIcon, CertificateIcon } from "../components/icons"
 import { useMyCourses } from "../lib/orders"
+import { useAllProgress } from "../lib/progress"
+import { useAuth } from "../lib/auth"
+import { courseDetails } from "../data/courses"
 
 export function AchievementsPage() {
-  // El progreso y las certificaciones aún no se calculan en el backend (no hay seguimiento
-  // real de avance por lección), así que por ahora solo mostramos el certificado de ejemplo
-  // cuando el usuario ya tiene al menos un curso inscrito de verdad; una cuenta nueva sin
-  // compras ve un estado vacío en vez de una certificación que no ha ganado.
-  const { courses, loading } = useMyCourses()
+  const { user } = useAuth()
+  const { courses, loading: loadingCourses } = useMyCourses()
+  const { progress, loading: loadingProgress } = useAllProgress()
+  const loading = loadingCourses || loadingProgress
+
+  // Un curso está "completado" solo cuando el usuario marcó todos sus módulos reales; el
+  // certificado de ejemplo solo se muestra para el primer curso que cumpla esa condición.
+  const completedCourse = courses.find((course) => {
+    const detail = courseDetails[course.id]
+    if (!detail || detail.modules.length === 0) return false
+    const completedCount = progress.find((p) => p.courseId === course.id)?.completedModules.length ?? 0
+    return completedCount >= detail.modules.length
+  })
+
   const hasEnrolledCourses = courses.length > 0
 
   return (
@@ -28,34 +40,36 @@ export function AchievementsPage() {
           <span className="font-medium text-foreground">Logros y Certificaciones</span>
         </nav>
 
-        {!loading && !hasEnrolledCourses && (
+        {!loading && !completedCourse && (
           <div className="mt-8 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-card px-6 py-16 text-center">
             <CertificateIcon className="h-10 w-10 text-muted" />
             <h1 className="text-lg font-bold text-foreground">Aún no tienes certificados</h1>
             <p className="max-w-md text-sm text-muted">
-              Cuando completes un curso, tu certificado y credencial verificable aparecerán aquí.
+              {hasEnrolledCourses
+                ? "Termina todos los módulos de un curso para desbloquear tu certificado."
+                : "Cuando completes un curso, tu certificado y credencial verificable aparecerán aquí."}
             </p>
             <Link
-              to="/cursos"
+              to={hasEnrolledCourses ? "/dashboard" : "/cursos"}
               className="mt-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
             >
-              Explorar cursos
+              {hasEnrolledCourses ? "Ir a mis cursos" : "Explorar cursos"}
             </Link>
           </div>
         )}
 
-        {!loading && hasEnrolledCourses && (
+        {!loading && completedCourse && (
           <>
             {/* Bloque superior: celebración */}
             <div className="mt-4">
-              <AchievementBanner />
+              <AchievementBanner courseTitle={completedCourse.title} />
             </div>
 
             {/* Bloque inferior: visualizador y validación */}
             <section className="mt-8" aria-label="Certificado y acciones">
               <div className="grid gap-6 lg:grid-cols-5">
                 <div className="lg:col-span-3">
-                  <CertificatePreview />
+                  <CertificatePreview recipient={user?.name ?? ""} courseTitle={completedCourse.title} />
                 </div>
                 <div className="lg:col-span-2">
                   <CertificateActions />

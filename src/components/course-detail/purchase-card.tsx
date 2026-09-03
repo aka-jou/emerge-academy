@@ -1,8 +1,9 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import type { CourseDetail } from "../../data/courses"
 import { useCart } from "../../lib/cart"
 import { useAuth } from "../../lib/auth"
+import { useMyCourses } from "../../lib/orders"
 import { CourseEquipment } from "./course-equipment"
 import { EvaluationCriteria } from "./evaluation-criteria"
 import {
@@ -14,6 +15,7 @@ import {
   HardHatIcon,
   ShieldIcon,
   CertificateIcon,
+  ArrowRightIcon,
 } from "../icons"
 
 function RequirementCard({ title, items }: { title: string; items: string[] }) {
@@ -36,7 +38,10 @@ export function PurchaseCard({ courseId, detail }: { courseId: string; detail: C
   const [quantity, setQuantity] = useState(1)
   const { addItem } = useCart()
   const { user } = useAuth()
+  const { courses: enrolledCourses, loading: loadingEnrollment } = useMyCourses()
   const navigate = useNavigate()
+
+  const isEnrolled = !!user && enrolledCourses.some((c) => c.id === courseId)
 
   function requireLoginOrProceed(after: () => void) {
     if (!user) {
@@ -107,21 +112,35 @@ export function PurchaseCard({ courseId, detail }: { courseId: string; detail: C
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={handleAddToCart}
-          className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
-        >
-          <ShoppingCartIcon className="h-5 w-5" />
-          Agregar al carrito
-        </button>
-        <button
-          type="button"
-          onClick={handleBuyNow}
-          className="mt-2.5 block w-full rounded-lg border border-border bg-transparent px-5 py-3 text-center text-sm font-semibold text-foreground transition hover:bg-background"
-        >
-          Comprar ahora
-        </button>
+        {isEnrolled ? (
+          <Link
+            to={`/dashboard/curso/${courseId}`}
+            className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
+          >
+            Ir a mis lecciones
+            <ArrowRightIcon className="h-4 w-4" />
+          </Link>
+        ) : (
+          <>
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              disabled={loadingEnrollment}
+              className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <ShoppingCartIcon className="h-5 w-5" />
+              Agregar al carrito
+            </button>
+            <button
+              type="button"
+              onClick={handleBuyNow}
+              disabled={loadingEnrollment}
+              className="mt-2.5 block w-full rounded-lg border border-border bg-transparent px-5 py-3 text-center text-sm font-semibold text-foreground transition hover:bg-background disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              Comprar ahora
+            </button>
+          </>
+        )}
         <button
           type="button"
           className="mt-4 w-full text-center text-sm font-semibold text-primary underline-offset-4 transition hover:underline"
