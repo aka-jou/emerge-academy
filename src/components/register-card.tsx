@@ -1,10 +1,11 @@
 import { type FormEvent, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { Logo } from "./landing/logo"
 import { useAuth } from "../lib/auth"
 
 export function RegisterCard() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { register } = useAuth()
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
@@ -31,7 +32,8 @@ export function RegisterCard() {
     setSubmitting(false)
 
     if (result.ok) {
-      navigate("/dashboard")
+      const from = (location.state as { from?: string } | null)?.from
+      navigate(from ?? "/dashboard")
     } else {
       setError(result.error ?? "No se pudo crear la cuenta.")
     }
@@ -130,7 +132,11 @@ export function RegisterCard() {
 
       <p className="mt-8 text-center text-sm text-muted">
         ¿Ya tienes cuenta?{" "}
-        <Link to="/login" className="font-semibold text-primary transition hover:text-primary-hover">
+        <Link
+          to="/login"
+          state={location.state}
+          className="font-semibold text-primary transition hover:text-primary-hover"
+        >
           Inicia sesión
         </Link>
       </p>

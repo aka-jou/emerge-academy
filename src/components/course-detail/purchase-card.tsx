@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import type { CourseDetail } from "../../data/courses"
 import { useCart } from "../../lib/cart"
+import { useAuth } from "../../lib/auth"
 import { CourseEquipment } from "./course-equipment"
 import { EvaluationCriteria } from "./evaluation-criteria"
 import {
@@ -34,16 +35,30 @@ function RequirementCard({ title, items }: { title: string; items: string[] }) {
 export function PurchaseCard({ courseId, detail }: { courseId: string; detail: CourseDetail }) {
   const [quantity, setQuantity] = useState(1)
   const { addItem } = useCart()
+  const { user } = useAuth()
   const navigate = useNavigate()
 
+  function requireLoginOrProceed(after: () => void) {
+    if (!user) {
+      // Sin cuenta no se puede comprar ni agregar al carrito: primero inicia sesión.
+      navigate("/login", { state: { from: `/cursos/${courseId}` } })
+      return
+    }
+    after()
+  }
+
   function handleAddToCart() {
-    addItem(courseId, quantity)
-    navigate("/carrito")
+    requireLoginOrProceed(() => {
+      addItem(courseId, quantity)
+      navigate("/carrito")
+    })
   }
 
   function handleBuyNow() {
-    addItem(courseId, quantity)
-    navigate("/carrito")
+    requireLoginOrProceed(() => {
+      addItem(courseId, quantity)
+      navigate("/carrito")
+    })
   }
 
   return (

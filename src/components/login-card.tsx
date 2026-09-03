@@ -110,7 +110,11 @@ export function LoginCard() {
 
       <p className="mt-8 text-center text-sm text-muted">
         ¿No tienes cuenta?{" "}
-        <Link to="/registro" className="font-semibold text-primary transition hover:text-primary-hover">
+        <Link
+          to="/registro"
+          state={location.state}
+          className="font-semibold text-primary transition hover:text-primary-hover"
+        >
           Regístrate aquí
         </Link>
       </p>

@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { Link } from "react-router-dom"
 import { DashboardHeader } from "../components/dashboard/dashboard-header"
 import {
   CalendarIcon,
@@ -15,6 +16,7 @@ import {
   eventTypeMeta,
   type CalendarEvent,
 } from "../data/calendar"
+import { api } from "../lib/api"
 
 const monthNames = [
   "Enero",
@@ -43,16 +45,30 @@ export function CalendarPage() {
   const [{ year, month }, setView] = useState(calendarMonth)
   // Día seleccionado por defecto: el de la sesión en vivo destacada.
   const [selectedDate, setSelectedDate] = useState("2026-11-25")
+  // Igual que en Logros y Certificaciones: mientras no exista una agenda real por curso en el
+  // backend, solo mostramos las sesiones y notificaciones de ejemplo si el usuario ya tiene al
+  // menos un curso inscrito de verdad. Una cuenta nueva sin compras ve el calendario vacío.
+  const [hasEnrolledCourses, setHasEnrolledCourses] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    api
+      .get<unknown[]>("/orders/me/courses")
+      .then((courses) => setHasEnrolledCourses(courses.length > 0))
+      .catch(() => setHasEnrolledCourses(false))
+  }, [])
+
+  const events = hasEnrolledCourses ? calendarEvents : []
+  const notifications = hasEnrolledCourses ? calendarNotifications : []
 
   const eventsByDate = useMemo(() => {
     const map = new Map<string, CalendarEvent[]>()
-    for (const ev of calendarEvents) {
+    for (const ev of events) {
       const list = map.get(ev.date) ?? []
       list.push(ev)
       map.set(ev.date, list)
     }
     return map
-  }, [])
+  }, [events])
 
   const grid = useMemo(() => {
     const firstDay = new Date(year, month, 1)
@@ -76,7 +92,7 @@ export function CalendarPage() {
     })
   }
 
-  const unreadCount = calendarNotifications.filter((n) => n.unread).length
+  const unreadCount = notifications.filter((n) => n.unread).length
 
   return (
     <div className="flex min-h-full flex-col bg-background">
@@ -92,6 +108,15 @@ export function CalendarPage() {
           <p className="text-sm text-muted">
             Sesiones en vivo, prácticas presenciales, evaluaciones y entregas de tus cursos.
           </p>
+          {hasEnrolledCourses === false && (
+            <p className="mt-2 text-sm text-muted">
+              Aún no tienes cursos inscritos.{" "}
+              <Link to="/cursos" className="font-semibold text-primary transition hover:text-primary-hover">
+                Explora el catálogo
+              </Link>{" "}
+              para empezar.
+            </p>
+          )}
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-3">
@@ -234,23 +259,29 @@ export function CalendarPage() {
                 )}
               </div>
               <ul className="mt-4 flex flex-col gap-3">
-                {calendarNotifications.map((n) => (
-                  <li
-                    key={n.id}
-                    className={`relative rounded-xl border p-3.5 ${
-                      n.unread ? "border-primary/30 bg-primary/5" : "border-border"
-                    }`}
-                  >
-                    <div className="flex items-start gap-2.5">
-                      <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${eventTypeMeta[n.type].dot}`} />
-                      <div>
-                        <p className="text-sm font-semibold text-foreground">{n.title}</p>
-                        <p className="mt-0.5 text-xs leading-relaxed text-muted">{n.detail}</p>
-                        <p className="mt-1.5 text-[11px] font-medium text-muted">{n.time}</p>
-                      </div>
-                    </div>
+                {notifications.length === 0 ? (
+                  <li className="rounded-lg bg-muted-surface px-3 py-6 text-center text-sm text-muted">
+                    No tienes notificaciones.
                   </li>
-                ))}
+                ) : (
+                  notifications.map((n) => (
+                    <li
+                      key={n.id}
+                      className={`relative rounded-xl border p-3.5 ${
+                        n.unread ? "border-primary/30 bg-primary/5" : "border-border"
+                      }`}
+                    >
+                      <div className="flex items-start gap-2.5">
+                        <span className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${eventTypeMeta[n.type].dot}`} />
+                        <div>
+                          <p className="text-sm font-semibold text-foreground">{n.title}</p>
+                          <p className="mt-0.5 text-xs leading-relaxed text-muted">{n.detail}</p>
+                          <p className="mt-1.5 text-[11px] font-medium text-muted">{n.time}</p>
+                        </div>
+                      </div>
+                    </li>
+                  ))
+                )}
               </ul>
             </section>
           </div>

@@ -2,12 +2,19 @@ import { Link, useNavigate } from "react-router-dom"
 import type { Course } from "../../data/courses"
 import { ClockIcon, GraduationCapIcon, MonitorIcon, CalendarIcon } from "../icons"
 import { useCart } from "../../lib/cart"
+import { useAuth } from "../../lib/auth"
 
 export function CourseCard({ course }: { course: Course }) {
   const { addItem } = useCart()
+  const { user } = useAuth()
   const navigate = useNavigate()
 
   function handleEnroll() {
+    if (!user) {
+      // Sin cuenta no se puede comprar: mandamos a iniciar sesión y de ahí de regreso al curso.
+      navigate("/login", { state: { from: `/cursos/${course.id}` } })
+      return
+    }
     addItem(course.id)
     navigate("/carrito")
   }
