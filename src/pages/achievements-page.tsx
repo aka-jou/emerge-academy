@@ -1,25 +1,18 @@
-import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { DashboardHeader } from "../components/dashboard/dashboard-header"
 import { AchievementBanner } from "../components/achievements/achievement-banner"
 import { CertificatePreview } from "../components/achievements/certificate-preview"
 import { CertificateActions } from "../components/achievements/certificate-actions"
 import { ChevronRightIcon, CertificateIcon } from "../components/icons"
-import { api } from "../lib/api"
+import { useMyCourses } from "../lib/orders"
 
 export function AchievementsPage() {
   // El progreso y las certificaciones aún no se calculan en el backend (no hay seguimiento
   // real de avance por lección), así que por ahora solo mostramos el certificado de ejemplo
   // cuando el usuario ya tiene al menos un curso inscrito de verdad; una cuenta nueva sin
   // compras ve un estado vacío en vez de una certificación que no ha ganado.
-  const [hasEnrolledCourses, setHasEnrolledCourses] = useState<boolean | null>(null)
-
-  useEffect(() => {
-    api
-      .get<unknown[]>("/orders/me/courses")
-      .then((courses) => setHasEnrolledCourses(courses.length > 0))
-      .catch(() => setHasEnrolledCourses(false))
-  }, [])
+  const { courses, loading } = useMyCourses()
+  const hasEnrolledCourses = courses.length > 0
 
   return (
     <div className="flex min-h-full flex-col bg-background">
@@ -35,7 +28,7 @@ export function AchievementsPage() {
           <span className="font-medium text-foreground">Logros y Certificaciones</span>
         </nav>
 
-        {hasEnrolledCourses === false && (
+        {!loading && !hasEnrolledCourses && (
           <div className="mt-8 flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border bg-card px-6 py-16 text-center">
             <CertificateIcon className="h-10 w-10 text-muted" />
             <h1 className="text-lg font-bold text-foreground">Aún no tienes certificados</h1>
@@ -51,7 +44,7 @@ export function AchievementsPage() {
           </div>
         )}
 
-        {hasEnrolledCourses === true && (
+        {!loading && hasEnrolledCourses && (
           <>
             {/* Bloque superior: celebración */}
             <div className="mt-4">

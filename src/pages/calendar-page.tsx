@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import { DashboardHeader } from "../components/dashboard/dashboard-header"
 import {
@@ -16,7 +16,7 @@ import {
   eventTypeMeta,
   type CalendarEvent,
 } from "../data/calendar"
-import { api } from "../lib/api"
+import { useMyCourses } from "../lib/orders"
 
 const monthNames = [
   "Enero",
@@ -48,14 +48,8 @@ export function CalendarPage() {
   // Igual que en Logros y Certificaciones: mientras no exista una agenda real por curso en el
   // backend, solo mostramos las sesiones y notificaciones de ejemplo si el usuario ya tiene al
   // menos un curso inscrito de verdad. Una cuenta nueva sin compras ve el calendario vacío.
-  const [hasEnrolledCourses, setHasEnrolledCourses] = useState<boolean | null>(null)
-
-  useEffect(() => {
-    api
-      .get<unknown[]>("/orders/me/courses")
-      .then((courses) => setHasEnrolledCourses(courses.length > 0))
-      .catch(() => setHasEnrolledCourses(false))
-  }, [])
+  const { courses, loading: loadingCourses } = useMyCourses()
+  const hasEnrolledCourses = courses.length > 0
 
   const events = hasEnrolledCourses ? calendarEvents : []
   const notifications = hasEnrolledCourses ? calendarNotifications : []
@@ -108,7 +102,7 @@ export function CalendarPage() {
           <p className="text-sm text-muted">
             Sesiones en vivo, prácticas presenciales, evaluaciones y entregas de tus cursos.
           </p>
-          {hasEnrolledCourses === false && (
+          {!loadingCourses && !hasEnrolledCourses && (
             <p className="mt-2 text-sm text-muted">
               Aún no tienes cursos inscritos.{" "}
               <Link to="/cursos" className="font-semibold text-primary transition hover:text-primary-hover">

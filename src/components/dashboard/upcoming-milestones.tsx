@@ -2,6 +2,7 @@ import type { JSX } from "react"
 import { Link } from "react-router-dom"
 import { VideoIcon, FileTextIcon, HardHatIcon } from "../icons"
 import { milestones, type Milestone } from "../../data/dashboard"
+import { useMyCourses } from "../../lib/orders"
 
 const kindConfig: Record<
   Milestone["kind"],
@@ -45,30 +46,43 @@ function actionButton(action: Milestone["action"]) {
 }
 
 export function UpcomingMilestones() {
+  // Los hitos son de ejemplo (todavía no hay agenda real por curso en el backend), así que
+  // solo se muestran a cuentas con al menos un curso inscrito de verdad.
+  const { courses, loading } = useMyCourses()
+  const hasEnrolledCourses = courses.length > 0
+
   return (
     <section className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
       <h2 className="text-lg font-bold text-foreground">Próximos hitos</h2>
 
-      <ul className="mt-4 flex flex-col gap-3">
-        {milestones.map((m) => {
-          const { Icon, tint } = kindConfig[m.kind]
-          return (
-            <li
-              key={m.id}
-              className="flex items-center gap-4 rounded-xl border border-border bg-muted-surface/40 p-3"
-            >
-              <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${tint}`}>
-                <Icon className="h-5 w-5" />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-foreground">{m.title}</p>
-                <p className="mt-0.5 text-xs text-muted">{m.schedule}</p>
-              </div>
-              {actionButton(m.action)}
-            </li>
-          )
-        })}
-      </ul>
+      {!loading && !hasEnrolledCourses && (
+        <p className="mt-4 rounded-lg bg-muted-surface px-3 py-6 text-center text-sm text-muted">
+          No tienes hitos próximos. Inscríbete a un curso para empezar.
+        </p>
+      )}
+
+      {hasEnrolledCourses && (
+        <ul className="mt-4 flex flex-col gap-3">
+          {milestones.map((m) => {
+            const { Icon, tint } = kindConfig[m.kind]
+            return (
+              <li
+                key={m.id}
+                className="flex items-center gap-4 rounded-xl border border-border bg-muted-surface/40 p-3"
+              >
+                <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${tint}`}>
+                  <Icon className="h-5 w-5" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-foreground">{m.title}</p>
+                  <p className="mt-0.5 text-xs text-muted">{m.schedule}</p>
+                </div>
+                {actionButton(m.action)}
+              </li>
+            )
+          })}
+        </ul>
+      )}
     </section>
   )
 }

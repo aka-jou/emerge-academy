@@ -1,9 +1,14 @@
 import { ArrowRightIcon } from "../icons"
 import { student } from "../../data/dashboard"
 import { useAuth } from "../../lib/auth"
+import { useMyCourses } from "../../lib/orders"
 
 export function WelcomeBanner() {
   const { user } = useAuth()
+  // El progreso por módulos aún no se calcula en el backend, así que solo lo mostramos
+  // cuando el usuario ya tiene al menos un curso inscrito de verdad.
+  const { courses, loading } = useMyCourses()
+  const hasEnrolledCourses = courses.length > 0
   const { globalProgress, completedModules, totalModules } = student
   const name = user?.name?.split(" ")[0] ?? student.name
 
@@ -15,42 +20,60 @@ export function WelcomeBanner() {
             ¡Hola de nuevo, {name}!
           </h1>
           <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">
-            Sigue avanzando, estás muy cerca de completar tu certificación. Retoma justo donde lo dejaste.
+            {hasEnrolledCourses
+              ? "Sigue avanzando, estás muy cerca de completar tu certificación. Retoma justo donde lo dejaste."
+              : "Explora el catálogo y elige tu primer curso para empezar tu certificación."}
           </p>
         </div>
 
-        <div className="text-left sm:text-right">
-          <p className="text-5xl font-extrabold leading-none text-primary sm:text-6xl">{globalProgress}%</p>
-          <p className="mt-1 text-sm font-medium text-muted">Progreso global</p>
-        </div>
+        {hasEnrolledCourses && (
+          <div className="text-left sm:text-right">
+            <p className="text-5xl font-extrabold leading-none text-primary sm:text-6xl">{globalProgress}%</p>
+            <p className="mt-1 text-sm font-medium text-muted">Progreso global</p>
+          </div>
+        )}
       </div>
 
-      <div className="mt-6">
-        <div className="flex items-center justify-between">
-          <span className="text-sm font-semibold text-foreground">
-            {completedModules} de {totalModules} módulos completados
-          </span>
-          <span className="text-sm font-semibold text-primary">{globalProgress}%</span>
+      {hasEnrolledCourses && (
+        <div className="mt-6">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold text-foreground">
+              {completedModules} de {totalModules} módulos completados
+            </span>
+            <span className="text-sm font-semibold text-primary">{globalProgress}%</span>
+          </div>
+          <div
+            className="mt-2 h-3 w-full overflow-hidden rounded-full bg-muted-surface"
+            role="progressbar"
+            aria-valuenow={globalProgress}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Progreso global del estudiante"
+          >
+            <div className="h-full rounded-full bg-primary" style={{ width: `${globalProgress}%` }} />
+          </div>
         </div>
-        <div
-          className="mt-2 h-3 w-full overflow-hidden rounded-full bg-muted-surface"
-          role="progressbar"
-          aria-valuenow={globalProgress}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-label="Progreso global del estudiante"
+      )}
+
+      {hasEnrolledCourses ? (
+        <button
+          type="button"
+          className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
         >
-          <div className="h-full rounded-full bg-primary" style={{ width: `${globalProgress}%` }} />
-        </div>
-      </div>
-
-      <button
-        type="button"
-        className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
-      >
-        Continuar curso actual
-        <ArrowRightIcon className="h-4 w-4" />
-      </button>
+          Continuar curso actual
+          <ArrowRightIcon className="h-4 w-4" />
+        </button>
+      ) : (
+        !loading && (
+          <a
+            href="/cursos"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
+          >
+            Explorar catálogo
+            <ArrowRightIcon className="h-4 w-4" />
+          </a>
+        )
+      )}
     </div>
   )
 }
