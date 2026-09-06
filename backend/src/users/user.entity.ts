@@ -22,6 +22,15 @@ export class User {
   company?: string
 
   @Column({ nullable: true })
+  jobTitle?: string
+
+  @Column({ nullable: true })
+  industry?: string
+
+  @Column({ nullable: true })
+  rfc?: string
+
+  @Column({ nullable: true })
   cityCountry?: string
 
   @OneToMany(() => Order, (order) => order.user)

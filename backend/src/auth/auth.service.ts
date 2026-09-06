@@ -21,7 +21,16 @@ export class AuthService {
 
   async register(dto: RegisterDto) {
     const passwordHash = await bcrypt.hash(dto.password, SALT_ROUNDS)
-    const user = await this.usersService.create({ name: dto.name, email: dto.email, passwordHash })
+    const user = await this.usersService.create({
+      name: dto.name,
+      email: dto.email,
+      passwordHash,
+      company: dto.company,
+      phone: dto.phone,
+      jobTitle: dto.jobTitle,
+      industry: dto.industry,
+      rfc: dto.rfc,
+    })
     return {
       accessToken: this.signToken(user.id, user.email),
       user: toPublicUser(user),

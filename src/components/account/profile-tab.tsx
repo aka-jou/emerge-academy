@@ -7,6 +7,9 @@ type FormValues = {
   email: string
   phone: string
   company: string
+  jobTitle: string
+  industry: string
+  rfc: string
   cityCountry: string
 }
 
@@ -23,7 +26,10 @@ const fields: Field[] = [
   { id: "name", label: "Nombre completo", type: "text", autoComplete: "name" },
   { id: "email", label: "Correo electrónico de contacto", type: "email", autoComplete: "email", readOnly: true },
   { id: "phone", label: "Teléfono", type: "tel", optional: true, autoComplete: "tel" },
-  { id: "company", label: "Empresa actual", type: "text", optional: true, autoComplete: "organization" },
+  { id: "jobTitle", label: "Puesto en la empresa", type: "text", optional: true, autoComplete: "organization-title" },
+  { id: "company", label: "Empresa / Razón social", type: "text", optional: true, autoComplete: "organization" },
+  { id: "industry", label: "Sector", type: "text", optional: true },
+  { id: "rfc", label: "RFC de la empresa", type: "text", optional: true },
   { id: "cityCountry", label: "Ciudad / País", type: "text", optional: true, autoComplete: "address-level2" },
 ]
 
@@ -34,6 +40,9 @@ export function ProfileTab() {
     email: user?.email ?? "",
     phone: user?.phone ?? "",
     company: user?.company ?? "",
+    jobTitle: user?.jobTitle ?? "",
+    industry: user?.industry ?? "",
+    rfc: user?.rfc ?? "",
     cityCountry: user?.cityCountry ?? "",
   })
   const [saved, setSaved] = useState(false)
@@ -47,6 +56,9 @@ export function ProfileTab() {
       email: user.email,
       phone: user.phone ?? "",
       company: user.company ?? "",
+      jobTitle: user.jobTitle ?? "",
+      industry: user.industry ?? "",
+      rfc: user.rfc ?? "",
       cityCountry: user.cityCountry ?? "",
     })
   }, [user])
@@ -59,6 +71,9 @@ export function ProfileTab() {
       name: values.name,
       phone: values.phone,
       company: values.company,
+      jobTitle: values.jobTitle,
+      industry: values.industry,
+      rfc: values.rfc,
       cityCountry: values.cityCountry,
     })
     setSubmitting(false)

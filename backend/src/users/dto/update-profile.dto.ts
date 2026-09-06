@@ -16,5 +16,17 @@ export class UpdateProfileDto {
 
   @IsOptional()
   @IsString()
+  jobTitle?: string
+
+  @IsOptional()
+  @IsString()
+  industry?: string
+
+  @IsOptional()
+  @IsString()
+  rfc?: string
+
+  @IsOptional()
+  @IsString()
   cityCountry?: string
 }

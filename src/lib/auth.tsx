@@ -7,16 +7,32 @@ export type User = {
   email: string
   phone?: string
   company?: string
+  jobTitle?: string
+  industry?: string
+  rfc?: string
   cityCountry?: string
 }
 
-type UpdateProfileInput = Partial<Pick<User, "name" | "phone" | "company" | "cityCountry">>
+type UpdateProfileInput = Partial<
+  Pick<User, "name" | "phone" | "company" | "jobTitle" | "industry" | "rfc" | "cityCountry">
+>
+
+export type RegisterInput = {
+  name: string
+  email: string
+  password: string
+  company: string
+  phone: string
+  jobTitle?: string
+  industry?: string
+  rfc?: string
+}
 
 type AuthContextValue = {
   user: User | null
   loading: boolean
   login: (email: string, password: string) => Promise<{ ok: boolean; error?: string }>
-  register: (name: string, email: string, password: string) => Promise<{ ok: boolean; error?: string }>
+  register: (data: RegisterInput) => Promise<{ ok: boolean; error?: string }>
   updateProfile: (data: UpdateProfileInput) => Promise<{ ok: boolean; error?: string }>
   changePassword: (currentPassword: string, newPassword: string) => Promise<{ ok: boolean; error?: string }>
   logout: () => void
@@ -54,13 +70,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loadSession()
   }, [])
 
-  async function register(name: string, email: string, password: string) {
+  async function register(data: RegisterInput) {
     try {
-      const result = await api.post<{ accessToken: string; user: User }>("/auth/register", {
-        name,
-        email,
-        password,
-      })
+      const result = await api.post<{ accessToken: string; user: User }>("/auth/register", data)
       setToken(result.accessToken)
       setUser(result.user)
       return { ok: true }

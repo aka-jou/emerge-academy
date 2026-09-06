@@ -6,7 +6,9 @@ import { User } from "./user.entity"
 
 const SALT_ROUNDS = 10
 
-export type UpdateProfileInput = Partial<Pick<User, "name" | "phone" | "company" | "cityCountry">>
+export type UpdateProfileInput = Partial<
+  Pick<User, "name" | "phone" | "company" | "jobTitle" | "industry" | "rfc" | "cityCountry">
+>
 
 @Injectable()
 export class UsersService {
@@ -24,13 +26,31 @@ export class UsersService {
     return this.usersRepo.findOne({ where: { id } })
   }
 
-  async create(data: { name: string; email: string; passwordHash: string }) {
+  async create(data: {
+    name: string
+    email: string
+    passwordHash: string
+    company?: string
+    phone?: string
+    jobTitle?: string
+    industry?: string
+    rfc?: string
+  }) {
     const email = data.email.trim().toLowerCase()
     const existing = await this.usersRepo.findOne({ where: { email } })
     if (existing) {
       throw new ConflictException("Ya existe una cuenta con este correo.")
     }
-    const user = this.usersRepo.create({ name: data.name.trim(), email, passwordHash: data.passwordHash })
+    const user = this.usersRepo.create({
+      name: data.name.trim(),
+      email,
+      passwordHash: data.passwordHash,
+      company: data.company?.trim(),
+      phone: data.phone?.trim(),
+      jobTitle: data.jobTitle?.trim(),
+      industry: data.industry,
+      rfc: data.rfc?.trim().toUpperCase(),
+    })
     return this.usersRepo.save(user)
   }
 

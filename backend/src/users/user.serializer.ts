@@ -6,6 +6,9 @@ export type PublicUser = {
   email: string
   phone?: string
   company?: string
+  jobTitle?: string
+  industry?: string
+  rfc?: string
   cityCountry?: string
 }
 
@@ -16,6 +19,9 @@ export function toPublicUser(user: User): PublicUser {
     email: user.email,
     phone: user.phone,
     company: user.company,
+    jobTitle: user.jobTitle,
+    industry: user.industry,
+    rfc: user.rfc,
     cityCountry: user.cityCountry,
   }
 }
