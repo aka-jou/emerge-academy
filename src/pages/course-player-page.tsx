@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Link, Navigate, useParams } from "react-router-dom"
 import { ArrowRightIcon, CheckIcon, MenuIcon, ClockIcon, LockIcon } from "../components/icons"
 import { courses, courseDetails } from "../data/courses"
-import { moduleQuizzes } from "../data/quizzes"
+import { moduleQuizzes, diagnosticQuizzes, practicalChecklists } from "../data/quizzes"
 import { useMyCourses } from "../lib/orders"
 import { useCourseProgress } from "../lib/progress"
 
@@ -30,6 +30,11 @@ export function CoursePlayerPage() {
   const [answers, setAnswers] = useState<Record<string, number>>({})
   const [submittedResult, setSubmittedResult] = useState<{ score: number; passed: boolean } | null>(null)
 
+  // Evaluación diagnóstica (solo informativa, no se guarda ni afecta la calificación).
+  const [diagnosticAnswers, setDiagnosticAnswers] = useState<Record<string, number>>({})
+  const [diagnosticSubmitted, setDiagnosticSubmitted] = useState(false)
+  const [showDiagnostic, setShowDiagnostic] = useState(false)
+
   const isEnrolled = enrolledCourses.some((c) => c.id === courseId)
   const modules = detail?.modules ?? []
   const totalModules = modules.length
@@ -52,6 +57,9 @@ export function CoursePlayerPage() {
   useEffect(() => {
     setAnswers({})
     setSubmittedResult(null)
+    setDiagnosticAnswers({})
+    setDiagnosticSubmitted(false)
+    setShowDiagnostic(false)
   }, [activeModule])
 
   const currentModule = modules.find((m) => m.number === activeModule) ?? modules[0]
@@ -61,6 +69,8 @@ export function CoursePlayerPage() {
   const isCurrentCompleted = currentModule ? completedModules.includes(currentModule.number) : false
   const quiz = currentModule ? moduleQuizzes[courseId]?.[currentModule.number] : undefined
   const previousScore = currentModule ? moduleScores[String(currentModule.number)] : undefined
+  const diagnosticQuestions = diagnosticQuizzes[courseId]
+  const checklist = practicalChecklists[courseId]
 
   function selectModule(moduleNumber: number) {
     if (!isUnlocked(moduleNumber)) return
@@ -192,6 +202,20 @@ export function CoursePlayerPage() {
                     </p>
                   )}
 
+                  {currentModule.number === 1 && diagnosticQuestions && (
+                    <DiagnosticBlock
+                      questions={diagnosticQuestions}
+                      show={showDiagnostic}
+                      onShow={() => setShowDiagnostic(true)}
+                      answers={diagnosticAnswers}
+                      onAnswer={(questionId, optionIndex) =>
+                        setDiagnosticAnswers((prev) => ({ ...prev, [questionId]: optionIndex }))
+                      }
+                      submitted={diagnosticSubmitted}
+                      onSubmit={() => setDiagnosticSubmitted(true)}
+                    />
+                  )}
+
                   {quiz ? (
                     <QuizBlock
                       quiz={quiz}
@@ -222,6 +246,7 @@ export function CoursePlayerPage() {
                       {isCurrentCompleted ? "Módulo completado" : "Marcar módulo como completado"}
                     </button>
                   )}
+                  {!nextModule && checklist && <ChecklistReference checklist={checklist} />}
                 </div>
               )}
             </div>
@@ -477,6 +502,129 @@ function QuizBlock({
         <CheckIcon className="h-4 w-4" />
         {saving ? "Enviando…" : "Enviar respuestas"}
       </button>
+    </div>
+  )
+}
+
+type DiagnosticBlockProps = {
+  questions: { id: string; prompt: string; options: string[]; correctIndex: number }[]
+  show: boolean
+  onShow: () => void
+  answers: Record<string, number>
+  onAnswer: (questionId: string, optionIndex: number) => void
+  submitted: boolean
+  onSubmit: () => void
+}
+
+// Evaluación diagnóstica: puramente informativa, no se guarda ni afecta la calificación
+// (así lo indica el documento oficial GE-F-CAP-11). Por eso no llama a ningún endpoint.
+function DiagnosticBlock({ questions, show, onShow, answers, onAnswer, submitted, onSubmit }: DiagnosticBlockProps) {
+  const allAnswered = questions.every((q) => answers[q.id] !== undefined)
+  const correctCount = questions.filter((q) => answers[q.id] === q.correctIndex).length
+
+  if (!show) {
+    return (
+      <button
+        type="button"
+        onClick={onShow}
+        className="mt-4 inline-flex w-fit items-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-semibold text-foreground transition hover:bg-muted-surface"
+      >
+        Responder evaluación diagnóstica (opcional, no afecta tu calificación)
+      </button>
+    )
+  }
+
+  return (
+    <div className="mt-4 rounded-xl border border-border bg-muted-surface/40 p-4">
+      <p className="text-sm font-semibold text-foreground">Evaluación diagnóstica</p>
+      <p className="mt-1 text-xs text-muted">
+        Mide tus conocimientos previos al inicio del taller. No tiene impacto en tu calificación final.
+      </p>
+
+      {submitted ? (
+        <p className="mt-3 text-sm font-medium text-foreground">
+          Obtuviste {correctCount} de {questions.length} aciertos. Tenlo en mente al repasar los siguientes módulos.
+        </p>
+      ) : (
+        <div className="mt-4 flex flex-col gap-4">
+          {questions.map((q, qIndex) => (
+            <fieldset key={q.id}>
+              <legend className="text-sm font-medium text-foreground">
+                {qIndex + 1}. {q.prompt}
+              </legend>
+              <div className="mt-2 flex flex-col gap-1.5">
+                {q.options.map((option, optIndex) => (
+                  <label key={optIndex} className="flex cursor-pointer items-center gap-2 text-sm text-foreground">
+                    <input
+                      type="radio"
+                      name={q.id}
+                      checked={answers[q.id] === optIndex}
+                      onChange={() => onAnswer(q.id, optIndex)}
+                      className="h-4 w-4 accent-primary"
+                    />
+                    {option}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          ))}
+          <button
+            type="button"
+            onClick={onSubmit}
+            disabled={!allAnswered}
+            className="inline-flex w-fit items-center gap-2 rounded-lg bg-card px-4 py-2 text-sm font-semibold text-foreground shadow-sm transition hover:bg-muted-surface disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            Ver mi resultado
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+type ChecklistReferenceProps = {
+  checklist: {
+    code: string
+    weightPercentage: number
+    passingRule: string
+    items: { number: number; skill: string; isCritical: boolean }[]
+  }
+}
+
+// Guía de observación práctica: es una evaluación en persona que hace el instructor
+// observando el desempeño físico del participante, por eso se muestra como referencia de
+// lo que se evaluará (no como un cuestionario que se responde en la plataforma).
+function ChecklistReference({ checklist }: ChecklistReferenceProps) {
+  return (
+    <div className="mt-6 rounded-xl border border-border bg-card p-5">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-bold text-foreground">Evaluación práctica presencial ({checklist.code})</p>
+        <span className="shrink-0 rounded-full bg-muted-surface px-2.5 py-1 text-xs font-semibold text-muted">
+          {checklist.weightPercentage}% de tu calificación
+        </span>
+      </div>
+      <p className="mt-1 text-xs leading-relaxed text-muted">
+        Tu instructor observará estos pasos durante la práctica presencial y marcará si los cumples. {checklist.passingRule}
+      </p>
+      <ul className="mt-3 flex flex-col gap-2">
+        {checklist.items.map((item) => (
+          <li key={item.number} className="flex items-start gap-2.5 text-sm text-foreground">
+            <span
+              className={
+                item.isCritical
+                  ? "mt-0.5 shrink-0 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-bold text-primary"
+                  : "mt-0.5 shrink-0 rounded-full bg-muted-surface px-1.5 py-0.5 text-[10px] font-bold text-muted"
+              }
+            >
+              {item.number}
+            </span>
+            <span className="leading-snug">
+              {item.skill}
+              {item.isCritical && <span className="ml-1.5 text-xs font-semibold text-primary">(paso obligatorio)</span>}
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

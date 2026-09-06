@@ -370,7 +370,13 @@ export const courseDetails: Record<string, CourseDetail> = {
       { code: "NOM-030-STPS-2009", name: "Servicios preventivos de seguridad y salud en el trabajo — Funciones y actividades" },
       { code: "Código Penal Federal, Art. 341", name: "Omisión de auxilio y Principio del Buen Samaritano" },
     ],
-    evaluationNote: "Incluye evaluación teórica (cuestionario de opción múltiple y casos clínicos) y evaluación práctica (megacódigo de simulación de paro cardíaco y atención de politraumatizado).",
+    evaluationCriteria: [
+      { label: "Evaluación diagnóstica (cuestionario, antes de iniciar)", percentage: 0 },
+      { label: "Evaluación formativa — guía de observación práctica (RCP, DEA, hemorragias, inmovilización)", percentage: 40 },
+      { label: "Evaluación teórica y práctica final (cuestionario y megacódigo de simulación)", percentage: 60 },
+    ],
+    evaluationNote:
+      "La evaluación diagnóstica (GE-F-CAP-11) no afecta la calificación final: solo mide conocimientos previos. En la guía de observación práctica (GE-F-CAP-12) se requiere aprobar 7 de 8 pasos técnicos críticos, incluyendo obligatoriamente Seguridad/PAS, Calidad de RCP y Ciclo de RCP, para obtener el resultado \"Competente\".",
     equipment: [
       "Maniquíes de simulación para prácticas de RCP",
       "Desfibrilador Externo Automático (DEA) de entrenamiento",
