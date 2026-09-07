@@ -23,42 +23,75 @@ const REFERRAL_SOURCES = [
   "Otro",
 ]
 
+type Step = 1 | 2
+
 export function RegisterCard() {
   const navigate = useNavigate()
   const location = useLocation()
   const { register } = useAuth()
 
+  const [step, setStep] = useState<Step>(1)
+
+  // Paso 1: información personal
   const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [company, setCompany] = useState("")
-  const [jobTitle, setJobTitle] = useState("")
-  const [phone, setPhone] = useState("")
-  const [industry, setIndustry] = useState("")
-  const [rfc, setRfc] = useState("")
   const [birthDate, setBirthDate] = useState("")
   const [educationLevel, setEducationLevel] = useState("")
+  const [email, setEmail] = useState("")
+  const [phone, setPhone] = useState("")
+
+  // Paso 2: información profesional
+  const [company, setCompany] = useState("")
+  const [jobTitle, setJobTitle] = useState("")
+  const [industry, setIndustry] = useState("")
+  const [rfc, setRfc] = useState("")
   const [yearsExperience, setYearsExperience] = useState("")
   const [referralSource, setReferralSource] = useState("")
   const [password, setPassword] = useState("")
   const [confirm, setConfirm] = useState("")
   const [acceptedTerms, setAcceptedTerms] = useState(false)
+
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+
+  function handleContinue(e: FormEvent) {
+    e.preventDefault()
+    setError(null)
+
+    if (!name.trim()) {
+      setError("Ingresa tu nombre completo.")
+      return
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      setError("Ingresa un correo electrónico válido.")
+      return
+    }
+    if (phone.replace(/\D/g, "").length < 10) {
+      setError("Ingresa un teléfono de contacto válido (mínimo 10 dígitos).")
+      return
+    }
+
+    setStep(2)
+  }
+
+  function handleBack() {
+    setError(null)
+    setStep(1)
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError(null)
 
+    if (!company.trim()) {
+      setError("Ingresa el nombre de tu empresa.")
+      return
+    }
     if (password.length < 6) {
       setError("La contraseña debe tener al menos 6 caracteres.")
       return
     }
     if (password !== confirm) {
       setError("Las contraseñas no coinciden.")
-      return
-    }
-    if (phone.replace(/\D/g, "").length < 10) {
-      setError("Ingresa un teléfono de contacto válido (mínimo 10 dígitos).")
       return
     }
     if (!acceptedTerms) {
@@ -92,8 +125,8 @@ export function RegisterCard() {
   }
 
   return (
-    <div className="w-full max-w-2xl rounded-2xl border border-border bg-card p-8 shadow-[0_4px_24px_rgba(20,83,45,0.08)] sm:p-10">
-      <div className="mb-8 flex flex-col items-center text-center">
+    <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-[0_4px_24px_rgba(20,83,45,0.08)] sm:p-10">
+      <div className="mb-6 flex flex-col items-center text-center">
         <Logo />
         <h1 className="mt-5 text-pretty text-xl font-semibold text-card-foreground">Crea tu cuenta empresarial</h1>
         <p className="mt-2 text-sm text-muted">
@@ -101,95 +134,122 @@ export function RegisterCard() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-        {error && (
-          <p
-            role="alert"
-            className="rounded-lg border border-destructive/30 bg-destructive/10 px-3.5 py-2.5 text-sm font-medium text-destructive"
-          >
-            {error}
-          </p>
-        )}
+      {/* Indicador de paso */}
+      <div className="mb-7 flex items-center gap-2">
+        <StepDot active={step >= 1} done={step > 1} label="1" />
+        <div className={`h-0.5 flex-1 rounded-full ${step > 1 ? "bg-primary" : "bg-border"}`} />
+        <StepDot active={step >= 2} done={false} label="2" />
+      </div>
+      <div className="-mt-5 mb-6 flex justify-between text-xs font-medium text-muted">
+        <span className={step === 1 ? "text-primary" : undefined}>Información personal</span>
+        <span className={step === 2 ? "text-primary" : undefined}>Información profesional</span>
+      </div>
 
-        {/* Datos del responsable de la cuenta */}
-        <fieldset className="flex flex-col gap-4">
-          <legend className="text-xs font-semibold uppercase tracking-wide text-muted">
-            Datos del responsable de la cuenta
-          </legend>
+      {error && (
+        <p
+          role="alert"
+          className="mb-5 rounded-lg border border-destructive/30 bg-destructive/10 px-3.5 py-2.5 text-sm font-medium text-destructive"
+        >
+          {error}
+        </p>
+      )}
+
+      {step === 1 ? (
+        <form onSubmit={handleContinue} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="name" className="text-sm font-medium text-card-foreground">
+              Nombre completo
+            </label>
+            <input
+              id="name"
+              type="text"
+              autoComplete="name"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="María Pérez"
+              className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
+            />
+          </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
-              <label htmlFor="name" className="text-sm font-medium text-card-foreground">
-                Nombre completo
-              </label>
-              <input
-                id="name"
-                type="text"
-                autoComplete="name"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="María Pérez"
-                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
-              />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label htmlFor="jobTitle" className="text-sm font-medium text-card-foreground">
-                Puesto en la empresa
+              <label htmlFor="birthDate" className="text-sm font-medium text-card-foreground">
+                Fecha de nacimiento
                 <span className="ml-1 font-normal text-muted">(opcional)</span>
               </label>
               <input
-                id="jobTitle"
-                type="text"
-                autoComplete="organization-title"
-                value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
-                placeholder="Coordinador de Seguridad e Higiene"
-                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
-              />
-            </div>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-sm font-medium text-card-foreground">
-                Correo electrónico
-              </label>
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="tucorreo@empresa.com"
-                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
+                id="birthDate"
+                type="date"
+                autoComplete="bday"
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
+                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="phone" className="text-sm font-medium text-card-foreground">
-                Teléfono de contacto
+              <label htmlFor="educationLevel" className="text-sm font-medium text-card-foreground">
+                Escolaridad
+                <span className="ml-1 font-normal text-muted">(opcional)</span>
               </label>
-              <input
-                id="phone"
-                type="tel"
-                autoComplete="tel"
-                required
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="961 123 4567"
-                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
-              />
+              <select
+                id="educationLevel"
+                value={educationLevel}
+                onChange={(e) => setEducationLevel(e.target.value)}
+                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
+              >
+                <option value="">Selecciona</option>
+                {EDUCATION_LEVELS.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
-        </fieldset>
 
-        {/* Datos de la empresa */}
-        <fieldset className="flex flex-col gap-4 border-t border-border pt-5">
-          <legend className="text-xs font-semibold uppercase tracking-wide text-muted">Datos de la empresa</legend>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="email" className="text-sm font-medium text-card-foreground">
+              Correo electrónico
+            </label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="tucorreo@empresa.com"
+              className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
+            />
+          </div>
 
+          <div className="flex flex-col gap-2">
+            <label htmlFor="phone" className="text-sm font-medium text-card-foreground">
+              Teléfono de contacto
+            </label>
+            <input
+              id="phone"
+              type="tel"
+              autoComplete="tel"
+              required
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="961 123 4567"
+              className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="mt-2 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-ring/40"
+          >
+            Continuar
+          </button>
+        </form>
+      ) : (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
               <label htmlFor="company" className="text-sm font-medium text-card-foreground">
@@ -208,6 +268,24 @@ export function RegisterCard() {
             </div>
 
             <div className="flex flex-col gap-2">
+              <label htmlFor="jobTitle" className="text-sm font-medium text-card-foreground">
+                Puesto en la empresa
+                <span className="ml-1 font-normal text-muted">(opcional)</span>
+              </label>
+              <input
+                id="jobTitle"
+                type="text"
+                autoComplete="organization-title"
+                value={jobTitle}
+                onChange={(e) => setJobTitle(e.target.value)}
+                placeholder="Coordinador de Seguridad"
+                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
+              />
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-2">
               <label htmlFor="industry" className="text-sm font-medium text-card-foreground">
                 Sector
                 <span className="ml-1 font-normal text-muted">(opcional)</span>
@@ -218,7 +296,7 @@ export function RegisterCard() {
                 onChange={(e) => setIndustry(e.target.value)}
                 className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
               >
-                <option value="">Selecciona un sector</option>
+                <option value="">Selecciona</option>
                 {INDUSTRIES.map((option) => (
                   <option key={option} value={option}>
                     {option}
@@ -226,71 +304,29 @@ export function RegisterCard() {
                 ))}
               </select>
             </div>
-          </div>
 
-          <div className="flex flex-col gap-2 sm:w-1/2 sm:pr-2">
-            <label htmlFor="rfc" className="text-sm font-medium text-card-foreground">
-              RFC de la empresa
-              <span className="ml-1 font-normal text-muted">(opcional, para tu factura)</span>
-            </label>
-            <input
-              id="rfc"
-              type="text"
-              value={rfc}
-              onChange={(e) => setRfc(e.target.value.toUpperCase())}
-              placeholder="EME010101AB1"
-              maxLength={13}
-              className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm uppercase text-card-foreground outline-none transition placeholder:normal-case placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
-            />
-          </div>
-        </fieldset>
-
-        {/* Información personal y profesional adicional (opcional) */}
-        <fieldset className="flex flex-col gap-4 border-t border-border pt-5">
-          <legend className="text-xs font-semibold uppercase tracking-wide text-muted">
-            Información adicional
-            <span className="ml-1 normal-case font-normal text-muted">(opcional, nos ayuda a conocerte mejor)</span>
-          </legend>
-
-          <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
-              <label htmlFor="birthDate" className="text-sm font-medium text-card-foreground">
-                Fecha de nacimiento
+              <label htmlFor="rfc" className="text-sm font-medium text-card-foreground">
+                RFC de la empresa
+                <span className="ml-1 font-normal text-muted">(opcional)</span>
               </label>
               <input
-                id="birthDate"
-                type="date"
-                autoComplete="bday"
-                value={birthDate}
-                onChange={(e) => setBirthDate(e.target.value)}
-                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
+                id="rfc"
+                type="text"
+                value={rfc}
+                onChange={(e) => setRfc(e.target.value.toUpperCase())}
+                placeholder="EME010101AB1"
+                maxLength={13}
+                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm uppercase text-card-foreground outline-none transition placeholder:normal-case placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
               />
-            </div>
-
-            <div className="flex flex-col gap-2">
-              <label htmlFor="educationLevel" className="text-sm font-medium text-card-foreground">
-                Escolaridad
-              </label>
-              <select
-                id="educationLevel"
-                value={educationLevel}
-                onChange={(e) => setEducationLevel(e.target.value)}
-                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
-              >
-                <option value="">Selecciona una opción</option>
-                {EDUCATION_LEVELS.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
               <label htmlFor="yearsExperience" className="text-sm font-medium text-card-foreground">
-                Años de experiencia en la industria
+                Años de experiencia
+                <span className="ml-1 font-normal text-muted">(opcional)</span>
               </label>
               <input
                 id="yearsExperience"
@@ -307,6 +343,7 @@ export function RegisterCard() {
             <div className="flex flex-col gap-2">
               <label htmlFor="referralSource" className="text-sm font-medium text-card-foreground">
                 ¿Cómo nos conociste?
+                <span className="ml-1 font-normal text-muted">(opcional)</span>
               </label>
               <select
                 id="referralSource"
@@ -314,7 +351,7 @@ export function RegisterCard() {
                 onChange={(e) => setReferralSource(e.target.value)}
                 className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
               >
-                <option value="">Selecciona una opción</option>
+                <option value="">Selecciona</option>
                 {REFERRAL_SOURCES.map((option) => (
                   <option key={option} value={option}>
                     {option}
@@ -323,13 +360,8 @@ export function RegisterCard() {
               </select>
             </div>
           </div>
-        </fieldset>
 
-        {/* Contraseña */}
-        <fieldset className="flex flex-col gap-4 border-t border-border pt-5">
-          <legend className="text-xs font-semibold uppercase tracking-wide text-muted">Seguridad de la cuenta</legend>
-
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 border-t border-border pt-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
               <label htmlFor="password" className="text-sm font-medium text-card-foreground">
                 Contraseña
@@ -362,36 +394,45 @@ export function RegisterCard() {
               />
             </div>
           </div>
-        </fieldset>
 
-        <label className="flex items-start gap-2.5 text-sm text-muted">
-          <input
-            type="checkbox"
-            checked={acceptedTerms}
-            onChange={(e) => setAcceptedTerms(e.target.checked)}
-            className="mt-0.5 h-4 w-4 shrink-0 accent-primary"
-          />
-          <span>
-            He leído y acepto el{" "}
-            <a href="#aviso-privacidad" className="font-medium text-primary hover:text-primary-hover">
-              Aviso de Privacidad
-            </a>{" "}
-            y los{" "}
-            <a href="#terminos" className="font-medium text-primary hover:text-primary-hover">
-              Términos y Condiciones
-            </a>{" "}
-            de Universidad Emerge.
-          </span>
-        </label>
+          <label className="flex items-start gap-2.5 text-sm text-muted">
+            <input
+              type="checkbox"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              className="mt-0.5 h-4 w-4 shrink-0 accent-primary"
+            />
+            <span>
+              He leído y acepto el{" "}
+              <a href="#aviso-privacidad" className="font-medium text-primary hover:text-primary-hover">
+                Aviso de Privacidad
+              </a>{" "}
+              y los{" "}
+              <a href="#terminos" className="font-medium text-primary hover:text-primary-hover">
+                Términos y Condiciones
+              </a>{" "}
+              de Universidad Emerge.
+            </span>
+          </label>
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="mt-1 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-ring/40 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {submitting ? "Creando cuenta…" : "Crear cuenta"}
-        </button>
-      </form>
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={handleBack}
+              className="rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-semibold text-card-foreground transition hover:bg-muted-surface"
+            >
+              Atrás
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="flex-1 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-ring/40 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {submitting ? "Creando cuenta…" : "Crear cuenta"}
+            </button>
+          </div>
+        </form>
+      )}
 
       <p className="mt-8 text-center text-sm text-muted">
         ¿Ya tienes cuenta?{" "}
@@ -404,5 +445,21 @@ export function RegisterCard() {
         </Link>
       </p>
     </div>
+  )
+}
+
+function StepDot({ active, done, label }: { active: boolean; done: boolean; label: string }) {
+  return (
+    <span
+      className={
+        done
+          ? "flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground"
+          : active
+            ? "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-primary text-[11px] font-bold text-primary"
+            : "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-border text-[11px] font-bold text-muted"
+      }
+    >
+      {label}
+    </span>
   )
 }
