@@ -30,6 +30,18 @@ export class User {
   @Column({ nullable: true })
   rfc?: string
 
+  @Column({ type: "date", nullable: true })
+  birthDate?: string
+
+  @Column({ nullable: true })
+  educationLevel?: string
+
+  @Column({ type: "int", nullable: true })
+  yearsExperience?: number
+
+  @Column({ nullable: true })
+  referralSource?: string
+
   @Column({ nullable: true })
   cityCountry?: string
 

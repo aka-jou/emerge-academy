@@ -12,6 +12,17 @@ const INDUSTRIES = [
   "Otro",
 ]
 
+const EDUCATION_LEVELS = ["Secundaria", "Bachillerato / Preparatoria", "Técnico", "Licenciatura", "Posgrado", "Otro"]
+
+const REFERRAL_SOURCES = [
+  "Recomendación",
+  "Redes sociales",
+  "Búsqueda en Google",
+  "Cliente o empresa anterior",
+  "Evento o feria",
+  "Otro",
+]
+
 export function RegisterCard() {
   const navigate = useNavigate()
   const location = useLocation()
@@ -24,6 +35,10 @@ export function RegisterCard() {
   const [phone, setPhone] = useState("")
   const [industry, setIndustry] = useState("")
   const [rfc, setRfc] = useState("")
+  const [birthDate, setBirthDate] = useState("")
+  const [educationLevel, setEducationLevel] = useState("")
+  const [yearsExperience, setYearsExperience] = useState("")
+  const [referralSource, setReferralSource] = useState("")
   const [password, setPassword] = useState("")
   const [confirm, setConfirm] = useState("")
   const [acceptedTerms, setAcceptedTerms] = useState(false)
@@ -61,6 +76,10 @@ export function RegisterCard() {
       jobTitle: jobTitle || undefined,
       industry: industry || undefined,
       rfc: rfc || undefined,
+      birthDate: birthDate || undefined,
+      educationLevel: educationLevel || undefined,
+      yearsExperience: yearsExperience ? Number(yearsExperience) : undefined,
+      referralSource: referralSource || undefined,
     })
     setSubmitting(false)
 
@@ -223,6 +242,86 @@ export function RegisterCard() {
               maxLength={13}
               className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm uppercase text-card-foreground outline-none transition placeholder:normal-case placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
             />
+          </div>
+        </fieldset>
+
+        {/* Información personal y profesional adicional (opcional) */}
+        <fieldset className="flex flex-col gap-4 border-t border-border pt-5">
+          <legend className="text-xs font-semibold uppercase tracking-wide text-muted">
+            Información adicional
+            <span className="ml-1 normal-case font-normal text-muted">(opcional, nos ayuda a conocerte mejor)</span>
+          </legend>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="birthDate" className="text-sm font-medium text-card-foreground">
+                Fecha de nacimiento
+              </label>
+              <input
+                id="birthDate"
+                type="date"
+                autoComplete="bday"
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
+                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="educationLevel" className="text-sm font-medium text-card-foreground">
+                Escolaridad
+              </label>
+              <select
+                id="educationLevel"
+                value={educationLevel}
+                onChange={(e) => setEducationLevel(e.target.value)}
+                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
+              >
+                <option value="">Selecciona una opción</option>
+                {EDUCATION_LEVELS.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="flex flex-col gap-2">
+              <label htmlFor="yearsExperience" className="text-sm font-medium text-card-foreground">
+                Años de experiencia en la industria
+              </label>
+              <input
+                id="yearsExperience"
+                type="number"
+                min={0}
+                max={60}
+                value={yearsExperience}
+                onChange={(e) => setYearsExperience(e.target.value)}
+                placeholder="Ej. 5"
+                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label htmlFor="referralSource" className="text-sm font-medium text-card-foreground">
+                ¿Cómo nos conociste?
+              </label>
+              <select
+                id="referralSource"
+                value={referralSource}
+                onChange={(e) => setReferralSource(e.target.value)}
+                className="w-full rounded-lg border border-border bg-card px-3.5 py-2.5 text-sm text-card-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
+              >
+                <option value="">Selecciona una opción</option>
+                {REFERRAL_SOURCES.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </fieldset>
 

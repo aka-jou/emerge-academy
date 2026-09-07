@@ -1,4 +1,4 @@
-import { IsEmail, IsIn, IsOptional, IsString, MinLength } from "class-validator"
+import { IsDateString, IsEmail, IsIn, IsInt, IsOptional, IsString, Max, Min, MinLength } from "class-validator"
 
 const INDUSTRIES = [
   "Energía eólica",
@@ -6,6 +6,17 @@ const INDUSTRIES = [
   "Industrial / Manufactura",
   "Construcción",
   "Oil & Gas",
+  "Otro",
+] as const
+
+const EDUCATION_LEVELS = ["Secundaria", "Bachillerato / Preparatoria", "Técnico", "Licenciatura", "Posgrado", "Otro"] as const
+
+const REFERRAL_SOURCES = [
+  "Recomendación",
+  "Redes sociales",
+  "Búsqueda en Google",
+  "Cliente o empresa anterior",
+  "Evento o feria",
   "Otro",
 ] as const
 
@@ -43,4 +54,23 @@ export class RegisterDto {
   @IsOptional()
   @IsString()
   rfc?: string
+
+  // Datos personales/profesionales adicionales, todos opcionales.
+  @IsOptional()
+  @IsDateString()
+  birthDate?: string
+
+  @IsOptional()
+  @IsIn(EDUCATION_LEVELS)
+  educationLevel?: (typeof EDUCATION_LEVELS)[number]
+
+  @IsOptional()
+  @IsInt()
+  @Min(0)
+  @Max(60)
+  yearsExperience?: number
+
+  @IsOptional()
+  @IsIn(REFERRAL_SOURCES)
+  referralSource?: (typeof REFERRAL_SOURCES)[number]
 }

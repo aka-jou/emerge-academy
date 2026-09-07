@@ -7,7 +7,20 @@ import { User } from "./user.entity"
 const SALT_ROUNDS = 10
 
 export type UpdateProfileInput = Partial<
-  Pick<User, "name" | "phone" | "company" | "jobTitle" | "industry" | "rfc" | "cityCountry">
+  Pick<
+    User,
+    | "name"
+    | "phone"
+    | "company"
+    | "jobTitle"
+    | "industry"
+    | "rfc"
+    | "birthDate"
+    | "educationLevel"
+    | "yearsExperience"
+    | "referralSource"
+    | "cityCountry"
+  >
 >
 
 @Injectable()
@@ -35,6 +48,10 @@ export class UsersService {
     jobTitle?: string
     industry?: string
     rfc?: string
+    birthDate?: string
+    educationLevel?: string
+    yearsExperience?: number
+    referralSource?: string
   }) {
     const email = data.email.trim().toLowerCase()
     const existing = await this.usersRepo.findOne({ where: { email } })
@@ -50,6 +67,10 @@ export class UsersService {
       jobTitle: data.jobTitle?.trim(),
       industry: data.industry,
       rfc: data.rfc?.trim().toUpperCase(),
+      birthDate: data.birthDate,
+      educationLevel: data.educationLevel,
+      yearsExperience: data.yearsExperience,
+      referralSource: data.referralSource,
     })
     return this.usersRepo.save(user)
   }

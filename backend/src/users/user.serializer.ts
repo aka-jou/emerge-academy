@@ -9,6 +9,10 @@ export type PublicUser = {
   jobTitle?: string
   industry?: string
   rfc?: string
+  birthDate?: string
+  educationLevel?: string
+  yearsExperience?: number
+  referralSource?: string
   cityCountry?: string
 }
 
@@ -22,6 +26,10 @@ export function toPublicUser(user: User): PublicUser {
     jobTitle: user.jobTitle,
     industry: user.industry,
     rfc: user.rfc,
+    birthDate: user.birthDate,
+    educationLevel: user.educationLevel,
+    yearsExperience: user.yearsExperience,
+    referralSource: user.referralSource,
     cityCountry: user.cityCountry,
   }
 }

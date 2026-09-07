@@ -30,6 +30,10 @@ export class AuthService {
       jobTitle: dto.jobTitle,
       industry: dto.industry,
       rfc: dto.rfc,
+      birthDate: dto.birthDate,
+      educationLevel: dto.educationLevel,
+      yearsExperience: dto.yearsExperience,
+      referralSource: dto.referralSource,
     })
     return {
       accessToken: this.signToken(user.id, user.email),

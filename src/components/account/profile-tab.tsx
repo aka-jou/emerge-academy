@@ -10,6 +10,10 @@ type FormValues = {
   jobTitle: string
   industry: string
   rfc: string
+  birthDate: string
+  educationLevel: string
+  yearsExperience: string
+  referralSource: string
   cityCountry: string
 }
 
@@ -30,6 +34,10 @@ const fields: Field[] = [
   { id: "company", label: "Empresa / Razón social", type: "text", optional: true, autoComplete: "organization" },
   { id: "industry", label: "Sector", type: "text", optional: true },
   { id: "rfc", label: "RFC de la empresa", type: "text", optional: true },
+  { id: "birthDate", label: "Fecha de nacimiento", type: "date", optional: true, autoComplete: "bday" },
+  { id: "educationLevel", label: "Escolaridad", type: "text", optional: true },
+  { id: "yearsExperience", label: "Años de experiencia en la industria", type: "number", optional: true },
+  { id: "referralSource", label: "¿Cómo nos conociste?", type: "text", optional: true },
   { id: "cityCountry", label: "Ciudad / País", type: "text", optional: true, autoComplete: "address-level2" },
 ]
 
@@ -43,6 +51,10 @@ export function ProfileTab() {
     jobTitle: user?.jobTitle ?? "",
     industry: user?.industry ?? "",
     rfc: user?.rfc ?? "",
+    birthDate: user?.birthDate ?? "",
+    educationLevel: user?.educationLevel ?? "",
+    yearsExperience: user?.yearsExperience !== undefined ? String(user.yearsExperience) : "",
+    referralSource: user?.referralSource ?? "",
     cityCountry: user?.cityCountry ?? "",
   })
   const [saved, setSaved] = useState(false)
@@ -59,6 +71,10 @@ export function ProfileTab() {
       jobTitle: user.jobTitle ?? "",
       industry: user.industry ?? "",
       rfc: user.rfc ?? "",
+      birthDate: user.birthDate ?? "",
+      educationLevel: user.educationLevel ?? "",
+      yearsExperience: user.yearsExperience !== undefined ? String(user.yearsExperience) : "",
+      referralSource: user.referralSource ?? "",
       cityCountry: user.cityCountry ?? "",
     })
   }, [user])
@@ -74,6 +90,10 @@ export function ProfileTab() {
       jobTitle: values.jobTitle,
       industry: values.industry,
       rfc: values.rfc,
+      birthDate: values.birthDate || undefined,
+      educationLevel: values.educationLevel,
+      yearsExperience: values.yearsExperience ? Number(values.yearsExperience) : undefined,
+      referralSource: values.referralSource,
       cityCountry: values.cityCountry,
     })
     setSubmitting(false)

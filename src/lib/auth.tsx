@@ -10,11 +10,28 @@ export type User = {
   jobTitle?: string
   industry?: string
   rfc?: string
+  birthDate?: string
+  educationLevel?: string
+  yearsExperience?: number
+  referralSource?: string
   cityCountry?: string
 }
 
 type UpdateProfileInput = Partial<
-  Pick<User, "name" | "phone" | "company" | "jobTitle" | "industry" | "rfc" | "cityCountry">
+  Pick<
+    User,
+    | "name"
+    | "phone"
+    | "company"
+    | "jobTitle"
+    | "industry"
+    | "rfc"
+    | "birthDate"
+    | "educationLevel"
+    | "yearsExperience"
+    | "referralSource"
+    | "cityCountry"
+  >
 >
 
 export type RegisterInput = {
@@ -26,6 +43,10 @@ export type RegisterInput = {
   jobTitle?: string
   industry?: string
   rfc?: string
+  birthDate?: string
+  educationLevel?: string
+  yearsExperience?: number
+  referralSource?: string
 }
 
 type AuthContextValue = {
