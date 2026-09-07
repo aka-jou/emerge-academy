@@ -53,8 +53,8 @@ export type RegisterInput = {
 type AuthContextValue = {
   user: User | null
   loading: boolean
-  login: (email: string, password: string) => Promise<{ ok: boolean; error?: string }>
-  register: (data: RegisterInput) => Promise<{ ok: boolean; error?: string }>
+  login: (email: string, password: string) => Promise<{ ok: boolean; error?: string; user?: User }>
+  register: (data: RegisterInput) => Promise<{ ok: boolean; error?: string; user?: User }>
   updateProfile: (data: UpdateProfileInput) => Promise<{ ok: boolean; error?: string }>
   changePassword: (currentPassword: string, newPassword: string) => Promise<{ ok: boolean; error?: string }>
   logout: () => void
@@ -97,7 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const result = await api.post<{ accessToken: string; user: User }>("/auth/register", data)
       setToken(result.accessToken)
       setUser(result.user)
-      return { ok: true }
+      return { ok: true, user: result.user }
     } catch (err) {
       return { ok: false, error: extractErrorMessage(err, "No se pudo crear la cuenta.") }
     }
@@ -108,7 +108,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const result = await api.post<{ accessToken: string; user: User }>("/auth/login", { email, password })
       setToken(result.accessToken)
       setUser(result.user)
-      return { ok: true }
+      return { ok: true, user: result.user }
     } catch (err) {
       return { ok: false, error: extractErrorMessage(err, "No se pudo iniciar sesión.") }
     }

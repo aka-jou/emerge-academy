@@ -96,12 +96,12 @@ export function DashboardHeader() {
                 {user?.role === "admin" && (
                   <Link
                     role="menuitem"
-                    to="/dashboard/admin/sesiones"
+                    to="/admin"
                     onClick={() => setMenuOpen(false)}
                     className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-muted-surface"
                   >
                     <VideoIcon className="h-4 w-4 text-muted" />
-                    Programar sesiones (admin)
+                    Panel de administrador
                   </Link>
                 )}
                 <button

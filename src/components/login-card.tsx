@@ -21,7 +21,9 @@ export function LoginCard() {
     setSubmitting(false)
     if (result.ok) {
       const from = (location.state as { from?: string } | null)?.from
-      navigate(from ?? "/dashboard")
+      // Los administradores tienen su propia área, separada del dashboard de alumnos; si
+      // venían de un link específico (from), eso tiene prioridad.
+      navigate(from ?? (result.user?.role === "admin" ? "/admin" : "/dashboard"))
     } else {
       setError(result.error ?? "No se pudo iniciar sesión.")
     }

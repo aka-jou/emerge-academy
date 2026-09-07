@@ -14,7 +14,9 @@ import { CoursePlayerPage } from "./pages/course-player-page"
 import { CalendarPage } from "./pages/calendar-page"
 import { ProtectedRoute } from "./components/protected-route"
 import { AdminRoute } from "./components/admin-route"
+import { AdminDashboardPage } from "./pages/admin-dashboard-page"
 import { AdminSessionsPage } from "./pages/admin-sessions-page"
+import { AdminCourseStudentsPage } from "./pages/admin-course-students-page"
 
 export default function App() {
   return (
@@ -83,10 +85,26 @@ export default function App() {
           }
         />
         <Route
-          path="/dashboard/admin/sesiones"
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminDashboardPage />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/sesiones"
           element={
             <AdminRoute>
               <AdminSessionsPage />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/admin/cursos/:id"
+          element={
+            <AdminRoute>
+              <AdminCourseStudentsPage />
             </AdminRoute>
           }
         />

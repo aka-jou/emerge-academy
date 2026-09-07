@@ -1,6 +1,6 @@
 import { type FormEvent, useState } from "react"
 import { Link } from "react-router-dom"
-import { DashboardHeader } from "../components/dashboard/dashboard-header"
+import { AdminHeader } from "../components/admin/admin-header"
 import { ChevronRightIcon, PlusIcon, TrashIcon, VideoIcon, ClockIcon } from "../components/icons"
 import { courses } from "../data/courses"
 import { useAdminSessions } from "../lib/sessions"
@@ -65,12 +65,12 @@ export function AdminSessionsPage() {
 
   return (
     <div className="flex min-h-full flex-col bg-background">
-      <DashboardHeader />
+      <AdminHeader />
 
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
         <nav aria-label="Ruta de navegación" className="flex items-center gap-1.5 text-sm text-muted">
-          <Link to="/dashboard" className="transition hover:text-foreground">
-            Dashboard
+          <Link to="/admin" className="transition hover:text-foreground">
+            Panel de administrador
           </Link>
           <ChevronRightIcon className="h-4 w-4" />
           <span className="font-medium text-foreground">Programar sesiones en vivo</span>

@@ -118,7 +118,7 @@ export function RegisterCard() {
 
     if (result.ok) {
       const from = (location.state as { from?: string } | null)?.from
-      navigate(from ?? "/dashboard")
+      navigate(from ?? (result.user?.role === "admin" ? "/admin" : "/dashboard"))
     } else {
       setError(result.error ?? "No se pudo crear la cuenta.")
     }
