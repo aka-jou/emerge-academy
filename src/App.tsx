@@ -13,6 +13,8 @@ import { AccountSettingsPage } from "./pages/account-settings-page"
 import { CoursePlayerPage } from "./pages/course-player-page"
 import { CalendarPage } from "./pages/calendar-page"
 import { ProtectedRoute } from "./components/protected-route"
+import { AdminRoute } from "./components/admin-route"
+import { AdminSessionsPage } from "./pages/admin-sessions-page"
 
 export default function App() {
   return (
@@ -78,6 +80,14 @@ export default function App() {
             <ProtectedRoute>
               <AccountSettingsPage />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/admin/sesiones"
+          element={
+            <AdminRoute>
+              <AdminSessionsPage />
+            </AdminRoute>
           }
         />
       </Routes>

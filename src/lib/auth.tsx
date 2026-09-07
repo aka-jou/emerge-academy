@@ -5,6 +5,7 @@ export type User = {
   id: string
   name: string
   email: string
+  role: "student" | "admin"
   phone?: string
   company?: string
   jobTitle?: string

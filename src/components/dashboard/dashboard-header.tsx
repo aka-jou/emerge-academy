@@ -1,7 +1,7 @@
 import { useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Logo } from "../landing/logo"
-import { CertificateIcon, CalendarIcon, LifeBuoyIcon, UsersIcon, LogOutIcon, ChevronDownIcon } from "../icons"
+import { CertificateIcon, CalendarIcon, LifeBuoyIcon, UsersIcon, LogOutIcon, ChevronDownIcon, VideoIcon } from "../icons"
 import { student } from "../../data/dashboard"
 import { useAuth } from "../../lib/auth"
 import { useClickOutside } from "../../lib/use-click-outside"
@@ -93,6 +93,17 @@ export function DashboardHeader() {
                   <UsersIcon className="h-4 w-4 text-muted" />
                   Mi cuenta
                 </Link>
+                {user?.role === "admin" && (
+                  <Link
+                    role="menuitem"
+                    to="/dashboard/admin/sesiones"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-foreground transition hover:bg-muted-surface"
+                  >
+                    <VideoIcon className="h-4 w-4 text-muted" />
+                    Programar sesiones (admin)
+                  </Link>
+                )}
                 <button
                   role="menuitem"
                   type="button"

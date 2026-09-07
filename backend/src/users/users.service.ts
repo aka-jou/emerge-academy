@@ -39,6 +39,10 @@ export class UsersService {
     return this.usersRepo.findOne({ where: { id } })
   }
 
+  async setRole(id: string, role: "student" | "admin") {
+    await this.usersRepo.update({ id }, { role })
+  }
+
   async create(data: {
     name: string
     email: string

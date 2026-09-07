@@ -1,6 +1,8 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm"
 import { Order } from "../orders/order.entity"
 
+export type UserRole = "student" | "admin"
+
 @Entity("users")
 export class User {
   @PrimaryGeneratedColumn("uuid")
@@ -14,6 +16,12 @@ export class User {
 
   @Column({ select: false })
   passwordHash: string
+
+  // "admin" puede programar sesiones en vivo para los cursos (ver módulo sessions). Se
+  // asigna automáticamente a las cuentas cuyo correo esté en la variable de entorno
+  // ADMIN_EMAILS del backend (ver auth.service.ts); no hay panel para asignarlo desde la UI.
+  @Column({ default: "student" })
+  role: UserRole
 
   @Column({ nullable: true })
   phone?: string

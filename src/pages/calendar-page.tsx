@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Link } from "react-router-dom"
 import { DashboardHeader } from "../components/dashboard/dashboard-header"
 import {
@@ -9,14 +9,9 @@ import {
   ClockIcon,
   MapPinIcon,
 } from "../components/icons"
-import {
-  calendarEvents,
-  calendarNotifications,
-  calendarMonth,
-  eventTypeMeta,
-  type CalendarEvent,
-} from "../data/calendar"
+import { calendarNotifications, calendarMonth, eventTypeMeta, type CalendarEvent } from "../data/calendar"
 import { useMyCourses } from "../lib/orders"
+import { useMySessions } from "../lib/sessions"
 
 const monthNames = [
   "Enero",
@@ -43,15 +38,18 @@ function toISO(year: number, month: number, day: number) {
 
 export function CalendarPage() {
   const [{ year, month }, setView] = useState(calendarMonth)
-  // Día seleccionado por defecto: el de la sesión en vivo destacada.
-  const [selectedDate, setSelectedDate] = useState("2026-11-25")
+  // Por defecto se selecciona hoy; al cargar las sesiones reales, si hay una próxima se
+  // salta automáticamente a su fecha.
+  const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10))
   // Igual que en Logros y Certificaciones: mientras no exista una agenda real por curso en el
   // backend, solo mostramos las sesiones y notificaciones de ejemplo si el usuario ya tiene al
   // menos un curso inscrito de verdad. Una cuenta nueva sin compras ve el calendario vacío.
   const { courses, loading: loadingCourses } = useMyCourses()
   const hasEnrolledCourses = courses.length > 0
-
-  const events = hasEnrolledCourses ? calendarEvents : []
+  // Sesiones reales programadas por un administrador para los cursos comprados. Las
+  // notificaciones siguen siendo de ejemplo (todavía no hay un sistema de notificaciones
+  // real), así que solo se muestran si el usuario ya tiene cursos inscritos.
+  const { events, loading: loadingEvents } = useMySessions()
   const notifications = hasEnrolledCourses ? calendarNotifications : []
 
   const eventsByDate = useMemo(() => {
@@ -63,6 +61,19 @@ export function CalendarPage() {
     }
     return map
   }, [events])
+
+  // Al cargar las sesiones reales, si hay alguna próxima, salta a su fecha y mes.
+  useEffect(() => {
+    if (loadingEvents || events.length === 0) return
+    const today = new Date().toISOString().slice(0, 10)
+    const upcoming = events.filter((ev) => ev.date >= today).sort((a, b) => a.date.localeCompare(b.date))
+    const target = upcoming[0] ?? events[0]
+    if (!target) return
+    setSelectedDate(target.date)
+    const [y, m] = target.date.split("-").map(Number)
+    setView({ year: y, month: m - 1 })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadingEvents, events.length])
 
   const grid = useMemo(() => {
     const firstDay = new Date(year, month, 1)
@@ -102,6 +113,9 @@ export function CalendarPage() {
           <p className="text-sm text-muted">
             Sesiones en vivo, prácticas presenciales, evaluaciones y entregas de tus cursos.
           </p>
+          {!loadingCourses && hasEnrolledCourses && loadingEvents && (
+            <p className="mt-2 text-sm text-muted">Cargando tus sesiones…</p>
+          )}
           {!loadingCourses && !hasEnrolledCourses && (
             <p className="mt-2 text-sm text-muted">
               Aún no tienes cursos inscritos.{" "}
@@ -234,6 +248,16 @@ export function CalendarPage() {
                           {ev.location}
                         </span>
                       </div>
+                      {ev.meetingUrl && (
+                        <a
+                          href={ev.meetingUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground transition hover:bg-primary-hover"
+                        >
+                          Unirse a la reunión
+                        </a>
+                      )}
                     </li>
                   ))}
                 </ul>

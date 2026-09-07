@@ -1,9 +1,10 @@
-import { User } from "./user.entity"
+import { User, type UserRole } from "./user.entity"
 
 export type PublicUser = {
   id: string
   name: string
   email: string
+  role: UserRole
   phone?: string
   company?: string
   jobTitle?: string
@@ -21,6 +22,7 @@ export function toPublicUser(user: User): PublicUser {
     id: user.id,
     name: user.name,
     email: user.email,
+    role: user.role,
     phone: user.phone,
     company: user.company,
     jobTitle: user.jobTitle,

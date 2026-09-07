@@ -9,6 +9,9 @@ export type CalendarEvent = {
   course: string
   location: string
   type: CalendarEventType
+  // Presente solo en sesiones en vivo reales (ver lib/sessions.ts); permite mostrar un
+  // botón "Unirse" que abre la reunión de Google Meet.
+  meetingUrl?: string
 }
 
 export const eventTypeMeta: Record<
