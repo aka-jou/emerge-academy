@@ -5,7 +5,7 @@ export function RegisterPage() {
   return (
     <div className="flex h-screen overflow-hidden">
       {/* Formulario: si es más largo que la pantalla, hace scroll de forma independiente. */}
-      <main className="flex h-screen flex-1 flex-col items-center justify-center overflow-y-auto bg-background px-4 py-10">
+      <main className="no-scrollbar flex h-screen flex-1 flex-col items-center justify-center overflow-y-auto bg-background px-4 py-10">
         <RegisterCard />
         <Link to="/" className="mt-6 text-sm font-medium text-muted transition hover:text-primary">
           ← Volver al inicio

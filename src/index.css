@@ -38,3 +38,14 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
+
+/* Oculta visualmente la barra de scroll sin quitar la capacidad de desplazar el contenido
+   (útil en paneles como el del registro/login, donde no debe verse ninguna barra). */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
