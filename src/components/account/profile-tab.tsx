@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { PencilIcon, CheckIcon } from "../icons"
 import { useAuth } from "../../lib/auth"
+import { getInitials } from "../../lib/initials"
 
 type FormValues = {
   name: string
@@ -121,7 +122,7 @@ export function ProfileTab() {
             aria-hidden="true"
             className="flex h-24 w-24 items-center justify-center rounded-full border-2 border-border bg-muted-surface text-2xl font-bold text-muted"
           >
-            {values.name.trim().charAt(0).toUpperCase() || "?"}
+            {getInitials(values.name) || "?"}
           </div>
           <button
             type="button"

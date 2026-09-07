@@ -13,6 +13,11 @@ export class AdminController {
     return this.adminService.getPlatformSummary()
   }
 
+  @Get("sessions/upcoming")
+  getUpcomingSessions() {
+    return this.adminService.findUpcomingSessions()
+  }
+
   @Get("courses-overview")
   getCoursesOverview() {
     return this.adminService.getCoursesOverview()

@@ -5,6 +5,7 @@ import { CertificateIcon, CalendarIcon, LifeBuoyIcon, UsersIcon, LogOutIcon, Che
 import { student } from "../../data/dashboard"
 import { useAuth } from "../../lib/auth"
 import { useClickOutside } from "../../lib/use-click-outside"
+import { getInitials } from "../../lib/initials"
 
 const links = [
   { label: "Soporte", href: "#soporte", Icon: LifeBuoyIcon },
@@ -67,11 +68,13 @@ export function DashboardHeader() {
               aria-label="Menú de cuenta"
               className="flex items-center gap-1.5 rounded-full transition hover:opacity-90"
             >
-              <img
-                src="/images/maria-avatar.png"
-                alt={`Foto de perfil de ${user?.name ?? student.name}`}
-                className="h-9 w-9 rounded-full border-2 border-border object-cover"
-              />
+              <span
+                aria-hidden="true"
+                className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-border bg-primary/10 text-sm font-bold text-primary"
+              >
+                {getInitials(user?.name ?? student.name)}
+              </span>
+              <span className="sr-only">Foto de perfil de {user?.name ?? student.name}</span>
               <ChevronDownIcon className={`hidden h-4 w-4 text-muted transition-transform sm:block ${menuOpen ? "rotate-180" : ""}`} />
             </button>
 

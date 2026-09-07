@@ -4,6 +4,7 @@ import { Logo } from "../landing/logo"
 import { LayoutDashboardIcon, VideoIcon, LogOutIcon, ChevronDownIcon, UsersIcon } from "../icons"
 import { useAuth } from "../../lib/auth"
 import { useClickOutside } from "../../lib/use-click-outside"
+import { getInitials } from "../../lib/initials"
 
 export function AdminHeader() {
   const { user, logout } = useAuth()
@@ -55,7 +56,7 @@ export function AdminHeader() {
               className="flex items-center gap-1.5 rounded-full transition hover:opacity-90"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-border bg-primary/10 text-sm font-bold text-primary">
-                {user?.name?.charAt(0).toUpperCase() ?? "A"}
+                {user?.name ? getInitials(user.name) : "AD"}
               </span>
               <ChevronDownIcon className={`hidden h-4 w-4 text-muted transition-transform sm:block ${menuOpen ? "rotate-180" : ""}`} />
             </button>

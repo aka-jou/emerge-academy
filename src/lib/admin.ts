@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { api } from "./api"
-import { courseDetails } from "../data/courses"
+import { courses, courseDetails } from "../data/courses"
 
 export type CourseOverview = {
   courseId: string
@@ -69,4 +69,38 @@ export function useCourseStudents(courseId: string | null) {
   const certifiedCount = totalModules > 0 ? students.filter((s) => s.completedModulesCount >= totalModules).length : 0
 
   return { students, totalModules, certifiedCount, loading, error, reload }
+}
+
+export type UpcomingSession = {
+  id: string
+  courseId: string
+  title: string
+  scheduledAt: string
+  meetingUrl: string
+}
+
+function courseTitle(courseId: string) {
+  return courses.find((c) => c.id === courseId)?.title ?? courseId
+}
+
+// Próximas sesiones en vivo de cualquier curso, para el vistazo rápido del administrador
+// en su dashboard (calendario de lo que va a impartir).
+export function useUpcomingSessions() {
+  const [sessions, setSessions] = useState<UpcomingSession[]>([])
+  const [loading, setLoading] = useState(true)
+
+  const reload = useCallback(() => {
+    setLoading(true)
+    return api
+      .get<UpcomingSession[]>("/admin/sessions/upcoming")
+      .then(setSessions)
+      .catch(() => setSessions([]))
+      .finally(() => setLoading(false))
+  }, [])
+
+  useEffect(() => {
+    reload()
+  }, [reload])
+
+  return { sessions, loading, reload, courseTitle }
 }

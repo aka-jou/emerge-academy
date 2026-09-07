@@ -4,10 +4,13 @@ import { WelcomeBanner } from "../components/dashboard/welcome-banner"
 import { EnrolledCourseCard } from "../components/dashboard/enrolled-course-card"
 import { UpcomingMilestones } from "../components/dashboard/upcoming-milestones"
 import { RecentDownloads } from "../components/dashboard/recent-downloads"
+import { AdminGlanceCard } from "../components/dashboard/admin-glance-card"
 import { useMyCourses } from "../lib/orders"
 import { useAllProgress } from "../lib/progress"
+import { useAuth } from "../lib/auth"
 
 export function DashboardPage() {
+  const { user } = useAuth()
   const { courses, loading, error } = useMyCourses()
   const { progress, loading: loadingProgress } = useAllProgress()
 
@@ -17,6 +20,15 @@ export function DashboardPage() {
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
         <WelcomeBanner enrolledCourses={courses} progress={progress} loading={loading || loadingProgress} />
+
+        {/* Cuentas de administrador ven aquí un vistazo rápido de sus sesiones en vez del
+            contenido de "alumno" (que estaría vacío, ya que un admin normalmente no compra
+            cursos para sí mismo). El panel completo de gestión vive en /admin. */}
+        {user?.role === "admin" && (
+          <div className="mt-8">
+            <AdminGlanceCard />
+          </div>
+        )}
 
         <section className="mt-8">
           <h2 className="text-xl font-bold tracking-tight text-foreground">Cursos activos</h2>
