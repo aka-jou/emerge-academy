@@ -7,6 +7,7 @@ import { ScrollTrigger } from "../../lib/gsap"
 const navLinks = [
   { label: "Cursos", href: "/cursos", route: true },
   { label: "Nuestro Enfoque", href: "#enfoque", route: false },
+  { label: "Convenio", href: "#convenio", route: false },
   { label: "Beneficios", href: "#beneficios", route: false },
   { label: "Calendario", href: "#fechas", route: false },
   { label: "Sectores", href: "#empresas", route: false },

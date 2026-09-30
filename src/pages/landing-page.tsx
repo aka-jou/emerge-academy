@@ -2,6 +2,7 @@ import { Navbar } from "../components/landing/navbar"
 import { Hero } from "../components/landing/hero"
 import { Benefits } from "../components/landing/benefits"
 import { AboutUs } from "../components/landing/about-us"
+import { Convenio } from "../components/landing/convenio"
 import { UpcomingDates } from "../components/landing/upcoming-dates"
 import { Testimonials } from "../components/landing/testimonials"
 import { TrustLogos } from "../components/landing/trust-logos"
@@ -17,6 +18,7 @@ export function LandingPage() {
           <Hero />
           <Benefits />
           <AboutUs />
+          <Convenio />
           <UpcomingDates />
           <Testimonials />
           <TrustLogos />
