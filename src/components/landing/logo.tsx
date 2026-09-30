@@ -14,7 +14,9 @@ export function Logo({ className = "", dark = false }: { className?: string; dar
         <span className={`text-lg font-extrabold tracking-tight ${dark ? "text-white" : "text-foreground"}`}>
           EMERGE
         </span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">Universidad</span>
+        <span className={`text-[10px] font-semibold uppercase tracking-[0.2em] ${dark ? "text-white/60" : "text-primary"}`}>
+          Universidad
+        </span>
       </span>
     </span>
   )

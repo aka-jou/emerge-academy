@@ -6,20 +6,23 @@ import { UpcomingDates } from "../components/landing/upcoming-dates"
 import { Testimonials } from "../components/landing/testimonials"
 import { TrustLogos } from "../components/landing/trust-logos"
 import { Footer } from "../components/landing/footer"
+import { SmoothScroll } from "../lib/smooth-scroll"
 
 export function LandingPage() {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main>
-        <Hero />
-        <Benefits />
-        <AboutUs />
-        <UpcomingDates />
-        <Testimonials />
-        <TrustLogos />
-      </main>
-      <Footer />
-    </div>
+    <SmoothScroll>
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main>
+          <Hero />
+          <Benefits />
+          <AboutUs />
+          <UpcomingDates />
+          <Testimonials />
+          <TrustLogos />
+        </main>
+        <Footer />
+      </div>
+    </SmoothScroll>
   )
 }

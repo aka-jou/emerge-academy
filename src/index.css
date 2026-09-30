@@ -19,12 +19,41 @@
 
   --color-ring: oklch(0.38 0.09 152);
 
+  /* Superficie oscura de marca (navbar sobre secciones oscuras, panel del convenio). */
+  --color-ink: #0e2b21;
+  /* Acento lima: cámbialo aquí y se actualiza en toda la landing. */
+  --color-accent: #f1ff6c;
+  --color-accent-foreground: #13240f;
+
   --radius: 0.75rem;
 }
 
 html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 4rem;
+  scroll-padding-top: 5.5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Estilos que Lenis necesita para no pelear con el scroll nativo. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 html,
