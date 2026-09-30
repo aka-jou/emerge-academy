@@ -1,25 +1,21 @@
-import { BriefcaseIcon, AwardIcon } from "../icons"
+import { SectionHeading } from "./section-heading"
 
 export function CourseObjective({ objective, instructor }: { objective?: string; instructor?: string }) {
   if (!objective && !instructor) return null
 
   return (
-    <div className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
-      {instructor && (
-        <p className="flex items-center gap-2 text-sm font-semibold text-foreground">
-          <BriefcaseIcon className="h-4 w-4 text-primary" />
-          Instructor: <span className="font-normal text-muted">{instructor}</span>
+    <section aria-labelledby="objetivo-title">
+      <SectionHeading id="objetivo-title">Qué vas a lograr</SectionHeading>
+      {objective && (
+        <p className="mt-6 border-l-4 border-(--area) pl-5 text-pretty text-lg leading-relaxed text-foreground sm:text-xl">
+          {objective}
         </p>
       )}
-      {objective && (
-        <div className={instructor ? "mt-4 border-t border-border pt-4" : undefined}>
-          <h3 className="flex items-center gap-2 text-sm font-bold text-foreground">
-            <AwardIcon className="h-4 w-4 text-primary" />
-            Objetivo general
-          </h3>
-          <p className="mt-2 text-sm leading-relaxed text-muted">{objective}</p>
-        </div>
+      {instructor && (
+        <p className="mt-5 text-sm text-muted">
+          Imparte <span className="font-semibold text-foreground">{instructor}</span>
+        </p>
       )}
-    </div>
+    </section>
   )
 }

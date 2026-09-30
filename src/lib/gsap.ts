@@ -1,8 +1,9 @@
 import { gsap } from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { Flip } from "gsap/Flip"
 import { useGSAP } from "@gsap/react"
 
-gsap.registerPlugin(useGSAP, ScrollTrigger)
+gsap.registerPlugin(useGSAP, ScrollTrigger, Flip)
 
 const numberFormat = new Intl.NumberFormat("es-MX")
 
@@ -25,4 +26,4 @@ export function countUp(el: HTMLElement, to: number, vars: gsap.TweenVars = {}) 
   })
 }
 
-export { gsap, ScrollTrigger, useGSAP }
+export { gsap, ScrollTrigger, Flip, useGSAP }

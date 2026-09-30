@@ -1,70 +1,93 @@
-import { ChevronDownIcon, SearchIcon } from "../icons"
-import { filterOptions } from "../../data/courses"
+import { SearchIcon } from "../icons"
+import { LEVELS, type Level } from "../../lib/course-areas"
 
-type SelectFieldProps = {
+type SegmentedProps<T extends string> = {
   label: string
-  options: string[]
-  placeholder: string
+  options: T[]
+  value: T | null
+  onChange: (value: T | null) => void
+  format?: (value: T) => string
 }
 
-function SelectField({ label, options, placeholder }: SelectFieldProps) {
+function Segmented<T extends string>({ label, options, value, onChange, format }: SegmentedProps<T>) {
   return (
-    <label className="flex min-w-[8.5rem] flex-1 flex-col gap-1.5">
-      <span className="text-sm font-medium text-foreground">{label}</span>
-      <div className="relative">
-        <select
-          className="w-full appearance-none rounded-lg border border-border bg-card py-2.5 pl-3 pr-9 text-sm font-medium text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-ring/30"
-          defaultValue=""
-        >
-          <option value="">{placeholder}</option>
-          {options.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-        <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+    <div role="group" aria-label={label} className="flex items-center gap-2">
+      <span className="text-xs font-semibold text-muted">{label}</span>
+      <div className="flex rounded-full bg-card p-1 ring-1 ring-border">
+        {options.map((option) => {
+          const active = value === option
+          return (
+            <button
+              key={option}
+              type="button"
+              aria-pressed={active}
+              onClick={() => onChange(active ? null : option)}
+              className={`whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
+                active ? "bg-ink text-white" : "text-muted hover:text-foreground"
+              }`}
+            >
+              {format ? format(option) : option}
+            </button>
+          )
+        })}
       </div>
-    </label>
+    </div>
   )
 }
 
-export function CourseFilters() {
+type CourseFiltersProps = {
+  query: string
+  onQueryChange: (value: string) => void
+  level: Level | null
+  onLevelChange: (value: Level | null) => void
+  duration: string | null
+  onDurationChange: (value: string | null) => void
+  durations: string[]
+  total: number
+  shown: number
+  onClear: () => void
+  hasFilters: boolean
+}
+
+export function CourseFilters(props: CourseFiltersProps) {
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
-        <div className="flex flex-1 flex-wrap gap-4">
-          <SelectField label="Módulo" options={filterOptions.modulo} placeholder="Todos" />
-          <SelectField label="Modalidad" options={filterOptions.modalidad} placeholder="Todas" />
-          <SelectField label="Ciudad/Sede" options={filterOptions.ciudad} placeholder="Todas" />
-          <SelectField label="Duración" options={filterOptions.duracion} placeholder="Todas" />
-          <SelectField label="Nivel" options={filterOptions.nivel} placeholder="Todos" />
-        </div>
-
-        <div className="flex gap-2.5">
-          <button
-            type="button"
-            className="rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
-          >
-            Aplicar
-          </button>
-          <button
-            type="button"
-            className="rounded-lg border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-background"
-          >
-            Limpiar
-          </button>
-        </div>
-      </div>
-
-      <div className="relative">
-        <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted" />
+    <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-6">
+      <div className="relative w-full lg:max-w-xs">
+        <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
         <input
           type="search"
-          placeholder="Buscar por nombre del curso o módulo..."
-          className="w-full rounded-lg border border-border bg-card py-3 pl-11 pr-4 text-sm text-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
-          aria-label="Buscar por nombre del curso o módulo"
+          value={props.query}
+          onChange={(e) => props.onQueryChange(e.target.value)}
+          placeholder="Buscar por nombre o tema"
+          aria-label="Buscar por nombre o tema"
+          className="w-full rounded-full border border-border bg-card py-2.5 pl-10 pr-4 text-sm text-foreground outline-none transition placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-ring/30"
         />
+      </div>
+
+      <div className="no-scrollbar -mx-4 flex gap-5 overflow-x-auto px-4 lg:mx-0 lg:px-0">
+        <Segmented label="Nivel" options={LEVELS} value={props.level} onChange={props.onLevelChange} />
+        <Segmented
+          label="Duración"
+          options={props.durations}
+          value={props.duration}
+          onChange={props.onDurationChange}
+          format={(d) => d.replace(" horas", " h")}
+        />
+      </div>
+
+      <div className="flex items-center gap-3 lg:ml-auto">
+        <p className="text-sm text-muted" aria-live="polite">
+          <span className="font-semibold text-foreground">{props.shown}</span> de {props.total} cursos
+        </p>
+        {props.hasFilters && (
+          <button
+            type="button"
+            onClick={props.onClear}
+            className="text-sm font-semibold text-primary underline-offset-4 hover:underline"
+          >
+            Quitar filtros
+          </button>
+        )}
       </div>
     </div>
   )
