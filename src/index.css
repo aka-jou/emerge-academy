@@ -20,6 +20,8 @@
   --color-primary-foreground: oklch(0.98 0.01 145);
 
   --color-ring: oklch(0.38 0.09 152);
+  /* Errores y acciones destructivas (se usaba en varias pantallas pero no estaba definido). */
+  --color-destructive: #b42318;
 
   /* Superficie oscura de marca (navbar sobre secciones oscuras, panel del convenio). */
   --color-ink: #0e2b21;
@@ -64,6 +66,36 @@ html {
     var(--color-sign-yellow) 0 12px,
     #1d1c17 12px 24px
   );
+}
+
+/* Franjas en movimiento para botones mientras se procesa algo. */
+@utility stripes-busy {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgb(255 255 255 / 0.16) 0 10px,
+    transparent 10px 20px
+  );
+  background-size: 28.28px 28.28px;
+  animation: stripes-move 0.8s linear infinite;
+}
+
+@keyframes stripes-move {
+  to {
+    background-position: 28.28px 0;
+  }
+}
+
+@keyframes alert-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stripes-busy {
+    animation: none;
+  }
 }
 
 /* Estilos que Lenis necesita para no pelear con el scroll nativo. */

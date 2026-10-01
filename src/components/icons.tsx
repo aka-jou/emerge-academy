@@ -415,3 +415,23 @@ export function VolumeOffIcon({ className }: IconProps) {
     </svg>
   )
 }
+
+export function EyeIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M2.06 12.35a1 1 0 0 1 0-.7C3.42 8.1 7.36 5 12 5s8.58 3.1 9.94 6.65a1 1 0 0 1 0 .7C20.58 15.9 16.64 19 12 19s-8.58-3.1-9.94-6.65z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  )
+}
+
+export function EyeOffIcon({ className }: IconProps) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M10.73 5.08A10.4 10.4 0 0 1 12 5c4.64 0 8.58 3.1 9.94 6.65a1 1 0 0 1 0 .7 10.8 10.8 0 0 1-1.64 2.86" />
+      <path d="M14.08 14.16a3 3 0 0 1-4.24-4.24" />
+      <path d="M17.48 17.5A10.7 10.7 0 0 1 12 19c-4.64 0-8.58-3.1-9.94-6.65a1 1 0 0 1 0-.7 10.8 10.8 0 0 1 4.45-5.15" />
+      <path d="m2 2 20 20" />
+    </svg>
+  )
+}
