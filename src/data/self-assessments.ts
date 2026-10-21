@@ -169,6 +169,44 @@ export const selfAssessments: Record<string, SelfAssessment> = {
     ],
     pillars: ["Prevención", "Trabajo en equipo", "Cumplimiento normativo", "Entorno seguro", "Respuesta efectiva", "Mejora continua"],
   },
+  "torque-tension": {
+    sections: [
+      {
+        title: "Conocimientos básicos y principios del torque y la tensión",
+        prompt: "¿Comprendo los fundamentos y su importancia en la seguridad y confiabilidad?",
+        items: [
+          "¿Comprendo la diferencia entre torque y tensión?",
+          "¿Identifico los factores que afectan el torque (fricción, lubricación, condición del perno)?",
+          "¿Conozco los tipos de uniones atornilladas y sus aplicaciones?",
+          "¿Reconozco la importancia del torque y la tensión en la seguridad y confiabilidad?",
+          "¿Conozco las normas y especificaciones aplicables (fabricante, industria, etc.)?",
+        ],
+      },
+      {
+        title: "Herramientas, equipos y procedimiento",
+        prompt: "¿Utilizo correctamente los equipos y sigo el procedimiento establecido?",
+        items: [
+          "¿Selecciono la herramienta adecuada (manual, hidráulica, eléctrica)?",
+          "¿Verifico la calibración y el estado de los equipos?",
+          "¿Aplico el procedimiento de torque según especificaciones del fabricante?",
+          "¿Realizo el torque en la secuencia correcta (cruz o estrella)?",
+          "¿Registro los valores de torque en los formatos correspondientes?",
+        ],
+      },
+      {
+        title: "Seguridad, calidad y verificación",
+        prompt: "¿Trabajo de forma segura y verifico que la unión cumple con los requisitos?",
+        items: [
+          "¿Utilizo el equipo de protección personal (EPP) adecuado?",
+          "¿Mantengo condiciones seguras de trabajo en altura o en campo?",
+          "¿Verifico la tensión residual o el método de verificación (marcas, DTI u otro)?",
+          "¿Identifico señales de reapriete o mantenimiento posterior?",
+          "¿Confirmo que la unión cumple con los criterios de calidad y cierre documental?",
+        ],
+      },
+    ],
+    pillars: ["Seguridad", "Calidad", "Trabajo en equipo", "Disciplina operativa", "Confiabilidad", "Resultados"],
+  },
   "sustancias-quimicas": {
     sections: [
       {
