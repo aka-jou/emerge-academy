@@ -5,6 +5,9 @@ import { courses, courseDetails } from "../data/courses"
 import { moduleQuizzes, diagnosticQuizzes, practicalChecklists } from "../data/quizzes"
 import { useMyCourses } from "../lib/orders"
 import { useCourseProgress } from "../lib/progress"
+import { useAuth } from "../lib/auth"
+import { selfAssessments } from "../data/self-assessments"
+import { SelfAssessmentBlock } from "../components/player/self-assessment-block"
 
 export function CoursePlayerPage() {
   const { id } = useParams<{ id: string }>()
@@ -12,6 +15,7 @@ export function CoursePlayerPage() {
   const course = courses.find((c) => c.id === courseId)
   const detail = courseDetails[courseId]
 
+  const { user } = useAuth()
   const { courses: enrolledCourses, loading: loadingEnrollment } = useMyCourses()
   const {
     completedModules,
@@ -71,6 +75,7 @@ export function CoursePlayerPage() {
   const previousScore = currentModule ? moduleScores[String(currentModule.number)] : undefined
   const diagnosticQuestions = diagnosticQuizzes[courseId]
   const checklist = practicalChecklists[courseId]
+  const selfAssessment = selfAssessments[courseId]
 
   function selectModule(moduleNumber: number) {
     if (!isUnlocked(moduleNumber)) return
@@ -247,6 +252,14 @@ export function CoursePlayerPage() {
                     </button>
                   )}
                   {!nextModule && checklist && <ChecklistReference checklist={checklist} />}
+                  {!nextModule && selfAssessment && (
+                    <SelfAssessmentBlock
+                      assessment={selfAssessment}
+                      storageKey={`emerge.autoevaluacion.${user?.id ?? "anon"}.${courseId}`}
+                      studentName={user?.name ?? ""}
+                      instructor={detail.instructor}
+                    />
+                  )}
                 </div>
               )}
             </div>
