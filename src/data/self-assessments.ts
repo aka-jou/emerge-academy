@@ -131,6 +131,44 @@ export const selfAssessments: Record<string, SelfAssessment> = {
     ],
     pillars: ["Prevención", "Trabajo en equipo", "Ergonomía", "Comunicación", "Respuesta a emergencias", "Mejora continua"],
   },
+  "alturas": {
+    sections: [
+      {
+        title: "Planificación, evaluación de riesgos y permisos",
+        prompt: "¿Reconozco los riesgos, evalúo las condiciones y gestiono correctamente los permisos para trabajar en alturas?",
+        items: [
+          "¿Identifico los peligros asociados al trabajo en alturas?",
+          "¿Evalúo las condiciones del sitio (clima, superficie, obstáculos) antes de iniciar?",
+          "¿Cuento con el permiso de trabajo en alturas y lo comprendo?",
+          "¿Defino el plan de trabajo, responsabilidades y comunicación?",
+          "¿Reconozco si las condiciones cambian y detengo el trabajo cuando es necesario?",
+        ],
+      },
+      {
+        title: "Equipo de protección, sistemas anticaídas y puntos de anclaje",
+        prompt: "¿Utilizo correctamente el equipo de protección personal y los sistemas anticaídas?",
+        items: [
+          "¿Utilizo arnés de cuerpo completo y equipos certificados?",
+          "¿Verifico el estado de las líneas de vida, conectores y absorbedores de energía?",
+          "¿Selecciono y uso puntos de anclaje adecuados y certificados?",
+          "¿Inspecciono mi equipo antes de cada uso?",
+          "¿Mantengo el equipo en buen estado y lo utilizo correctamente durante toda la actividad?",
+        ],
+      },
+      {
+        title: "Trabajo seguro, rescate y respuesta a emergencias",
+        prompt: "¿Trabajo de forma segura, comunico y sé cómo actuar ante una emergencia?",
+        items: [
+          "¿Mantengo comunicación constante con mi equipo durante la actividad?",
+          "¿Conozco el plan de rescate y los procedimientos de emergencia?",
+          "¿Identifico los equipos y personal de rescate disponibles?",
+          "¿Reconozco señales de alerta (fatiga, malestar, condiciones inseguras)?",
+          "¿Participo en los simulacros y contribuyo a la mejora continua de la seguridad?",
+        ],
+      },
+    ],
+    pillars: ["Planificación", "Trabajo en equipo", "Uso correcto de equipo", "Comunicación", "Respuesta a emergencias", "Mejora continua"],
+  },
   "prl": {
     sections: [
       {
