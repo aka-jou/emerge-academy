@@ -63,7 +63,9 @@ export function CartPage() {
 
     if (result.ok) {
       clear()
-      navigate("/checkout/confirmacion", { state: { order: result.order } })
+      // Compra simulada: el pedido queda pagado al instante y el alumno va directo a su
+      // dashboard, donde ya ve el curso en "Mis cursos" listo para empezar.
+      navigate("/dashboard", { replace: true })
     } else {
       setCheckoutError(result.error)
     }

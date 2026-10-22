@@ -99,7 +99,7 @@ export function OrderSummary({
         className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3.5 text-sm font-bold text-primary-foreground transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
       >
         <LockIcon className="h-5 w-5" />
-        {submitting ? "Procesando pago…" : `Proceder al pago - ${currency.format(total)}`}
+        {submitting ? "Inscribiendo…" : `Confirmar inscripción - ${currency.format(total)}`}
       </button>
 
       {/* Pie */}
