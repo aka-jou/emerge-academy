@@ -36,9 +36,6 @@
   --color-sign-green: #1f8a4c;
   --color-sign-blue: #1d5fa8;
 
-  /* Rojo para errores y respuestas "No" (lo usan las alertas de formularios y la autoevaluación). */
-  --color-destructive: oklch(0.55 0.2 27);
-
   --radius: 0.75rem;
 }
 
