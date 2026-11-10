@@ -8,6 +8,8 @@ import { useCourseProgress } from "../lib/progress"
 import { useAuth } from "../lib/auth"
 import { selfAssessments } from "../data/self-assessments"
 import { SelfAssessmentBlock } from "../components/player/self-assessment-block"
+import { useCourseManual } from "../data/manuals"
+import { ManualContent } from "../components/player/manual-content"
 
 export function CoursePlayerPage() {
   const { id } = useParams<{ id: string }>()
@@ -25,6 +27,7 @@ export function CoursePlayerPage() {
     setModuleCompleted,
     submitQuiz,
   } = useCourseProgress(courseId)
+  const { manual, loading: loadingManual } = useCourseManual(courseId)
 
   const [activeModule, setActiveModule] = useState(1)
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -195,7 +198,9 @@ export function CoursePlayerPage() {
                     {currentModule.title}
                   </h1>
                   <p className="mt-3 text-sm leading-relaxed text-muted">
-                    Revisa el contenido de este módulo con tu instructor y el material de apoyo del curso.
+                    {manual?.modules[String(currentModule.number)]?.length
+                      ? "Estudia los temas del manual del participante que corresponden a este módulo y repásalos con tu instructor."
+                      : "Revisa el contenido de este módulo con tu instructor y el material de apoyo del curso."}
                     {quiz
                       ? " Cuando estés listo, responde el cuestionario para acreditar el módulo."
                       : " Cuando hayas cubierto los temas y practicado lo necesario, márcalo como completado para avanzar tu progreso real de certificación."}
@@ -220,6 +225,8 @@ export function CoursePlayerPage() {
                       onSubmit={() => setDiagnosticSubmitted(true)}
                     />
                   )}
+
+                  <ManualContent manual={manual} loading={loadingManual} moduleNumber={currentModule.number} />
 
                   {quiz ? (
                     <QuizBlock
