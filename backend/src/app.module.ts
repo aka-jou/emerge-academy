@@ -21,18 +21,30 @@ import { AdminModule } from "./admin/admin.module"
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: "postgres",
-        host: config.get<string>("DB_HOST", "localhost"),
-        port: config.get<number>("DB_PORT", 5432),
-        username: config.get<string>("DB_USERNAME", "emerge"),
-        password: config.get<string>("DB_PASSWORD", "emerge"),
-        database: config.get<string>("DB_DATABASE", "emerge_academy"),
-        entities: [User, Course, Order, OrderItem, CourseProgress, LiveSession],
-        // Sólo para desarrollo: crea/actualiza tablas automáticamente. En producción,
-        // usar migraciones de TypeORM en vez de synchronize.
-        synchronize: true,
-      }),
+      useFactory: (config: ConfigService) => {
+        const entities = [User, Course, Order, OrderItem, CourseProgress, LiveSession]
+        // En Railway (y la mayoría de hostings) Postgres se entrega como DATABASE_URL.
+        // Si no existe, se usan las variables DB_* del entorno local.
+        const url = config.get<string>("DATABASE_URL")
+        const ssl = config.get<string>("DB_SSL") === "true" ? { rejectUnauthorized: false } : false
+        const common = {
+          type: "postgres" as const,
+          entities,
+          ssl,
+          // Crea/actualiza tablas automáticamente. Suficiente para pruebas; para producción
+          // estable conviene pasar a migraciones de TypeORM.
+          synchronize: true,
+        }
+        if (url) return { ...common, url }
+        return {
+          ...common,
+          host: config.get<string>("DB_HOST", "localhost"),
+          port: Number(config.get<string>("DB_PORT", "5432")),
+          username: config.get<string>("DB_USERNAME", "emerge"),
+          password: config.get<string>("DB_PASSWORD", "emerge"),
+          database: config.get<string>("DB_DATABASE", "emerge_academy"),
+        }
+      },
     }),
     AuthModule,
     UsersModule,

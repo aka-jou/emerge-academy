@@ -16,15 +16,18 @@ async function bootstrap() {
     }),
   )
 
-  app.enableCors({
-    origin: config.get<string>("FRONTEND_ORIGIN", "http://localhost:5173"),
-    credentials: true,
-  })
+  // FRONTEND_ORIGIN acepta varias URLs separadas por coma (p. ej. dominio de Vercel + localhost).
+  const origins = config
+    .get<string>("FRONTEND_ORIGIN", "http://localhost:3000")
+    .split(",")
+    .map((o) => o.trim().replace(/\/$/, ""))
+    .filter(Boolean)
+  app.enableCors({ origin: origins, credentials: true })
 
   app.setGlobalPrefix("api")
 
-  const port = config.get<number>("PORT", 3001)
-  await app.listen(port)
+  const port = Number(config.get<string>("PORT", "3002"))
+  await app.listen(port, "0.0.0.0")
   // eslint-disable-next-line no-console
   console.log(`Emerge Academy API escuchando en http://localhost:${port}/api`)
 }
