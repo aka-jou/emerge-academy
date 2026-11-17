@@ -522,26 +522,26 @@ function ModuleSidebar({
         )}
       </nav>
 
-      {/* Accesos rápidos a las secciones principales de la plataforma. */}
-      <div className="shrink-0 border-t border-border p-3">
-        <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted">Ir a</p>
+      {/* Accesos rápidos: panel oscuro de marca con textura para separarlo del contenido del curso. */}
+      <div className="panel-texture shrink-0 bg-ink p-3 text-white">
+        <p className="px-3 pb-1.5 pt-1 text-[11px] font-semibold uppercase tracking-wider text-white/50">Ir a</p>
         <ul className="grid grid-cols-1 gap-0.5">
           {quickLinks.map(({ to, label, Icon }) => (
             <li key={to}>
               <Link
                 to={to}
-                className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted-surface hover:text-primary"
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-white/85 transition hover:bg-white/10 hover:text-white"
               >
-                <Icon className="h-4 w-4 text-muted" />
+                <Icon className="h-4 w-4 text-[#9fd08f]" />
                 {label}
               </Link>
             </li>
           ))}
-          <li>
+          <li className="mt-1 border-t border-white/10 pt-1">
             <button
               type="button"
               onClick={onLogout}
-              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-medium text-destructive transition hover:bg-destructive/10"
+              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-medium text-red-300 transition hover:bg-red-500/15 hover:text-red-200"
             >
               <LogOutIcon className="h-4 w-4" />
               Cerrar sesión

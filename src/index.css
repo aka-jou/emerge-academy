@@ -176,6 +176,13 @@ html {
   animation: grow-x 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
 }
 
+/* Textura sutil de rayas diagonales para paneles oscuros de navegación. */
+@utility panel-texture {
+  background-image:
+    repeating-linear-gradient(135deg, rgb(255 255 255 / 0.035) 0 2px, transparent 2px 9px),
+    radial-gradient(120% 80% at 100% 0%, rgb(79 157 34 / 0.18), transparent 60%);
+}
+
 /* ---------- Ticket de compra ---------- */
 
 /* Papel térmico con bordes dentados arriba y abajo (como un ticket cortado). */
