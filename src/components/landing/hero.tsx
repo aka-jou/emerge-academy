@@ -54,7 +54,7 @@ export function Hero() {
 
   return (
     <section ref={root} className="relative overflow-hidden">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-28 sm:px-6 lg:grid-cols-2 lg:px-8 lg:pb-24 lg:pt-36">
+      <div className="mx-auto grid grid-cols-1 max-w-7xl items-center gap-12 px-4 pb-16 pt-28 sm:px-6 lg:grid-cols-2 lg:px-8 lg:pb-24 lg:pt-36">
         <div>
           <span
             data-hero="badge"
@@ -83,7 +83,7 @@ export function Hero() {
             basada en escenarios reales e instructores certificados.
           </p>
 
-          <ul className="mt-7 grid gap-3 sm:grid-cols-2">
+          <ul className="mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {pillars.map((pillar) => (
               <li
                 key={pillar}

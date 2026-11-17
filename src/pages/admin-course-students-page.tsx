@@ -36,7 +36,7 @@ export function AdminCourseStudentsPage() {
           </p>
         )}
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted">Alumnos inscritos</p>
             <p className="mt-2 text-3xl font-bold text-foreground">{loading ? "…" : students.length}</p>

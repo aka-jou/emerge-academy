@@ -49,7 +49,7 @@ export function DashboardPage() {
           )}
 
           {!loading && courses.length > 0 && (
-            <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {courses.map((course) => (
                 <EnrolledCourseCard key={course.id} course={course} progress={progress} />
               ))}
@@ -57,7 +57,7 @@ export function DashboardPage() {
           )}
         </section>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-5">
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-5">
           <div className="lg:col-span-3">
             <UpcomingMilestones />
           </div>

@@ -172,7 +172,7 @@ export function RegisterCard() {
             />
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
               <label htmlFor="birthDate" className="text-sm font-medium text-card-foreground">
                 Fecha de nacimiento
@@ -250,7 +250,7 @@ export function RegisterCard() {
         </form>
       ) : (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
               <label htmlFor="company" className="text-sm font-medium text-card-foreground">
                 Empresa / Razón social
@@ -284,7 +284,7 @@ export function RegisterCard() {
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
               <label htmlFor="industry" className="text-sm font-medium text-card-foreground">
                 Sector
@@ -322,7 +322,7 @@ export function RegisterCard() {
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
               <label htmlFor="yearsExperience" className="text-sm font-medium text-card-foreground">
                 Años de experiencia
@@ -361,7 +361,7 @@ export function RegisterCard() {
             </div>
           </div>
 
-          <div className="grid gap-4 border-t border-border pt-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 border-t border-border pt-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
               <label htmlFor="password" className="text-sm font-medium text-card-foreground">
                 Contraseña

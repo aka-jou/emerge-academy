@@ -8,7 +8,7 @@ export function Footer() {
   return (
     <footer id="contacto" data-nav-theme="dark" className="scroll-mt-16 bg-zinc-950 text-zinc-400">
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <Logo dark />
             <p className="mt-4 max-w-xs text-sm leading-relaxed">

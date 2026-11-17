@@ -103,8 +103,8 @@ export function CoursesPage() {
 
       <section className="bg-ink text-white">
         <div className="mx-auto max-w-7xl px-4 pb-10 pt-12 sm:px-6 lg:px-8 lg:pb-12 lg:pt-16">
-          <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] lg:items-end">
-            <h1 className="font-display text-6xl font-semibold uppercase leading-[0.9] tracking-tight sm:text-7xl lg:text-8xl">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] lg:items-end">
+            <h1 className="font-display text-[clamp(2.5rem,12vw,3.75rem)] font-semibold uppercase leading-[0.9] tracking-tight sm:text-7xl lg:text-8xl">
               <span className="block overflow-hidden">
                 <span data-anim="line" className="block">
                   Capacitación
@@ -182,7 +182,7 @@ export function CoursesPage() {
 
       <main className="flex-1">
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
-          <div ref={grid} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div ref={grid} className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {visible.map((course) => (
               <CourseCard key={course.id} course={course} isEnrolled={enrolledIds.has(course.id)} />
             ))}

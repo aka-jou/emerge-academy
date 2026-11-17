@@ -26,7 +26,7 @@ export function AdminDashboardPage() {
         )}
 
         {/* Tarjetas de resumen */}
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
             <div className="flex items-center gap-2 text-muted">
               <GraduationCapIcon className="h-4 w-4" />

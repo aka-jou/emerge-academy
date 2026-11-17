@@ -45,7 +45,7 @@ export function AboutUs() {
           </p>
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {areas.map((area) => (
             <div
               key={area.title}
@@ -60,7 +60,7 @@ export function AboutUs() {
           ))}
         </div>
 
-        <div className="mt-16 grid items-center gap-12 lg:grid-cols-2">
+        <div className="mt-16 grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
           <div className="order-2 overflow-hidden rounded-2xl border border-border shadow-sm lg:order-1">
             <img
               src="/images/courses/comandante-emergencias.jpg"

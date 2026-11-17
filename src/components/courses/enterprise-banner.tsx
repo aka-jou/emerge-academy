@@ -1,7 +1,7 @@
 export function EnterpriseBanner() {
   return (
     <div className="relative overflow-hidden rounded-3xl bg-ink px-6 pb-12 pt-10 text-white sm:px-10 lg:px-14">
-      <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
         <div>
           <h2 className="text-balance font-display text-4xl font-semibold leading-[0.95] tracking-tight sm:text-5xl">
             ¿Capacitas a una cuadrilla completa?

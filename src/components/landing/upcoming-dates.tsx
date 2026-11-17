@@ -41,7 +41,7 @@ export function UpcomingDates() {
           </p>
         </div>
 
-        <div id="cursos" className="mt-12 grid gap-6 md:grid-cols-3">
+        <div id="cursos" className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
           {courses.map((course) => (
             <div
               key={course.code}

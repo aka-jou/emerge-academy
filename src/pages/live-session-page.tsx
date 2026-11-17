@@ -27,7 +27,7 @@ export function LiveSessionPage() {
           <span className="font-semibold text-foreground">Sesión en vivo</span>
         </nav>
 
-        <div className="mt-6 grid gap-6 lg:grid-cols-10">
+        <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-10">
           {/* Columna principal (70%) */}
           <div className="lg:col-span-7">
             <div className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">

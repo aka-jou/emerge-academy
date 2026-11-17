@@ -127,7 +127,7 @@ export function CalendarPage() {
           )}
         </div>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Calendario */}
           <section className="lg:col-span-2">
             <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">

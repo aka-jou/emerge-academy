@@ -150,7 +150,7 @@ export function ProfileTab() {
       )}
 
       {/* Formulario en grid de dos columnas */}
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         {fields.map((field) => (
           <div key={field.id} className={field.id === "cityCountry" ? "sm:col-span-2" : undefined}>
             <label htmlFor={field.id} className="block text-sm font-medium text-foreground">

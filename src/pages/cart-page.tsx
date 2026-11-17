@@ -103,7 +103,7 @@ export function CartPage() {
               </Link>
             </div>
           ) : (
-            <div className="mt-6 grid items-start gap-8 lg:grid-cols-[7fr_4fr]">
+            <div className="mt-6 grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,7fr)_minmax(0,4fr)]">
               {/* Columna izquierda: cursos */}
               <div className="flex flex-col gap-4">
                 {cartItems.map((item) => (

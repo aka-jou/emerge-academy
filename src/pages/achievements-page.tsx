@@ -67,7 +67,7 @@ export function AchievementsPage() {
 
             {/* Bloque inferior: visualizador y validación */}
             <section className="mt-8" aria-label="Certificado y acciones">
-              <div className="grid gap-6 lg:grid-cols-5">
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
                 <div className="lg:col-span-3">
                   <CertificatePreview recipient={user?.name ?? ""} courseTitle={completedCourse.title} />
                 </div>

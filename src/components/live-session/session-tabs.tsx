@@ -25,7 +25,7 @@ export function SessionTabs({ session }: { session: LiveSession }) {
               role="tab"
               aria-selected={isActive}
               onClick={() => setActive(tab.key)}
-              className={`-mb-px border-b-2 px-4 py-2.5 text-sm font-semibold transition ${
+              className={`-mb-px whitespace-nowrap border-b-2 px-2.5 py-2.5 text-[13px] sm:px-4 sm:text-sm font-semibold transition ${
                 isActive
                   ? "border-primary text-primary"
                   : "border-transparent text-muted hover:text-foreground"

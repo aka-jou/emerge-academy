@@ -86,7 +86,7 @@ export function AdminSessionsPage() {
           automáticamente en el calendario de todos los alumnos inscritos en el curso.
         </p>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-5">
+        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-5">
           {/* Formulario para programar una nueva sesión */}
           <section className="lg:col-span-2">
             <form

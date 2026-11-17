@@ -49,13 +49,13 @@ html {
   }
 }
 
-/* Cinta reflejante (como la de los chalecos de brigada): acento, plata, acento. */
+/* Cinta reflejante (como la de los chalecos de brigada): verde de marca, plata, verde. */
 @utility tape {
   background: linear-gradient(
     to bottom,
-    var(--color-accent) 0 34%,
-    #9ea298 34% 66%,
-    var(--color-accent) 66% 100%
+    var(--color-primary) 0 34%,
+    #b9c4bc 34% 66%,
+    var(--color-primary) 66% 100%
   );
 }
 

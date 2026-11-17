@@ -24,7 +24,7 @@ export function AdminHeader() {
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link to="/admin" aria-label="Universidad Emerge - Panel de administrador" className="flex items-center gap-2">
           <Logo />
-          <span className="rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide text-primary">
+          <span className="hidden rounded-md bg-primary/10 px-2 py-0.5 text-[11px] min-[360px]:inline font-bold uppercase tracking-wide text-primary">
             Admin
           </span>
         </Link>

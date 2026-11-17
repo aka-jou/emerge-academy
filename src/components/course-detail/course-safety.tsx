@@ -15,7 +15,7 @@ export function Prerequisites({ items }: { items: string[] }) {
         <h2 id="requisitos-title" className="font-display text-3xl font-semibold leading-none text-[#3b2f00]">
           Requisitos obligatorios
         </h2>
-        <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+        <ul className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {items.map((item) => (
             <li key={item} className="flex items-start gap-3 text-sm leading-snug text-[#3b2f00]">
               <span
@@ -41,7 +41,7 @@ export function PpeRequirements({ items }: { items: string[] }) {
     <section aria-labelledby="epp-title">
       <SectionHeading id="epp-title">Equipo de protección personal</SectionHeading>
       <p className="mt-3 text-muted">De uso obligatorio durante todas las prácticas.</p>
-      <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+      <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {items.map((item) => (
           <li key={item} className="flex items-center gap-4 rounded-2xl bg-card p-4 ring-1 ring-border">
             <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sign-blue text-white ring-4 ring-sign-blue/15">
@@ -61,7 +61,7 @@ export function StandardsList({ standards }: { standards: { code: string; name: 
   return (
     <section aria-labelledby="normas-title">
       <SectionHeading id="normas-title">Normas que cubre</SectionHeading>
-      <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+      <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {standards.map((std) => (
           <li key={std.code} className="rounded-2xl border-2 border-ink/85 p-5">
             <p className="font-display text-2xl font-semibold leading-none tracking-wide text-foreground">

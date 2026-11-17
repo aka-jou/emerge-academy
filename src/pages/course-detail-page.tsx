@@ -86,7 +86,7 @@ function CourseDetailContent({ id, detail }: { id: string; detail: CourseDetail 
       <CoursesHeader />
 
       <section className="relative bg-ink text-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 pb-16 pt-8 sm:px-6 lg:grid-cols-[1.15fr_1fr] lg:items-center lg:px-8 lg:pb-24 lg:pt-10">
+        <div className="mx-auto grid grid-cols-1 max-w-7xl gap-10 px-4 pb-16 pt-8 sm:px-6 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:items-center lg:px-8 lg:pb-24 lg:pt-10">
           <div className="min-w-0">
             <nav aria-label="Ruta" className="flex items-center gap-1.5 text-sm text-white/55">
               <Link to="/cursos" className="transition hover:text-white">
@@ -167,7 +167,7 @@ function CourseDetailContent({ id, detail }: { id: string; detail: CourseDetail 
       </section>
 
       <main className="flex-1">
-        <div className="mx-auto grid max-w-7xl gap-14 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16 lg:px-8 lg:py-20">
+        <div className="mx-auto grid grid-cols-1 max-w-7xl gap-14 px-4 py-14 sm:px-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-16 lg:px-8 lg:py-20">
           <div className="flex min-w-0 flex-col gap-16">
             <CourseObjective objective={detail.objective} instructor={detail.instructor} />
             <Prerequisites items={detail.prerequisites} />

@@ -117,7 +117,7 @@ export function Convenio() {
         data-nav-theme="dark"
         className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-ink px-5 py-14 text-white sm:px-10 lg:px-14 lg:py-20"
       >
-        <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] lg:items-end">
           <h2
             data-convenio="title"
             className="text-balance text-3xl font-semibold leading-[1.08] tracking-tight sm:text-5xl"
@@ -179,7 +179,7 @@ export function Convenio() {
 
         <dl
           data-convenio="stats"
-          className="mt-4 grid gap-6 rounded-[1.25rem] bg-accent p-6 text-accent-foreground sm:grid-cols-3 sm:p-8"
+          className="mt-4 grid grid-cols-1 gap-6 rounded-[1.25rem] bg-accent p-6 text-accent-foreground sm:grid-cols-3 sm:p-8"
         >
           {convenio.stats.map((stat) => (
             <div key={stat.label}>
