@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom"
 import { LandingPage } from "./pages/landing-page"
 import { LoginPage } from "./pages/login-page"
 import { RegisterPage } from "./pages/register-page"
@@ -24,7 +24,17 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Routes>
+      <AnimatedRoutes />
+    </BrowserRouter>
+  )
+}
+
+// Cada cambio de página entra con un fundido suave (la key reinicia la animación).
+function AnimatedRoutes() {
+  const location = useLocation()
+  return (
+    <div key={location.pathname} className="h-full animate-page-in">
+      <Routes location={location}>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registro" element={<RegisterPage />} />
@@ -113,6 +123,6 @@ export default function App() {
         />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </BrowserRouter>
+    </div>
   )
 }

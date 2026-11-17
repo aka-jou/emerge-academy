@@ -25,9 +25,10 @@
 
   /* Superficie oscura de marca (navbar sobre secciones oscuras, panel del convenio). */
   --color-ink: #0e2b21;
-  /* Acento lima: cámbialo aquí y se actualiza en toda la landing. */
-  --color-accent: #f1ff6c;
-  --color-accent-foreground: #13240f;
+  /* Acento verde salvia (sobrio, de la familia del verde de marca): cámbialo aquí y se
+     actualiza en toda la plataforma (botones sobre fondos oscuros, insignias, estados). */
+  --color-accent: #c6dccb;
+  --color-accent-foreground: #0e2b21;
 
   /* Un color por área de formación, inspirado en la señalización NOM-026-STPS. */
   --color-sign-yellow: #f2b705;
@@ -92,8 +93,123 @@ html {
   }
 }
 
+/* ---------- Animaciones generales de la plataforma ---------- */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes loader-bar {
+  0% {
+    transform: translateX(-100%) scaleX(0.4);
+  }
+  50% {
+    transform: translateX(40%) scaleX(0.6);
+  }
+  100% {
+    transform: translateX(160%) scaleX(0.4);
+  }
+}
+
+@keyframes loader-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.94);
+    opacity: 0.75;
+  }
+}
+
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Solo opacidad: un transform en el contenedor de la página rompería los position: fixed. */
+@utility animate-page-in {
+  animation: fade-in 0.35s ease-out both;
+}
+
+@utility animate-fade-in {
+  animation: fade-in 0.3s ease-out both;
+}
+
+/* Entrada escalonada: usa style={{ "--i": n }} en cada elemento de la lista. */
+@utility animate-fade-up {
+  animation: fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+@utility animate-slide-in-left {
+  animation: slide-in-left 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Barras de progreso: se llenan desde la izquierda al aparecer. */
+@utility animate-grow-x {
+  animation: grow-x 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+
+@utility animate-loader-bar {
+  animation: loader-bar 1.3s ease-in-out infinite;
+}
+
+@utility animate-loader-pulse {
+  animation: loader-pulse 1.6s ease-in-out infinite;
+}
+
+/* Bloque de carga (skeleton) con brillo que recorre la superficie. */
+@utility skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-muted-surface) 0%,
+    oklch(0.94 0.01 150) 50%,
+    var(--color-muted-surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+/* Botones: leve hundimiento al presionar. */
+button:not(:disabled):active,
+a[role="button"]:active {
+  transform: translateY(1px);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .stripes-busy {
+  .stripes-busy,
+  .animate-page-in,
+  .animate-fade-in,
+  .animate-fade-up,
+  .animate-slide-in-left,
+  .animate-loader-bar,
+  .animate-loader-pulse,
+  .animate-grow-x,
+  .skeleton {
     animation: none;
   }
 }

@@ -170,7 +170,7 @@ export function LoginCard() {
           disabled={status !== "idle"}
           className={`group relative mt-2 flex h-12 w-full items-center justify-center overflow-hidden rounded-full text-sm font-semibold transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 disabled:cursor-not-allowed ${
             status === "success"
-              ? "bg-accent text-accent-foreground"
+              ? "bg-primary-hover text-primary-foreground"
               : "bg-primary text-primary-foreground hover:bg-primary-hover"
           }`}
         >

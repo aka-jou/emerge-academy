@@ -64,7 +64,7 @@ export function AccountSettingsPage() {
             </nav>
           </aside>
 
-          <section className="min-w-0 rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-8">
+          <section key={active} className="min-w-0 rounded-2xl border border-border bg-card p-4 shadow-sm animate-fade-in sm:p-8">
             {active === "profile" && <ProfileTab />}
             {active === "security" && <SecurityTab />}
             {active === "billing" && <BillingTab />}

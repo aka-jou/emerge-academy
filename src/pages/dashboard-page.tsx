@@ -33,7 +33,21 @@ export function DashboardPage() {
         <section className="mt-8">
           <h2 className="text-xl font-bold tracking-tight text-foreground">Cursos activos</h2>
 
-          {loading && <p className="mt-4 text-sm text-muted">Cargando tus cursos…</p>}
+          {loading && (
+            <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-label="Cargando tus cursos">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+                  <div className="skeleton h-40" />
+                  <div className="flex flex-col gap-3 p-5">
+                    <div className="skeleton h-4 w-24 rounded" />
+                    <div className="skeleton h-5 w-3/4 rounded" />
+                    <div className="skeleton h-2 w-full rounded-full" />
+                    <div className="skeleton mt-2 h-10 w-full rounded-lg" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
           {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
 
           {!loading && !error && courses.length === 0 && (
@@ -50,8 +64,10 @@ export function DashboardPage() {
 
           {!loading && courses.length > 0 && (
             <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {courses.map((course) => (
-                <EnrolledCourseCard key={course.id} course={course} progress={progress} />
+              {courses.map((course, index) => (
+                <div key={course.id} className="animate-fade-up" style={{ "--i": index } as React.CSSProperties}>
+                  <EnrolledCourseCard course={course} progress={progress} />
+                </div>
               ))}
             </div>
           )}

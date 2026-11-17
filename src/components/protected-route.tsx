@@ -1,17 +1,14 @@
 import { type ReactNode } from "react"
 import { Navigate, useLocation } from "react-router-dom"
 import { useAuth } from "../lib/auth"
+import { PageLoader } from "./page-loader"
 
 export function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth()
   const location = useLocation()
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <span className="text-sm font-medium text-muted">Cargando…</span>
-      </div>
-    )
+    return <PageLoader />
   }
 
   if (!user) {

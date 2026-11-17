@@ -43,7 +43,7 @@ export function DashboardCourseCard({ course }: { course: ActiveCourse }) {
             aria-valuemax={100}
             aria-label={`Progreso de ${title}`}
           >
-            <div className="h-full rounded-full bg-primary" style={{ width: `${progress}%` }} />
+            <div className="h-full origin-left rounded-full bg-primary animate-grow-x" style={{ width: `${progress}%` }} />
           </div>
           <span className="text-sm font-semibold text-foreground">{progress}%</span>
         </div>

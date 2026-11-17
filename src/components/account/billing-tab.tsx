@@ -56,7 +56,7 @@ export function BillingTab() {
                       {order.items.map((item) => item.course?.title ?? item.courseId).join(", ")}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3">
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-700">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
                         {order.status === "paid" ? "Pagado" : "Cancelado"}
                       </span>
                     </td>

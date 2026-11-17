@@ -49,9 +49,9 @@ export function ThankYouPage() {
       <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col items-center px-4 py-12 sm:px-6 sm:py-16">
         {/* Insignia de éxito */}
         <div className="relative flex items-center justify-center">
-          <span className="absolute h-28 w-28 animate-ping rounded-full bg-green-400/30" aria-hidden="true" />
-          <span className="absolute h-24 w-24 rounded-full bg-green-100" aria-hidden="true" />
-          <span className="relative flex h-20 w-20 items-center justify-center rounded-full bg-green-500 shadow-lg shadow-green-500/40">
+          <span className="absolute h-28 w-28 animate-ping rounded-full bg-primary/20" aria-hidden="true" />
+          <span className="absolute h-24 w-24 rounded-full bg-primary/10" aria-hidden="true" />
+          <span className="relative flex h-20 w-20 items-center justify-center rounded-full bg-primary shadow-lg shadow-primary/30">
             <CheckIcon className="h-10 w-10 text-white" />
           </span>
         </div>
@@ -74,7 +74,7 @@ export function ThankYouPage() {
               <p className="text-xs font-medium uppercase tracking-wide text-muted">Número de orden</p>
               <p className="mt-1 font-mono text-lg font-bold text-foreground">{order.folio}</p>
             </div>
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1.5 text-xs font-semibold text-green-700">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
               <CheckIcon className="h-3.5 w-3.5" />
               Pago confirmado
             </span>

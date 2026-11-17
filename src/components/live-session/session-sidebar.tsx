@@ -27,14 +27,14 @@ export function SessionSidebar({ session }: { session: LiveSession }) {
   return (
     <aside className="flex flex-col gap-6">
       {/* Acceso habilitado */}
-      <div className="rounded-2xl border border-green-200 bg-green-50 p-5">
+      <div className="rounded-2xl border border-primary/20 bg-primary/[0.06] p-5">
         <div className="flex items-start gap-3">
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-green-600 text-white">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-white">
             <CheckIcon className="h-5 w-5" />
           </span>
           <div>
-            <h3 className="text-sm font-bold text-green-800">Acceso habilitado</h3>
-            <p className="mt-1 text-sm leading-relaxed text-green-700">
+            <h3 className="text-sm font-bold text-primary-hover">Acceso habilitado</h3>
+            <p className="mt-1 text-sm leading-relaxed text-primary">
               Tu inscripción cubre las sesiones en vivo de este curso. Ya puedes unirte cuando comience.
             </p>
           </div>

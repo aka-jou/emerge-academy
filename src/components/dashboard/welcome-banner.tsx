@@ -70,7 +70,7 @@ export function WelcomeBanner({ enrolledCourses, progress, loading }: WelcomeBan
             aria-valuemax={100}
             aria-label="Progreso global del estudiante"
           >
-            <div className="h-full rounded-full bg-primary" style={{ width: `${globalProgress}%` }} />
+            <div className="h-full origin-left rounded-full bg-primary animate-grow-x" style={{ width: `${globalProgress}%` }} />
           </div>
         </div>
       )}

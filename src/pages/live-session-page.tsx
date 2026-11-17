@@ -48,8 +48,8 @@ export function LiveSessionPage() {
                   <CalendarIcon className="h-3.5 w-3.5 text-muted" />
                   {session.duration}
                 </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1.5 text-xs font-semibold text-green-700">
-                  <span className="h-2 w-2 rounded-full bg-green-600" />
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary">
+                  <span className="h-2 w-2 rounded-full bg-primary" />
                   {session.status}
                 </span>
               </div>

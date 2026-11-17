@@ -1,6 +1,19 @@
 import { useEffect, useState } from "react"
-import { Link, Navigate, useParams } from "react-router-dom"
-import { ArrowRightIcon, CheckIcon, MenuIcon, ClockIcon, LockIcon } from "../components/icons"
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom"
+import {
+  ArrowRightIcon,
+  CheckIcon,
+  MenuIcon,
+  ClockIcon,
+  LockIcon,
+  FileTextIcon,
+  LayoutDashboardIcon,
+  CalendarIcon,
+  CertificateIcon,
+  SettingsIcon,
+  GraduationCapIcon,
+  LogOutIcon,
+} from "../components/icons"
 import { courses, courseDetails } from "../data/courses"
 import { moduleQuizzes, diagnosticQuizzes, practicalChecklists } from "../data/quizzes"
 import { useMyCourses } from "../lib/orders"
@@ -10,6 +23,11 @@ import { selfAssessments } from "../data/self-assessments"
 import { SelfAssessmentBlock } from "../components/player/self-assessment-block"
 import { useCourseManual } from "../data/manuals"
 import { ManualContent } from "../components/player/manual-content"
+import { PageLoader } from "../components/page-loader"
+
+// Paso especial (después de los módulos) para la ficha de autoevaluación: los módulos se
+// numeran desde 1, así que el 0 nunca choca con un módulo real.
+const SELF_ASSESSMENT_STEP = 0
 
 export function CoursePlayerPage() {
   const { id } = useParams<{ id: string }>()
@@ -17,7 +35,8 @@ export function CoursePlayerPage() {
   const course = courses.find((c) => c.id === courseId)
   const detail = courseDetails[courseId]
 
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
   const { courses: enrolledCourses, loading: loadingEnrollment } = useMyCourses()
   const {
     completedModules,
@@ -69,8 +88,14 @@ export function CoursePlayerPage() {
     setShowDiagnostic(false)
   }, [activeModule])
 
-  const currentModule = modules.find((m) => m.number === activeModule) ?? modules[0]
-  const currentIndex = modules.findIndex((m) => m.number === activeModule)
+  const selfAssessment = selfAssessments[courseId]
+  const isSelfStep = activeModule === SELF_ASSESSMENT_STEP && !!selfAssessment
+  const lastModule = modules[modules.length - 1]
+  // La autoevaluación es el último paso: se habilita al completar el último módulo.
+  const selfUnlocked = !!selfAssessment && !!lastModule && completedModules.includes(lastModule.number)
+
+  const currentModule = isSelfStep ? undefined : (modules.find((m) => m.number === activeModule) ?? modules[0])
+  const currentIndex = currentModule ? modules.findIndex((m) => m.number === currentModule.number) : -1
   const prevModule = currentIndex > 0 ? modules[currentIndex - 1] : null
   const nextModule = currentIndex >= 0 && currentIndex < modules.length - 1 ? modules[currentIndex + 1] : null
   const isCurrentCompleted = currentModule ? completedModules.includes(currentModule.number) : false
@@ -78,10 +103,14 @@ export function CoursePlayerPage() {
   const previousScore = currentModule ? moduleScores[String(currentModule.number)] : undefined
   const diagnosticQuestions = diagnosticQuizzes[courseId]
   const checklist = practicalChecklists[courseId]
-  const selfAssessment = selfAssessments[courseId]
+
+  function handleLogout() {
+    logout()
+    navigate("/", { replace: true })
+  }
 
   function selectModule(moduleNumber: number) {
-    if (!isUnlocked(moduleNumber)) return
+    if (moduleNumber === SELF_ASSESSMENT_STEP ? !selfUnlocked : !isUnlocked(moduleNumber)) return
     setActiveModule(moduleNumber)
     setSidebarOpen(false)
   }
@@ -115,11 +144,7 @@ export function CoursePlayerPage() {
 
   // Todavía no sabemos si está inscrito (cargando useMyCourses): esperar antes de decidir.
   if (loadingEnrollment) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-background">
-        <span className="text-sm font-medium text-muted">Cargando…</span>
-      </div>
-    )
+    return <PageLoader label="Cargando curso…" />
   }
 
   // El usuario no compró este curso: lo mandamos a la página de venta, no a las lecciones.
@@ -127,6 +152,8 @@ export function CoursePlayerPage() {
     return <Navigate to={`/cursos/${courseId}`} replace />
   }
 
+  // En la autoevaluación (último paso) basta con tener el curso al 100 %.
+  const canFinish = isSelfStep ? percent === 100 : isCurrentCompleted
   const allQuestionsAnswered = quiz ? quiz.questions.every((q) => answers[q.id] !== undefined) : false
 
   return (
@@ -142,6 +169,9 @@ export function CoursePlayerPage() {
             activeModuleNumber={activeModule}
             isUnlocked={isUnlocked}
             onSelectModule={selectModule}
+            hasSelfAssessment={!!selfAssessment}
+            selfUnlocked={selfUnlocked}
+            onLogout={handleLogout}
           />
         </aside>
 
@@ -152,9 +182,9 @@ export function CoursePlayerPage() {
               type="button"
               aria-label="Cerrar contenido"
               onClick={() => setSidebarOpen(false)}
-              className="absolute inset-0 bg-black/40"
+              className="absolute inset-0 bg-black/40 animate-fade-in"
             />
-            <div className="absolute inset-y-0 left-0 w-80 max-w-[85%] border-r border-border shadow-xl">
+            <div className="absolute inset-y-0 left-0 w-80 max-w-[85%] border-r border-border shadow-xl animate-slide-in-left">
               <ModuleSidebar
                 title={course.title}
                 percent={percent}
@@ -163,6 +193,9 @@ export function CoursePlayerPage() {
                 activeModuleNumber={activeModule}
                 isUnlocked={isUnlocked}
                 onSelectModule={selectModule}
+                hasSelfAssessment={!!selfAssessment}
+                selfUnlocked={selfUnlocked}
+                onLogout={handleLogout}
               />
             </div>
           </div>
@@ -183,7 +216,28 @@ export function CoursePlayerPage() {
           </div>
 
           <main className="flex-1 overflow-y-auto px-4 py-6 sm:px-8 sm:py-8">
-            <div className="mx-auto max-w-3xl">
+            <div key={activeModule} className="mx-auto max-w-3xl animate-fade-up">
+              {isSelfStep && selfAssessment && (
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-primary">
+                    <FileTextIcon className="h-3.5 w-3.5" />
+                    <span>Cierre del curso</span>
+                  </div>
+                  <h1 className="mt-2 text-xl font-bold tracking-tight text-foreground text-pretty sm:text-2xl">
+                    Ficha de autoevaluación del participante
+                  </h1>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">
+                    Ya terminaste los módulos del curso. Antes de descargar tu certificado, reflexiona sobre lo que
+                    aprendiste: responde con honestidad, no hay respuestas correctas y no afecta tu calificación.
+                  </p>
+                  <SelfAssessmentBlock
+                    assessment={selfAssessment}
+                    storageKey={`emerge.autoevaluacion.${user?.id ?? "anon"}.${courseId}`}
+                    studentName={user?.name ?? ""}
+                    instructor={detail.instructor}
+                  />
+                </div>
+              )}
               {currentModule && (
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-primary">
@@ -250,7 +304,7 @@ export function CoursePlayerPage() {
                       disabled={saving}
                       className={
                         isCurrentCompleted
-                          ? "mt-6 inline-flex w-fit items-center gap-2 rounded-lg border border-primary bg-primary/10 px-4 py-2.5 text-sm font-semibold text-primary transition disabled:cursor-not-allowed disabled:opacity-60"
+                          ? "mt-6 inline-flex w-fit items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-60"
                           : "mt-6 inline-flex w-fit items-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-semibold text-foreground transition hover:bg-muted-surface disabled:cursor-not-allowed disabled:opacity-60"
                       }
                     >
@@ -259,14 +313,6 @@ export function CoursePlayerPage() {
                     </button>
                   )}
                   {!nextModule && checklist && <ChecklistReference checklist={checklist} />}
-                  {!nextModule && selfAssessment && (
-                    <SelfAssessmentBlock
-                      assessment={selfAssessment}
-                      storageKey={`emerge.autoevaluacion.${user?.id ?? "anon"}.${courseId}`}
-                      studentName={user?.name ?? ""}
-                      instructor={detail.instructor}
-                    />
-                  )}
                 </div>
               )}
             </div>
@@ -277,8 +323,11 @@ export function CoursePlayerPage() {
             <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
               <button
                 type="button"
-                disabled={!prevModule}
-                onClick={() => prevModule && setActiveModule(prevModule.number)}
+                disabled={!isSelfStep && !prevModule}
+                onClick={() => {
+                  if (isSelfStep) setActiveModule(lastModule.number)
+                  else if (prevModule) setActiveModule(prevModule.number)
+                }}
                 className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-semibold text-foreground transition hover:bg-muted-surface disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <ArrowRightIcon className="h-4 w-4 rotate-180" />
@@ -286,7 +335,7 @@ export function CoursePlayerPage() {
                 <span className="sm:hidden">Anterior</span>
               </button>
 
-              {nextModule ? (
+              {currentModule && nextModule ? (
                 <button
                   type="button"
                   disabled={saving || !isCurrentCompleted}
@@ -296,21 +345,31 @@ export function CoursePlayerPage() {
                   <ArrowRightIcon className="h-4 w-4" />
                   <span>Siguiente módulo</span>
                 </button>
+              ) : currentModule && selfAssessment ? (
+                <button
+                  type="button"
+                  disabled={saving || !isCurrentCompleted}
+                  onClick={() => isCurrentCompleted && setActiveModule(SELF_ASSESSMENT_STEP)}
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  <ArrowRightIcon className="h-4 w-4" />
+                  <span>{isCurrentCompleted ? "Autoevaluación" : "Termina este módulo"}</span>
+                </button>
               ) : (
                 <Link
                   to="/dashboard/logros"
-                  aria-disabled={!isCurrentCompleted}
+                  aria-disabled={!canFinish}
                   onClick={(e) => {
-                    if (!isCurrentCompleted) e.preventDefault()
+                    if (!canFinish) e.preventDefault()
                   }}
                   className={
-                    isCurrentCompleted
+                    canFinish
                       ? "inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition hover:bg-primary-hover"
                       : "pointer-events-none inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground opacity-40"
                   }
                 >
                   <CheckIcon className="h-4 w-4" />
-                  {percent === 100 ? "Ver certificado" : "Termina este módulo para finalizar"}
+                  {percent === 100 ? "Ver certificado" : isSelfStep ? "Completa todos los módulos" : "Termina este módulo para finalizar"}
                 </Link>
               )}
             </div>
@@ -329,7 +388,18 @@ type ModuleSidebarProps = {
   activeModuleNumber: number
   isUnlocked: (moduleNumber: number) => boolean
   onSelectModule: (moduleNumber: number) => void
+  hasSelfAssessment: boolean
+  selfUnlocked: boolean
+  onLogout: () => void
 }
+
+const quickLinks = [
+  { to: "/dashboard", label: "Dashboard", Icon: LayoutDashboardIcon },
+  { to: "/cursos", label: "Catálogo de cursos", Icon: GraduationCapIcon },
+  { to: "/dashboard/calendario", label: "Calendario", Icon: CalendarIcon },
+  { to: "/dashboard/logros", label: "Mis certificados", Icon: CertificateIcon },
+  { to: "/dashboard/cuenta", label: "Ajustes de cuenta", Icon: SettingsIcon },
+]
 
 function ModuleSidebar({
   title,
@@ -339,9 +409,13 @@ function ModuleSidebar({
   activeModuleNumber,
   isUnlocked,
   onSelectModule,
+  hasSelfAssessment,
+  selfUnlocked,
+  onLogout,
 }: ModuleSidebarProps) {
+  const selfActive = activeModuleNumber === SELF_ASSESSMENT_STEP
   return (
-    <div className="flex h-full flex-col bg-card">
+    <div className="flex h-full flex-col overflow-y-auto bg-card">
       <div className="shrink-0 border-b border-border p-5">
         <Link
           to="/dashboard"
@@ -365,19 +439,22 @@ function ModuleSidebar({
             aria-valuemax={100}
             aria-label="Progreso del curso"
           >
-            <div className="h-full rounded-full bg-primary" style={{ width: `${percent}%` }} />
+            <div
+              className="h-full rounded-full bg-primary transition-[width] duration-700 ease-out"
+              style={{ width: `${percent}%` }}
+            />
           </div>
         </div>
       </div>
 
-      <nav aria-label="Contenido del curso" className="flex-1 overflow-y-auto p-3">
+      <nav aria-label="Contenido del curso" className="flex-1 p-3">
         <ul className="flex flex-col gap-0.5">
-          {modules.map((m) => {
+          {modules.map((m, index) => {
             const isActive = m.number === activeModuleNumber
             const isCompleted = completedModules.includes(m.number)
             const unlocked = isUnlocked(m.number)
             return (
-              <li key={m.number}>
+              <li key={m.number} className="animate-fade-up" style={{ "--i": index } as React.CSSProperties}>
                 <button
                   type="button"
                   onClick={() => onSelectModule(m.number)}
@@ -385,7 +462,7 @@ function ModuleSidebar({
                   aria-current={isActive ? "true" : undefined}
                   className={
                     isActive
-                      ? "flex w-full items-start gap-2.5 rounded-lg bg-green-50 px-3 py-2.5 text-left text-sm font-medium text-foreground"
+                      ? "flex w-full items-start gap-2.5 rounded-lg bg-primary/[0.07] px-3 py-2.5 text-left text-sm font-semibold text-foreground ring-1 ring-primary/15"
                       : unlocked
                         ? "flex w-full items-start gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted transition hover:bg-muted-surface hover:text-foreground"
                         : "flex w-full cursor-not-allowed items-start gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted/50"
@@ -393,7 +470,7 @@ function ModuleSidebar({
                 >
                   <span className="mt-0.5 shrink-0">
                     {isCompleted ? (
-                      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-green-500">
+                      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-primary">
                         <CheckIcon className="h-3 w-3 text-white" />
                       </span>
                     ) : unlocked ? (
@@ -414,7 +491,64 @@ function ModuleSidebar({
             )
           })}
         </ul>
+
+        {hasSelfAssessment && (
+          <>
+            <p className="mt-4 px-3 text-[11px] font-semibold uppercase tracking-wider text-muted">Cierre del curso</p>
+            <button
+              type="button"
+              onClick={() => onSelectModule(SELF_ASSESSMENT_STEP)}
+              disabled={!selfUnlocked}
+              aria-current={selfActive ? "true" : undefined}
+              className={
+                selfActive
+                  ? "mt-1 flex w-full items-start gap-2.5 rounded-lg bg-primary/[0.07] px-3 py-2.5 text-left text-sm font-semibold text-foreground ring-1 ring-primary/15"
+                  : selfUnlocked
+                    ? "mt-1 flex w-full items-start gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted transition hover:bg-muted-surface hover:text-foreground"
+                    : "mt-1 flex w-full cursor-not-allowed items-start gap-2.5 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-muted/50"
+              }
+            >
+              <span className="mt-0.5 shrink-0">
+                {selfUnlocked ? <FileTextIcon className="h-4 w-4" /> : <LockIcon className="h-4 w-4" />}
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block leading-snug">Ficha de autoevaluación</span>
+                <span className="mt-0.5 block text-xs text-muted">
+                  {selfUnlocked ? "No afecta tu calificación" : "Se habilita al completar el último módulo"}
+                </span>
+              </span>
+            </button>
+          </>
+        )}
       </nav>
+
+      {/* Accesos rápidos a las secciones principales de la plataforma. */}
+      <div className="shrink-0 border-t border-border p-3">
+        <p className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted">Ir a</p>
+        <ul className="grid grid-cols-1 gap-0.5">
+          {quickLinks.map(({ to, label, Icon }) => (
+            <li key={to}>
+              <Link
+                to={to}
+                className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-foreground transition hover:bg-muted-surface hover:text-primary"
+              >
+                <Icon className="h-4 w-4 text-muted" />
+                {label}
+              </Link>
+            </li>
+          ))}
+          <li>
+            <button
+              type="button"
+              onClick={onLogout}
+              className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-medium text-destructive transition hover:bg-destructive/10"
+            >
+              <LogOutIcon className="h-4 w-4" />
+              Cerrar sesión
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   )
 }

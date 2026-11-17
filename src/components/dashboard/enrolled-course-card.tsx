@@ -9,8 +9,14 @@ export function EnrolledCourseCard({ course, progress }: { course: Course; progr
   const percent = totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
-      <img src={course.image} alt={course.title} className="h-32 w-full object-cover" />
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-md">
+      <div className="overflow-hidden">
+        <img
+          src={course.image}
+          alt={course.title}
+          className="h-32 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+        />
+      </div>
       <div className="flex flex-1 flex-col p-5">
         <span className="inline-flex w-fit rounded-md bg-muted-surface px-2 py-1 text-xs font-medium text-muted">
           {course.type}
@@ -32,7 +38,7 @@ export function EnrolledCourseCard({ course, progress }: { course: Course; progr
               aria-valuemax={100}
               aria-label={`Progreso de ${course.title}`}
             >
-              <div className="h-full rounded-full bg-primary" style={{ width: `${percent}%` }} />
+              <div className="h-full origin-left rounded-full bg-primary animate-grow-x" style={{ width: `${percent}%` }} />
             </div>
           </div>
         )}
