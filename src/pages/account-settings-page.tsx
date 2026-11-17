@@ -39,9 +39,9 @@ export function AccountSettingsPage() {
         </div>
 
         {/* Panel con menú de pestañas (vertical en desktop, superior en móvil) */}
-        <div className="mt-6 grid gap-6 lg:grid-cols-[260px_1fr]">
-          <aside aria-label="Secciones de ajustes">
-            <nav className="flex gap-2 overflow-x-auto rounded-xl border border-border bg-card p-2 lg:flex-col lg:overflow-visible">
+        <div className="mt-6 grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[260px_minmax(0,1fr)]">
+          <aside aria-label="Secciones de ajustes" className="min-w-0">
+            <nav className="flex max-w-full gap-2 overflow-x-auto rounded-xl border border-border bg-card p-2 lg:flex-col lg:overflow-visible">
               {tabs.map(({ id, label, Icon }) => {
                 const isActive = active === id
                 return (
@@ -52,8 +52,8 @@ export function AccountSettingsPage() {
                     aria-current={isActive ? "page" : undefined}
                     className={
                       isActive
-                        ? "inline-flex w-full shrink-0 items-center gap-2.5 whitespace-nowrap rounded-lg bg-primary px-3.5 py-2.5 text-left text-sm font-semibold text-primary-foreground transition lg:whitespace-normal"
-                        : "inline-flex w-full shrink-0 items-center gap-2.5 whitespace-nowrap rounded-lg px-3.5 py-2.5 text-left text-sm font-medium text-muted transition hover:bg-muted-surface hover:text-foreground lg:whitespace-normal"
+                        ? "inline-flex shrink-0 items-center gap-2.5 whitespace-nowrap rounded-lg bg-primary px-3.5 py-2.5 text-left text-sm font-semibold text-primary-foreground transition lg:w-full lg:whitespace-normal"
+                        : "inline-flex shrink-0 items-center gap-2.5 whitespace-nowrap rounded-lg px-3.5 py-2.5 text-left text-sm font-medium text-muted transition hover:bg-muted-surface hover:text-foreground lg:w-full lg:whitespace-normal"
                     }
                   >
                     <Icon className="h-4 w-4 shrink-0" />
@@ -64,7 +64,7 @@ export function AccountSettingsPage() {
             </nav>
           </aside>
 
-          <section className="rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8">
+          <section className="min-w-0 rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-8">
             {active === "profile" && <ProfileTab />}
             {active === "security" && <SecurityTab />}
             {active === "billing" && <BillingTab />}

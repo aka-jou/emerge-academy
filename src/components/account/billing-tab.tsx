@@ -71,10 +71,10 @@ export function BillingTab() {
         </div>
       )}
 
-      <p className="flex items-center gap-2 text-xs leading-relaxed text-muted">
-        <FileTextIcon className="h-3.5 w-3.5" />
+      <p className="text-xs leading-relaxed text-muted">
+        <FileTextIcon className="mr-1.5 inline h-3.5 w-3.5 align-[-2px]" />
         ¿Necesitas una factura con datos fiscales específicos? Escríbenos a{" "}
-        <span className="font-medium text-foreground">facturacion@emergeacademy.mx</span> con tu folio de orden.
+        <span className="break-all font-medium text-foreground">facturacion@emergeacademy.mx</span> con tu folio de orden.
       </p>
     </div>
   )
