@@ -74,8 +74,6 @@ export function DashboardPage() {
           )}
         </section>
 
-        {!loading && !error && <ExploreCourses enrolledCourses={courses} />}
-
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-5">
           <div className="lg:col-span-3">
             <UpcomingMilestones />
@@ -84,6 +82,8 @@ export function DashboardPage() {
             <RecentDownloads />
           </div>
         </div>
+
+        {!loading && !error && <ExploreCourses enrolledCourses={courses} />}
       </main>
     </div>
   )
