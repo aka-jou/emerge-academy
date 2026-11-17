@@ -4,6 +4,8 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   /* Condensada de letrero para títulos y cifras del catálogo y las fichas de curso. */
   --font-display: "Barlow Condensed", "Arial Narrow", ui-sans-serif, sans-serif;
+  /* Tipografía de impresora térmica para el ticket de compra. */
+  --font-ticket: "Courier Prime", "Courier New", ui-monospace, monospace;
 
   --color-background: oklch(0.97 0.01 145);
   --color-foreground: oklch(0.22 0.03 150);
@@ -174,6 +176,55 @@ html {
   animation: grow-x 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
 }
 
+/* ---------- Ticket de compra ---------- */
+
+/* Papel térmico con bordes dentados arriba y abajo (como un ticket cortado). */
+@utility ticket-paper {
+  --tooth: 10px;
+  background: linear-gradient(180deg, #fffdf6 0%, #fbf8ee 100%);
+  -webkit-mask:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / var(--tooth) 51% repeat-x,
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--tooth) 51% repeat-x;
+  mask:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / var(--tooth) 51% repeat-x,
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--tooth) 51% repeat-x;
+}
+
+@keyframes ticket-print {
+  0% {
+    transform: translateY(-100%);
+  }
+  70% {
+    transform: translateY(2%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* El ticket sale de la impresora en "tirones", como una térmica real. */
+@utility animate-ticket-print {
+  animation: ticket-print 2.2s steps(14, end) 0.2s both;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .ticket-print,
+  .ticket-print * {
+    visibility: visible;
+  }
+  .ticket-print {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 80mm;
+    transform: translateX(-50%);
+    animation: none;
+  }
+}
+
 @utility animate-loader-bar {
   animation: loader-bar 1.3s ease-in-out infinite;
 }
@@ -209,6 +260,7 @@ a[role="button"]:active {
   .animate-loader-bar,
   .animate-loader-pulse,
   .animate-grow-x,
+  .animate-ticket-print,
   .skeleton {
     animation: none;
   }

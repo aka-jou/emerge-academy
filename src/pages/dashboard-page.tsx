@@ -5,6 +5,7 @@ import { EnrolledCourseCard } from "../components/dashboard/enrolled-course-card
 import { UpcomingMilestones } from "../components/dashboard/upcoming-milestones"
 import { RecentDownloads } from "../components/dashboard/recent-downloads"
 import { AdminGlanceCard } from "../components/dashboard/admin-glance-card"
+import { ExploreCourses } from "../components/dashboard/explore-courses"
 import { useMyCourses } from "../lib/orders"
 import { useAllProgress } from "../lib/progress"
 import { useAuth } from "../lib/auth"
@@ -72,6 +73,8 @@ export function DashboardPage() {
             </div>
           )}
         </section>
+
+        {!loading && !error && <ExploreCourses enrolledCourses={courses} />}
 
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-5">
           <div className="lg:col-span-3">

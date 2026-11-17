@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { FileTextIcon } from "../icons"
 import { useMyOrders } from "../../lib/orders"
 
@@ -44,7 +45,15 @@ export function BillingTab() {
               <tbody>
                 {orders.map((order) => (
                   <tr key={order.id} className="border-b border-border last:border-0 transition hover:bg-muted-surface/60">
-                    <td className="px-4 py-3 font-mono text-xs font-medium text-foreground">{order.folio}</td>
+                    <td className="px-4 py-3 font-mono text-xs font-medium">
+                      <Link
+                        to={`/checkout/confirmacion?orden=${order.id}`}
+                        className="text-primary underline-offset-2 hover:underline"
+                        title="Ver ticket de compra"
+                      >
+                        {order.folio}
+                      </Link>
+                    </td>
                     <td className="whitespace-nowrap px-4 py-3 text-muted">
                       {new Date(order.createdAt).toLocaleDateString("es-MX", {
                         day: "numeric",

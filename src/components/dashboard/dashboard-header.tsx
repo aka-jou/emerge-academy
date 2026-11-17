@@ -1,7 +1,8 @@
 import { useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { Logo } from "../landing/logo"
-import { CertificateIcon, CalendarIcon, LifeBuoyIcon, UsersIcon, LogOutIcon, ChevronDownIcon, VideoIcon } from "../icons"
+import { CertificateIcon, CalendarIcon, LifeBuoyIcon, UsersIcon, LogOutIcon, ChevronDownIcon, VideoIcon, ShoppingCartIcon } from "../icons"
+import { useCart } from "../../lib/cart"
 import { student } from "../../data/dashboard"
 import { useAuth } from "../../lib/auth"
 import { useClickOutside } from "../../lib/use-click-outside"
@@ -13,6 +14,7 @@ const links = [
 
 export function DashboardHeader() {
   const { user, logout } = useAuth()
+  const { count } = useCart()
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -48,11 +50,25 @@ export function DashboardHeader() {
             <span className="hidden sm:inline">Certificados</span>
           </Link>
 
+          <Link
+            to="/carrito"
+            aria-label={count > 0 ? `Carrito (${count})` : "Carrito"}
+            className="relative inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-muted transition hover:bg-muted-surface hover:text-foreground"
+          >
+            <ShoppingCartIcon className="h-4 w-4" />
+            <span className="hidden sm:inline">Carrito</span>
+            {count > 0 && (
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-bold text-primary-foreground animate-fade-in sm:static sm:h-5 sm:min-w-5">
+                {count}
+              </span>
+            )}
+          </Link>
+
           {links.map(({ label, href, Icon }) => (
             <a
               key={label}
               href={href}
-              className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-muted transition hover:bg-muted-surface hover:text-foreground"
+              className="hidden items-center min-[360px]:inline-flex gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-muted transition hover:bg-muted-surface hover:text-foreground"
             >
               <Icon className="h-4 w-4" />
               <span className="hidden sm:inline">{label}</span>
