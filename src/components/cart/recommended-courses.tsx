@@ -21,7 +21,7 @@ export function RecommendedCourses({ courses, onAdd }: RecommendedCoursesProps) 
       <h2 className="text-lg font-bold text-foreground">Cursos recomendados</h2>
       <p className="mt-1 text-sm text-muted">Complementa tu certificación añadiéndolos al carrito.</p>
 
-      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-5 grid grid-cols-[minmax(0,1fr)] gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {courses.map((course) => (
           <div
             key={course.id}

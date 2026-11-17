@@ -18,6 +18,7 @@ import { ScrollToTop } from "./components/scroll-to-top"
 import { AdminDashboardPage } from "./pages/admin-dashboard-page"
 import { AdminSessionsPage } from "./pages/admin-sessions-page"
 import { AdminCourseStudentsPage } from "./pages/admin-course-students-page"
+import { NotFoundPage } from "./pages/not-found-page"
 
 export default function App() {
   return (
@@ -110,6 +111,7 @@ export default function App() {
             </AdminRoute>
           }
         />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   )
